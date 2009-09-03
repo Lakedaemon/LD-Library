@@ -1,0 +1,126 @@
+\hsize180truemm\vsize 270truemm\hoffset=-10truemm\voffset=-13truemm
+\pretolerance=500\tolerance=1000\brokenpenalty=5000
+\parindent=3mm
+
+
+\def\Pdf#1{#1}%
+\def\Xhtml#1{}%
+% look there for info : 
+%
+%  http://www.tug.org/texlive/Contents/live/texmf-dist/doc/xetex/XeTeX-notes.pdf
+% 
+%width <dimen>
+%height <dimen>
+%scaled <scalefactor>
+%xscaled <scalefactor>
+%yscaled <scalefactor>
+%rotated <degrees>
+\def\Image{\@getoptionalarg\LD@Image@Insert}%
+\def\LD@Image@Insert#1{%
+	\def\LD@Option@@Width{}%
+	\def\LD@Option@@Height{}%
+	\def\LD@Option@@Scaled{}%
+	\def\LD@Option@@XScaled{}%
+	\def\LD@Option@@YScaled{}%
+	\def\LD@Option@@Rotated{}%
+	\def\LD@Option@@Box{}%
+	\LD@Option@Process{,}%
+	\def\LD@Temp{}%
+	\unless\ifx\LD@Option@@Width\LD@Empty
+		\LD@String@Append{ width }\LD@Temp
+		\EA\LD@String@Append\EA{\LD@Option@@Width}\LD@Temp
+	\fi
+	\unless\ifx\LD@Option@@Height\LD@Empty
+		\LD@String@Append{ height }\LD@Temp
+		\EA\LD@String@Append\EA{\LD@Option@@Height}\LD@Temp
+	\fi
+	\unless\ifx\LD@Option@@Scaled\LD@Empty
+		\LD@String@Append{ scaled }\LD@Temp
+		\EA\LD@String@Append\EA{\LD@Option@@Scaled}\LD@Temp
+	\fi
+	\unless\ifx\LD@Option@@XScaled\LD@Empty
+		\LD@String@Append{ xscaled }\LD@Temp
+		\EA\LD@String@Append\EA{\LD@Option@@XScaled}\LD@Temp
+	\fi
+	\unless\ifx\LD@Option@@YScaled\LD@Empty
+		\LD@String@Append{ yscaled }\LD@Temp
+		\EA\LD@String@Append\EA{\LD@Option@@YScaled}\LD@Temp
+	\fi
+	\unless\ifx\LD@Option@@Rotated\LD@Empty
+		\LD@String@Append{ rotated }\LD@Temp
+		\EA\LD@String@Append\EA{\LD@Option@@Rotated}\LD@Temp
+	\fi
+	\def\LD@Test{"#1"}%
+	\LD@String@IfSubString\LD@Test{.pdf}{%
+		\let\LD@Image@CS\XeTeXpdffile
+	}{%
+		\let\LD@Image@CS\XeTeXpicfile
+	}%
+	\EA\LD@String@Append\EA{\LD@Temp}\LD@Test
+	\unless\ifx\LD@Option@@Box\LD@Empty
+		\ifx\LD@Option@@Width\LD@Empty
+			\hbox\bgroup
+		\else
+			\hbox to \LD@Option@@Width\bgroup
+		\fi
+	\fi
+	\EA\LD@Image@CS\LD@Test\relax
+	\unless\ifx\LD@Option@@Box\LD@Empty
+		\egroup
+	\fi
+}%
+%
+%
+%
+%% LD@Graphic@Frame
+%
+%
+%
+%  http://www.tug.org/texlive/Contents/live/texmf-dist/doc/xetex/XeTeX-notes.pdf
+
+\def\LD@Graphic@Frame{%
+	\noindent
+	\tikzstyle{body} = [draw=Color\LD@Option@@Color,shading=axis,shading angle=45,top color=ColorVL\LD@Option@@Color,bottom color=ColorT\LD@Option@@Color,middle color=ColorL\LD@Option@@Color,thick,rectangle, rounded corners, inner xsep=5pt, inner ysep=10pt]%
+	\tikzstyle{head}= [draw=Color\LD@Option@@Color,fill=ColorVL\LD@Option@@Color,thick,rectangle,rounded corners,inner xsep=3pt,inner ysep=3pt]%
+	\tikzstyle{title}= [draw=Color\LD@Option@@Color,fill=ColorVL\LD@Option@@Color,thick,rectangle,rounded corners,inner xsep=3pt,inner ysep=3pt]%
+	\tikzstyle{type}= [xshift=-3pt,yshift=-4pt,ellipse,fill=white,draw=Color\LD@Option@@Color,inner sep=0.5pt]%
+	\OLdimen=\hsize\advance\OLdimen by -15.3pt%
+	\ifInverted
+		\tikzpicture
+			\node[text width=\OLdimen,body] (a) {\noindent \LD@Option@@Text};
+			\unless\ifx\LD@Option@@\LD@Empty
+				\node [head] at (a.south) {\noindent\LD@Option@@};
+			\fi
+			\unless\ifx\LD@Option@@Title\LD@Empty
+				\node [title] at (a.north)  {\noindent\LD@Option@@Title};
+			\fi
+			\unless\ifx\LD@Option@@Type\LD@Empty
+			\node [type] at (a.north east)  {\noindent\LD@Option@@Type};
+			\fi
+		\endtikzpicture
+		\PAR
+		\vskip15pt
+		\Invertedfalse
+	\else % Inverted false
+		\ifx\LD@Option@@\LD@Empty
+			\bigskip\noindent
+		\fi
+		\tikzpicture
+			\node[text width=\OLdimen,body] (a) {\noindent \LD@Option@@Text};
+			\unless\ifx\LD@Option@@\LD@Empty
+				\node [head] at (a.north)  (b) {\noindent\LD@Option@@};
+			\fi
+			\unless\ifx\LD@Option@@Title\LD@Empty
+				\node [head] at (a.south)  {\noindent\LD@Option@@Title};
+			\fi
+			\unless\ifx\LD@Option@@Type\LD@Empty
+				\node [type] at (a.north east)  {\noindent\LD@Option@@Type};
+			\fi
+		\endtikzpicture
+		\PAR
+		\vskip9pt
+	\fi
+}%
+\endinput
+
+

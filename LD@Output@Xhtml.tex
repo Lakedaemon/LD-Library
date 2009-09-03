@@ -1,0 +1,60 @@
+\def\Pdf#1{}%
+\def\Xhtml#1{#1}%
+\def\c#1{\HCode{&ccedil;}}%
+\overfullrule=0pt
+%%%%%%%% Mbox=hbox containing text inside math mode % Mvbox ? Mhbox ?
+%
+\def\mbox{\@getoptionalarg\LD@System@Mbox}%
+\def\LD@System@Mbox#1{{%
+	\PauseMathClass
+	\mtexttrue
+	\HCode{<mtext>}%
+	\Configure{$}{\HCode{&nbsp;</mtext><mrow>}\EndPauseMathClass\mtextfalse}{\PauseMathClass\mtexttrue\HCode{</mrow><mtext>&nbsp;}}{}%
+	\hbox{#1}%
+	\HCode{</mtext>}%
+	\EndPauseMathClass	
+}}%
+\def\Image{\@getoptionalarg\LD@Image@Insert}%
+\newdimen\LD@Dimen@Size
+\def\LD@Image@Insert#1{%
+	\LD@Option@Process{,}%
+	\def\LD@Image@String{#1 }%
+	\ifcsname LD@Option@@Height\endcsname
+		\LD@Dimen@Size=\LD@Option@@Height\relax
+		\EA\def\EA\LD@Image@String\EA{\LD@Image@String height="\pgf@sys@tonumber{\LD@Dimen@Size}" }%
+	\fi
+	\ifcsname LD@Option@@Width\endcsname
+		\LD@Dimen@Size=\LD@Option@@Width\relax
+		\EA\def\EA\LD@Image@String\EA{\LD@Image@String width="\pgf@sys@tonumber{\LD@Dimen@Size}" }%
+	\fi
+	\ifcsname LD@Option@@Alt\endcsname
+		\EA\def\EA\LD@Image@Alt\EA{\EA[\LD@Option@@Alt]}%
+	\else
+		\def\LD@Image@Alt{}%
+	\fi	
+	\EA\EA\EA\Picture\EA\LD@Image@Alt\EA{\LD@Image@String}%
+}%
+%
+%
+%
+%
+\def\LD@Graphic@Frame{%
+\noindent
+		\ifInverted % Inverted
+			\EndP
+			\HCode{<div class="ICF\LD@Option@@Color">}\vbox{\ignorespaces\LD@Option@@Text\EndP}\HCode{</div>}%
+			\unless\ifx\LD@Option@@\LD@Empty
+				\HCode{<div class="centerline"><span class="ICFHyp\LD@Option@@Color">}\LD@Option@@\HCode{</span></div>}%
+			\fi
+			\Invertedfalse
+		\else % Inverted false
+			\EndP
+			\unless\ifx\LD@Option@@\LD@Empty
+				\HCode{<div class="centerline"><span class="CFHyp\LD@Option@@Color">}\LD@Option@@\HCode{</span></div>}%
+			\fi
+			\HCode{<div class="CF\LD@Option@@Color">}\vbox{\noindent\ignorespaces\LD@Option@@Text\EndP}%
+			\HCode{</div>}%
+		\fi
+		\Par
+}%
+\endinput

@@ -1,0 +1,107 @@
+\catcode`@=11\relax
+{\catcode`\%=11\relax
+\gdef\LD@Time@Write{\directlua0{os.execute("echo %time%.>C:/TeX/Output/LD@Time@Stamp.tex")}}\relax
+}
+\pdfoutput1
+\directlua0{
+callback.register('define_font',
+    function(name, size)
+      filename=kpse.find_file(name,"truetype fonts")
+      if (filename) then 
+         if (size < 0) then size = (- 655.36) * size end
+        ttffont = fontforge.to_table(fontforge.open(filename))
+        if ttffont then
+          f = { }
+          f.name = ttffont.fontname
+          f.fullname = ttffont.names[1].names.fullname
+          f.parameters = { }
+          f.designsize = size
+          f.size = size
+          f.direction = 0
+          f.parameters.slant = 0
+          f.parameters.space = size * 0.25
+          f.parameters.space_stretch = 0.3 * size
+          f.parameters.space_shrink = 0.1 * size
+          f.parameters.x_height = 0.4 * size
+          f.parameters.quad = 1.0 * size
+          f.parameters.extra_space = 0
+          f.characters = { }
+          mag = size / ttffont.units_per_em
+
+           names_of_char = { }
+          for char, glyph in pairs(ttffont.map.map)
+          do
+            names_of_char[ttffont.glyphs[glyph].name]
+              = ttffont.map.backmap[glyph]
+          end
+
+          names_of_glyph = { }
+          for char, glyph in pairs(ttffont.map.map)
+          do
+            names_of_glyph[ttffont.glyphs[glyph].name]
+              = glyph
+          end
+
+         for char, glyph in pairs(ttffont.map.map)
+          do
+            glyph_table = ttffont.glyphs[glyph]
+
+            f.characters[char] = {
+              index = glyph,
+              width = glyph_table.width * mag,
+              name = glyph_table.name,
+            }
+            if glyph_table.kerns then
+              local kerns = { }
+              for _, kern in pairs(glyph_table.kerns)
+              do
+                kerns[names_of_char[kern.char]] = kern.off * mag
+              end
+            f.characters[char].kerns = kerns
+            end
+          end
+          f.filename = filename
+          f.type = 'real'
+          f.format = 'truetype'
+          f.embedding = "full"
+          f.cidinfo = {
+            registry = "Adobe",
+            ordering = "Identity",
+            supplement = 0,
+            version = 1
+          }
+        end  
+      else 
+        f = font.read_tfm(name, size)
+      end 
+    return f
+    end
+  )
+}
+\def\LD@Font@Study#1{%
+	\directlua0{
+		function printtable (ind,tableau,prof)
+			local k,l
+			texio.write_nl(string.rep("...",prof) .. ind .. " -> {")
+			prof=prof+1
+			for k,l in pairs(tableau) do 
+				if (type(l)=="table") then
+					printtable(k,l,prof)
+				else
+					texio.write_nl(string.rep("...",prof) .. k .. " -> " .. tostring(l))
+				end
+			end
+			texio.write_nl(string.rep("...",prof-1) .. "}")
+		end
+		filename=kpse.find_file("#1","truetype fonts")
+		ttffont = fontforge.to_table(fontforge.open(filename))
+		printtable("#1",ttffont,0)
+	}%
+}%
+
+\def\LD@String@Length#1#2{%
+	#2=\directlua0{%
+			tex.print(unicode.utf8.len("#1") )
+		}\relax
+}%
+\endinput

@@ -1,0 +1,1078 @@
+\catcode`@=11\relax
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												%
+%					Pos	                                                                        %
+%												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@XML@SetBunpou#1#2{%
+	\LD@Counter@A=#1\relax
+	\ifcase\LD@Counter@A
+		%<!ENTITY MA "martial arts term">
+		\def#2{{\LD@Dingbats@MartialArts 8}}%
+	\or
+		%<!ENTITY X "rude or X-rated term (not displayed in educational software)">
+		\def#2{{\LD@Dingbats@X i}}%
+	\or
+		%<!ENTITY abbr "abbreviation">
+		\def#2{}%
+	\or
+		%<!ENTITY adj "adjective (keiyoushi)">
+		\def#2{adj}%
+	\or
+		%<!ENTITY adj-na "adjectival nouns or quasi-adjectives (keiyodoshi)">
+		\def#2{{\LD@Font@One -\LD@Font@Kana な}}%
+	\or
+		%<!ENTITY adj-no "nouns which may take the genitive case particle `no'">
+		\def#2{{\LD@Font@One-\LD@Font@Kana の}}%
+	\or
+		%<!ENTITY adj-pn "pre-noun adjectival (rentaishi)">
+		\def#2{}%
+	\or
+		%<!ENTITY adj-t "`taru' adjective">
+		\def#2{}%
+	\or
+		%<!ENTITY adv "adverb (fukushi)">
+		\def#2{{\LD@Font@One adv}}%
+	\or
+		%<!ENTITY adv-to "adverb taking the `to' particle">
+		\def#2{{\LD@Font@One -\LD@Font@Kana と}}%
+	\or
+		%<!ENTITY arch "archaism">
+		\def#2{{\LD@Font@One arc}}%
+	\or
+		%<!ENTITY ateji "ateji (phonetic) reading">
+		\def#2{}%
+	\or
+		%<!ENTITY aux "auxiliary">
+		\def#2{{\LD@Font@One aux}}%
+	\or
+		%<!ENTITY aux-v "auxiliary verb">
+		\def#2{}%
+	\or
+		%<!ENTITY aux-adj "auxiliary adjective">
+		\def#2{}%
+	\or
+		%<!ENTITY Buddh "Buddhist term">
+		\def#2{\LD@Dingbats@Japan w}%
+	\or
+		%<!ENTITY chn "children's language">
+		\def#2{{\LD@Font@Kana 子}}%
+	\or
+		%<!ENTITY col "colloquialism ">
+		\def#2{}%
+	\or
+		%<!ENTITY comp "computer terminology">
+		\def#2{}%
+	\or
+		%<!ENTITY conj "conjunction">
+		\def#2{{\LD@Font@One conj}}%
+	\or
+		%<!ENTITY ctr "counter">
+		\def#2{{\LD@Font@One comp}}%
+	\or
+		%<!ENTITY derog "derogatory">
+		\def#2{}%
+	\or
+		%<!ENTITY eK "exclusively kanji">
+		\def#2{{\LD@Font@Kana 漢字}}%
+	\or
+		%<!ENTITY exp "Expressions (phrases, clauses, etc.)">
+		\def#2{{\LD@Font@One exp}}%
+	\or
+		%<!ENTITY fam "familiar language ">
+		\def#2{{\LD@Font@One fam}}%
+	\or
+		%<!ENTITY fem "female term or language">
+		\def#2{{\LD@Font@Kana 女}}%
+	\or
+		%<!ENTITY food "food term">
+		\def#2{{\LD@Dingbats@Japan r}}%
+	\or
+		%<!ENTITY geom "geometry term">
+		\def#2{}%
+	\or
+		%<!ENTITY gikun "gikun (meaning) reading">
+		\def#2{}%
+	\or
+		%<!ENTITY hon "honorific or respectful (sonkeigo) language ">
+		\def#2{}%
+	\or
+		%<!ENTITY hum "humble (kenjougo) language ">
+		\def#2{{\LD@Font@One hum}}%
+	\or
+		%<!ENTITY iK "word containing irregular kanji usage">
+		\def#2{}%
+	\or
+		%<!ENTITY id "idiomatic expression ">
+		\def#2{{\LD@Font@One id}}%
+	\or
+		%<!ENTITY ik "word containing irregular kana usage">
+		\def#2{}%
+	\or
+		%<!ENTITY int "interjection (kandoushi)">
+		\def#2{{\LD@Font@One int}}%
+	\or
+		%<!ENTITY io "irregular okurigana usage">
+		\def#2{}%
+	\or
+		%<!ENTITY iv "irregular verb">
+		\def#2{{\LD@Font@One v.ir}}%
+	\or
+		%<!ENTITY ling "linguistics terminology">
+		\def#2{}%
+	\or
+		%<!ENTITY m-sl "manga slang">
+		\def#2{{\LD@Font@One manga}}%
+	\or
+		%<!ENTITY male "male term or language">
+		\def#2{{\LD@Font@Kana 男}}%
+	\or
+		%<!ENTITY male-sl "male slang">
+		\def#2{arg M}%
+	\or
+		%<!ENTITY math "mathematics">
+		\def#2{maths}%
+	\or
+		%<!ENTITY mil "military">
+		\def#2{mil}%
+	\or
+		%<!ENTITY n "noun (common) (futsuumeishi)">
+		\def#2{{\LD@Font@One n}}%
+	\or
+		%<!ENTITY n-adv "adverbial noun (fukushitekimeishi)">
+		\def#2{n-adv}%
+	\or
+		%<!ENTITY n-suf "noun, used as a suffix">
+		\def#2{}%
+	\or
+		%<!ENTITY n-pref "noun, used as a prefix">
+		\def#2{}%
+	\or
+		%<!ENTITY n-t "noun (temporal) (jisoumeishi)">
+		\def#2{}%
+	\or
+		%<!ENTITY num "numeric">
+		\def#2{{\LD@Font@One num}}%
+	\or
+		%<!ENTITY oK "word containing out-dated kanji ">
+		\def#2{}%
+	\or
+		%<!ENTITY obs "obsolete term">
+		\def#2{obs}%
+	\or
+		%<!ENTITY obsc "obscure term">
+		\def#2{}%
+	\or
+		%<!ENTITY ok "out-dated or obsolete kana usage">
+		\def#2{}%
+	\or
+		%<!ENTITY pol "polite (teineigo) language ">
+		\def#2{pol}%
+	\or
+		%<!ENTITY pref "prefix ">
+		\def#2{pre}%
+	\or
+		%<!ENTITY prt "particle ">
+		\def#2{}%
+	\or
+		%<!ENTITY physics "physics terminology">
+		\def#2{}%
+	\or
+		%<!ENTITY rare "rare">
+		\def#2{rare}%
+	\or
+		%<!ENTITY sens "sensitive">
+		\def#2{}%
+	\or
+		%<!ENTITY sl "slang">
+		\def#2{arg}%
+	\or
+		%<!ENTITY suf "suffix ">
+		\def#2{suf}%
+	\or
+		%<!ENTITY uK "word usually written using kanji alone ">
+		\def#2{}%
+	\or
+		%<!ENTITY uk "word usually written using kana alone ">
+		\def#2{}%
+	\or
+		%<!ENTITY v1 "Ichidan verb">
+		\def#2{}%
+	\or
+		%<!ENTITY v5 "Godan verb (not completely classified)">
+		\def#2{}%
+	\or
+		%<!ENTITY v5aru "Godan verb - -aru special class">
+		\def#2{}%
+	\or
+		%<!ENTITY v5b "Godan verb with `bu' ending">
+		\def#2{}%
+	\or
+		%<!ENTITY v5g "Godan verb with `gu' ending">
+		\def#2{}%
+	\or
+		%<!ENTITY v5k "Godan verb with `ku' ending">
+		\def#2{}%
+	\or
+		%<!ENTITY v5k-s "Godan verb - Iku/Yuku special class">
+		\def#2{}%
+	\or
+		%<!ENTITY v5m "Godan verb with `mu' ending">
+		\def#2{}%
+	\or
+		%<!ENTITY v5n "Godan verb with `nu' ending">
+		\def#2{}%
+	\or
+		%<!ENTITY v5r "Godan verb with `ru' ending">
+		\def#2{}%
+	\or
+		%<!ENTITY v5r-i "Godan verb with `ru' ending (irregular verb)">
+		\def#2{{\LD@Font@One v.ir}}%
+	\or
+		%<!ENTITY v5s "Godan verb with `su' ending">
+		\def#2{}%
+	\or
+		%<!ENTITY v5t "Godan verb with `tsu' ending">
+		\def#2{}%
+	\or
+		%<!ENTITY v5u "Godan verb with `u' ending">
+		\def#2{}%
+	\or
+		%<!ENTITY v5u-s "Godan verb with `u' ending (special class)">
+		\def#2{}%
+	\or
+		%<!ENTITY v5uru "Godan verb - Uru old class verb (old form of Eru)">
+		\def#2{}%
+	\or
+		%<!ENTITY vi "intransitive verb ">
+		\def#2{{\LD@Font@One v.i}}%
+	\or
+		%<!ENTITY vk "Kuru verb - special class">
+		\def#2{}%
+	\or
+		%<!ENTITY vn "irregular nu verb">
+		\def#2{}%
+	\or
+		%<!ENTITY vs "noun or participle which takes the aux. verb suru">
+		\def#2{{\LD@Font@One -\LD@Font@Kana する}}%
+	\or
+		%<!ENTITY vs-s "suru verb - special class">
+		\def#2{{\LD@Font@One -\LD@Font@Kana する}}%
+	\or
+		%<!ENTITY vs-i "suru verb - irregular">
+		\def#2{{\LD@Font@One -\LD@Font@Kana する}}%
+	\or
+		%<!ENTITY vz "zuru verb - (alternative form of -jiru verbs)">
+		\def#2{{\LD@Font@One -\LD@Font@Kana ずる}}%
+	\or
+		%<!ENTITY vt "transitive verb">
+		\def#2{{\LD@Font@One v.t}}%
+	\or
+		%<!ENTITY vulg "vulgar expression or word ">
+		\def#2{{\LD@Font@One vulg}}%
+	\else
+		\def#2{}%
+	\fi
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                     Xml Parser for JMdict and JMndict                                %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcount\LD@XML@A\global\LD@XML@A=0\relax
+\newcount\LD@XML@BufferCount\global\LD@XML@BufferCount=0\relax
+\newcount\LD@XML@EntryCount\global\LD@XML@EntryCount=0\relax
+
+\newcount\ReadingsNumber
+\newcount\WritingsNumber
+\newcount\KanjiCount\global\KanjiCount=0\relax
+\newcount\Glop
+
+		%%%% Hiragana readings
+\newcount\HiraganaCount\global\HiraganaCount=0\relax
+\newcount\HiraganaFromKanjiCount\global\HiraganaFromKanjiCount=0\relax
+
+
+
+
+{%
+	\catcode`[=11\relax
+	\catcode`]=11\relax
+	\gdef\LD@Assign#1#2#3{% Assign arguments contained in #1 cs (expended once) into a main argument #2 cs and an optional argument #3
+		\edef\LD@Assign@Tail{#1]}%
+		\LD@String@Split\LD@Assign@Tail ]\LD@Assign@Head\LD@Assign@Tail
+		\ifx\LD@Assign@Tail\LD@Empty
+			\edef#2{\LD@Assign@Head}%
+			\def#3{}%
+		\else
+			\LD@String@Split\LD@Assign@Tail ]#2\LD@Trash
+			\LD@String@Split\LD@Assign@Head [\LD@Trash #3%
+		\fi
+	}%
+}%
+
+
+%%%%%%%%%%%%%%%%%%%%%% switch %%%%%%%%%%%%%%%%%%%%%%
+
+%\def\LD@XML@Parse{%
+%	\catcode60=0\relax
+%}% 
+%\def\LD@XML@Read{%
+%	\catcode60=11\relax
+%}%
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																							%
+%											?xml												%
+% 																							%
+%																							%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{%
+	\catcode`?=11\relax
+	\gdef\?xml #1?>{%
+		\LD@XML@Parse
+	}%
+}%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	<--  comments  -->
+
+{%
+	\catcode`!=11\relax
+	\gdef\!--{%
+		\LD@XML@Read
+		\LD@XML@Comment
+	}%
+}%
+\long\gdef\LD@XML@Comment #1-->{% 
+	\LD@XML@Parse
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	!DOCTYPE
+{%
+	\catcode`!=11\relax
+	\catcode`[=11\relax
+	\catcode`]=11\relax
+	\gdef\!DOCTYPE#1[{%
+		\LD@XML@Parse
+	}%
+	\gdef\LD@XML@Init{%
+		\catcode`>=12\relax
+		\def\>{%
+			\catcode`\]=11\relax
+		}%
+		\catcode`]=0\relax
+		\LD@XML@Parse
+	}%
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	 !ELEMENT
+{%
+	\catcode`!=11\relax
+	\gdef\!ELEMENT{%
+		\LD@XML@Read
+		\LD@XML@Element
+	}%
+}%
+\gdef\LD@XML@Element #1>{%
+	\LD@XML@Parse
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	!ATTLIST
+{%
+	\catcode`!=11\relax
+	\gdef\!ATTLIST{%
+		\LD@XML@Read
+		\LD@XML@Attlist
+	}%
+}%
+\gdef\LD@XML@Attlist #1>{%
+	\LD@XML@Parse
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	!ENTITY
+{%
+	\catcode`!=11\relax
+	\gdef\!ENTITY{%
+		\LD@XML@Read
+		\LD@XML@Entity
+	}%
+}%
+\gdef\LD@XML@Entity #1 #2>{%
+	\EA\xdef\CS LD@Entity@#1\EC{\the\LD@XML@A}%
+	\global\advance\LD@XML@A by1\relax
+	\LD@XML@Parse
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																							%
+%											<JMdict>											%
+% 																							%
+%																							%
+\gdef\JMdict>{%
+	\LD@XML@Read
+	\LD@XML@JMdict
+}%
+\gdef\JMnedict>{%
+	\LD@XML@Read
+	\LD@XML@JMdict
+}%
+\gdef\LD@XML@JMdict{%
+	\LD@XML@Parse%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																	%
+%								<entry>								%
+% 																	%
+%																	%
+\gdef\entry>{%
+	\LD@XML@Read
+	\LD@XML@Entry
+}%
+\gdef\LD@XML@Entry{%
+	\xdef\LD@Entry@KEle{}%
+	\xdef\LD@Entry@Keb{}% inutile ?
+	\xdef\LD@Entry@REle{}%
+	\xdef\LD@Entry@Reb{}% inutile ?
+	\xdef\LD@Entry@Info{}%
+	\xdef\LD@Entry@Sense{}%
+	\LD@XML@Parse
+}%
+%%%%%%%%%%%%%%%%%%%%	<ent_seq>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\ent_seq>{%
+		\LD@XML@Read
+		\LD@XML@ent_seq
+	}%
+	\gdef\LD@XML@ent_seq #1</ent_seq>{%
+		\xdef\LD@Entry@Number{#1}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<k_ele>					%
+% 											%
+%											%
+{%
+	\catcode`\_=11\relax
+	\gdef\k_ele>{%
+		\LD@XML@Read
+		\LD@XML@K_ELE 
+	}%
+	\gdef\LD@XML@K_ELE{%
+		\unless\ifx\LD@Entry@KEle\LD@Empty
+			\xdef\LD@Entry@KEle{\LD@Entry@KEle |}%
+		\fi
+		\xdef\LD@Entry@Opt{N}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<ke_inf>
+{%
+	\catcode`\_=11\relax
+	\catcode`<=11\relax
+	\catcode`/=11\relax
+	\catcode`[=11\relax
+	\catcode`&=11\relax
+	\catcode`;=11\relax
+	\gdef\ke_inf>{%
+		\LD@XML@Read
+		\LD@XML@KE_INF
+	}%
+	\gdef\LD@XML@KE_INF &#1;</ke_inf>{% 
+		\if N\LD@Entry@Opt
+			\xdef\LD@Entry@KEle{\LD@Entry@KEle [Inf=#1}%
+			\xdef\LD@Entry@Opt{Y}%
+		\else
+			\xdef\LD@Entry@KEle{\LD@Entry@KEle ,Inf=#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+%
+}
+%%%%%%%	<ke_pri>
+{%
+	\catcode`\_=11\relax
+	\catcode`<=11\relax
+	\catcode`/=11\relax
+	\catcode`[=11\relax
+	\gdef\ke_pri>{%
+		\LD@XML@Read
+		\LD@XML@KE_PRI
+	}%
+	\gdef\LD@XML@KE_PRI #1</ke_pri>{% Writing priority
+		\if N\LD@Entry@Opt
+			\xdef\LD@Entry@KEle{\LD@Entry@KEle [Pri=#1}%
+			\xdef\LD@Entry@Opt{Y}%
+		\else
+			\xdef\LD@Entry@KEle{\LD@Entry@KEle ,Pri=#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<keb>
+{%
+	\catcode`<=11\relax
+	\catcode`/=11\relax
+	\gdef\keb>{%
+		\LD@XML@Read
+		\LD@XML@KEB
+	}%
+	\gdef\LD@XML@KEB #1</keb>{% Writing
+		\xdef\LD@Entry@Keb{#1}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%
+{%
+	\catcode`<=11\relax
+	\catcode`/=11\relax
+	\catcode`\_=11\relax
+	\catcode`]=11\relax
+	\gdef\/k_ele>{%
+		\LD@XML@Read
+		\LD@XML@/K_ELE
+	}%
+	\gdef\LD@XML@/K_ELE{%
+		\if N\LD@Entry@Opt
+			\xdef\LD@Entry@KEle{\LD@Entry@KEle \LD@Entry@Keb}%
+		\else
+			\xdef\LD@Entry@KEle{\LD@Entry@KEle ]\LD@Entry@Keb}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</k_ele>					%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<r_ele>					%
+% 											%
+%											%
+{%
+	\catcode`\_=11\relax
+	\gdef\r_ele>{%
+		\LD@XML@Read
+		\LD@XML@R_ELE
+	}%
+	\gdef\LD@XML@R_ELE{% 
+		\unless\ifx\LD@Entry@REle\LD@Empty
+			\xdef\LD@Entry@REle{\LD@Entry@REle |}%
+		\fi
+		\xdef\LD@Entry@Opt{N}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<re_nokanji/>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`[=11\relax
+	\gdef\re_nokanji/>{%
+		\LD@XML@Read
+		\LD@XML@RE_NOKANJI
+	}%
+	\gdef\LD@XML@RE_NOKANJI{% 
+		\if N\LD@Entry@Opt
+			\xdef\LD@Entry@REle{\LD@Entry@REle [NoKanji}%
+			\xdef\LD@Entry@Opt{Y}%
+		\else
+			\xdef\LD@Entry@REle{\LD@Entry@REle ,NoKanji}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<re_restr>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\catcode`[=11\relax
+	\gdef\re_restr>{%
+		\LD@XML@Read
+		\LD@XML@RE_RESTR
+	}%
+	\gdef\LD@XML@RE_RESTR #1</re_restr>{% Restrictions on the reading
+		\if N\LD@Entry@Opt
+			\xdef\LD@Entry@REle{\LD@Entry@REle [Restr=#1}%
+			\xdef\LD@Entry@Opt{Y}%
+		\else
+			\xdef\LD@Entry@REle{\LD@Entry@REle ,Restr=#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<re_inf>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\catcode`[=11\relax
+	\catcode`&=11\relax
+	\catcode`;=11\relax
+	\gdef\re_inf>{%
+		\LD@XML@Read
+		\LD@XML@RE_INF
+	}%
+	\gdef\LD@XML@RE_INF &#1;</re_inf>{% Info on the reading
+		\if N\LD@Entry@Opt
+			\xdef\LD@Entry@REle{\LD@Entry@REle [Inf=#1}%
+			\xdef\LD@Entry@Opt{Y}%
+		\else
+			\xdef\LD@Entry@REle{\LD@Entry@REle ,Inf=#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<re_pri>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\catcode`[=11\relax
+	\gdef\re_pri>{%
+		\LD@XML@Read
+		\LD@XML@RE_PRI
+	}%
+	\gdef\LD@XML@RE_PRI #1</re_pri>{% Priority of the reading
+		\if N\LD@Entry@Opt
+			\xdef\LD@Entry@REle{\LD@Entry@REle [Pri=#1}%
+			\xdef\LD@Entry@Opt{Y}%
+		\else
+			\xdef\LD@Entry@REle{\LD@Entry@REle ,Pri=#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<reb>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\reb>{%
+		\LD@XML@Read
+		\LD@XML@REB
+	}%
+	\gdef\LD@XML@REB #1</reb>{%
+		\xdef\LD@Entry@Reb{#1}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	</r_ele>
+{%
+	\catcode`/=11\relax
+	\catcode`\_=11\relax
+	\catcode`]=11\relax
+	\gdef\/r_ele>{%
+		\LD@XML@Read
+		\LD@XML@/R_ELE
+	}%
+	\gdef\LD@XML@/R_ELE{%
+		\if N\LD@Entry@Opt
+			\xdef\LD@Entry@REle{\LD@Entry@REle \LD@Entry@Reb}%
+		\else
+			\xdef\LD@Entry@REle{\LD@Entry@REle ]\LD@Entry@Reb}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</r_ele>					%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<sense>					%
+% 											%
+%											%
+{%
+	\catcode`\_=11\relax
+	\gdef\sense>{%
+		\LD@XML@Read
+		\LD@XML@SENSE
+	}%
+	\gdef\LD@XML@SENSE{% 
+		\xdef\LD@Entry@Sense@Buffer{}%
+		\xdef\LD@Entry@Gloss{}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<stagk>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\stagk>{%
+		\LD@XML@Read
+		\LD@XML@STAGK
+	}%
+	\gdef\LD@XML@STAGK #1</stagk>{% sense restricted to keb
+		\ifx\LD@Entry@Sense@Buffer\LD@Empty 
+			\xdef\LD@Entry@Sense@Buffer{Stagk=#1}%
+		\else
+			\xdef\LD@Entry@Sense@Buffer{\LD@Entry@Sense@Buffer ,Stagk=#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<stagr>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\stagr>{%
+		\LD@XML@Read
+		\LD@XML@STAGR
+	}%
+	\gdef\LD@XML@STAGR #1</stagr>{% sense restricted to reb
+		\ifx\LD@Entry@Sense@Buffer\LD@Empty 
+			\xdef\LD@Entry@Sense@Buffer{Stagr=#1}%
+		\else
+			\xdef\LD@Entry@Sense@Buffer{\LD@Entry@Sense@Buffer ,Stagr=#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<xref>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\xref>{%
+		\LD@XML@Read
+		\LD@XML@XREF
+	}%
+	\gdef\LD@XML@XREF #1</xref>{% 
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<ant>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\ant>{%
+		\LD@XML@Read
+		\LD@XML@ANT
+	}%
+	\gdef\LD@XML@ANT #1</ant>{% 
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<pos>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\catcode`&=11\relax
+	\catcode`;=11\relax
+	\gdef\pos>{%
+		\LD@XML@Read
+		\LD@XML@POS
+	}%
+	\gdef\LD@XML@POS &#1;</pos>{% pos
+		\ifx\LD@Entry@Sense@Buffer\LD@Empty 
+			\xdef\LD@Entry@Sense@Buffer{Pos=\CS LD@Entity@#1\EC}%
+		\else
+			\xdef\LD@Entry@Sense@Buffer{\LD@Entry@Sense@Buffer ,Pos=\CS LD@Entity@#1\EC}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<field>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\catcode`&=11\relax
+	\catcode`;=11\relax
+	\gdef\field>{%
+		\LD@XML@Read
+		\LD@XML@Field
+	}%
+	\gdef\LD@XML@Field &#1;</field>{% field of application
+		\ifx\LD@Entry@Sense@Buffer\LD@Empty 
+			\xdef\LD@Entry@Sense@Buffer{Field=\CS LD@Entity@#1\EC}%
+		\else
+			\xdef\LD@Entry@Sense@Buffer{\LD@Entry@Sense@Buffer ,Field=\CS LD@Entity@#1\EC}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<misc>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\misc>{%
+		\LD@XML@Read
+		\LD@XML@misc
+	}%
+	\gdef\LD@XML@misc #1</misc>{% Info on the reading
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<lsource>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\lsource#1>{%
+		\LD@XML@Read
+		\def\LD@Temp{#1}%
+		\LD@String@LastChar\LD@Temp\LD@Trash\LD@Temp
+		\if /\LD@Temp
+			\let\LD@XML@Next\LD@XML@Parse
+		\else
+			\let\LD@XML@Next\LD@XML@lsource
+		\fi
+		\LD@XML@Next
+	}%
+	\gdef\LD@XML@lsource #1</lsource>{% Info on the reading
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<dial>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\dial>{%
+		\LD@XML@Read
+		\LD@XML@DIAL
+	}%
+	\gdef\LD@XML@DIAL #1</dial>{% Info on the reading
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<gloss>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\catcode`"=11\relax
+	\gdef\gloss#1>{%
+		\LD@XML@Read
+		\def\LD@Temp{#1}%
+		\ifx\LD@Temp\LD@Empty
+			\def\LD@Entry@Language{en}%			
+		\else
+			\LD@String@Split\LD@Temp {="}\LD@Trash\LD@Temp
+			\LD@String@Split\LD@Temp "\LD@Entry@Language\LD@Trash
+		\fi
+		\LD@XML@gloss
+	}%
+	\gdef\LD@XML@gloss #1</gloss>{% Info on the reading
+		\ifx\LD@Akuma@Language\LD@Entry@Language
+			\ifx\LD@Entry@Gloss\LD@Empty
+				\xdef\LD@Entry@Gloss{#1}%
+			\else
+				\xdef\LD@Entry@Gloss{\LD@Entry@Gloss , #1}%
+			\fi
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	<s_inf>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\catcode`_=11\relax
+	\gdef\s_inf>{%
+		\LD@XML@Read
+		\LD@XML@S_INF
+	}%
+	\gdef\LD@XML@S_INF #1</s_inf>{% Info on the reading
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%	</sense>
+{%
+	\catcode`/=11\relax
+	\catcode`\_=11\relax
+	\catcode`]=11\relax
+	\catcode`[=11\relax
+	\gdef\/sense>{%
+		\LD@XML@Read
+		\LD@XML@/SENSE
+	}%
+	\gdef\LD@XML@/SENSE{%
+		\unless\ifx\LD@Entry@Gloss\LD@Empty
+			\unless\ifx\LD@Entry@Sense\LD@Empty
+				\xdef\LD@Entry@Sense{\LD@Entry@Sense |}%
+			\fi
+			\ifx\LD@Entry@Sense@Buffer\LD@Empty 
+				\xdef\LD@Entry@Sense{\LD@Entry@Sense\LD@Entry@Gloss}%
+			\else
+				\xdef\LD@Entry@Sense{\LD@Entry@Sense [\LD@Entry@Sense@Buffer ]\LD@Entry@Gloss}%
+			\fi
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</sense>					%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<info>						%
+% 											%
+%											%
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\info>{%
+		\LD@XML@Read
+		\LD@XML@info
+	}%
+	\gdef\LD@XML@info #1</info>{%
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</info>						%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<trans>					%
+% 											%
+%											%
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\trans{%
+		\LD@XML@Read
+		\LD@XML@trans
+	}%
+	\gdef\LD@XML@trans #1</trans>{%
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</trans>					%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{%
+	\catcode`/=11\relax
+	\gdef\/entry>{%
+		\LD@XML@Read
+		\LD@XML@SlashENTRY
+	}%
+}%
+\newcount\LD@Entry@Miss\global\LD@Entry@Miss=0\relax
+\newcount\LD@Entry@Count\global\LD@Entry@Count=0\relax
+\newcount\LD@Entry@Quirks\global\LD@Entry@Quirks=0\relax
+\newcount\LD@Entry@Counter@Progress\global\LD@Entry@Counter@Progress=0\relax
+
+% These 2 control sequences have to be defined ! (or I could code them \CS LD@XML@Entry@Kanji@Do\EC and \CS LD@XML@Entry@Kana@Do\EC in the following routine)
+%\let\LD@XML@Entry@Kanji@Do\relax
+%\let\LD@XML@Entry@Kana@Do\relax
+\newcount\LD@Trace\global\LD@Trace=0\relax
+\def\LD@XML@SlashENTRY{%
+	\global\advance\LD@XML@EntryCount by1\relax
+	\global\advance\LD@Entry@Counter@Progress by1\relax
+	\ifnum\LD@Entry@Counter@Progress>9999\relax
+		\LD@Time@Benchmark{Total Entries : \LD@Entry@Number\LD@Space OK : \the\LD@Entry@Count\LD@Space Quirks : \the\LD@Entry@Quirks}%
+		\global\LD@Entry@Counter@Progress=0\relax
+	\fi
+	\LD@For\LD@Member@Kana:=\LD@Entry@REle\With |\Do{%
+		\LD@Assign\LD@Member@Kana\LD@Kana@Reading\LD@Kana@Info
+		\unless\ifx\LD@Entry@KEle\LD@Empty
+			% Test for No Kanji
+			\edef\LD@Temp{\LD@Kana@Info NoKanji}%
+			\LD@Split\LD@Temp{NoKanji}\LD@Trash\LD@Temp
+			\ifx\LD@Temp\LD@Empty
+				% Kanji
+				% Test for Kanji restriction
+				\xdef\LD@Entry@Restr{}%
+				\edef\LD@Tail{\LD@Kana@Info ,Restr=}%
+				\loop
+					\LD@Split\LD@Tail{Restr=}\LD@Trash\LD@Tail
+				\unless\ifx\LD@Tail\LD@Empty
+					\LD@Split\LD@Tail ,\LD@Head\LD@Tail
+					\xdef\LD@Entry@Restr{\LD@Entry@Restr\LD@Head ,}%
+				\repeat
+				% Test for irregular Kana usage
+				\edef\LD@Test{\LD@Kana@Info ,Inf=ik}%
+				\LD@Split\LD@Test{Inf=ik}\LD@Trash\LD@Test
+				\ifx\LD@Test\LD@Empty
+					\def\LD@Entry@Kana@Ir{0}%
+				\else
+					\def\LD@Entry@Kana@Ir{1}%
+				\fi
+				\LD@ForOne\LD@Member@Kanji:=\LD@Entry@KEle\With |\Do{%
+					\LD@Assign\LD@Member@Kanji\LD@Kanji@Reading\LD@Kanji@Info
+					% Tests for restriction
+					\def\LD@Temp{Y}%
+					\unless\ifx\LD@Entry@Restr\LD@Empty
+						\edef\LD@Temp{,\LD@Entry@Restr\LD@Kanji@Reading,}%
+						\EA\LD@Split\EA\LD@Temp\EA{\EA,\LD@Kanji@Reading,}\LD@Trash\LD@Temp
+					\fi
+					\unless\ifx\LD@Temp\LD@Empty% if it is empty, it isn't in the restriction list
+						% Test for irregular Kana usage
+						\edef\LD@Test{\LD@Kanji@Info ,Inf=iK}%
+						\LD@Split\LD@Test{Inf=iK}\LD@Trash\LD@Test
+						\ifx\LD@Test\LD@Empty
+							\def\LD@Entry@Kanji@Ir{0}%
+						\else
+							\def\LD@Entry@Kanji@Ir{1}%
+						\fi
+						% Test for irregular okurigana usage
+						\edef\LD@Test{\LD@Kanji@Info ,Inf=io}%
+						\LD@Split\LD@Test{Inf=io}\LD@Trash\LD@Test
+						\ifx\LD@Test\LD@Empty
+							\def\LD@Entry@Kanji@Ir{0}%
+						\else
+							\def\LD@Entry@Kanji@Ir{1}%
+						\fi
+						\LD@XML@Entry@Kanji@Do
+					\fi
+				}%
+			\else
+				% Kana only
+				\unless\ifx\LD@Entry@Sense\LD@Empty
+					\LD@XML@Entry@Kana@Do
+				\fi
+			\fi
+		\else
+			% Kana only
+			\unless\ifx\LD@Entry@Sense\LD@Empty
+				\LD@XML@Entry@Kana@Do
+			\fi
+		\fi
+	}%
+	\LD@XML@Parse
+}%
+%																	%
+%								</entry>								%
+% 																	%
+%																	%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{%
+	\catcode`/=11\relax
+	\gdef\/JMdict>{%
+		\LD@XML@Read
+		\LD@XML@/JMdict
+	}%
+	\gdef\/JMnedict>{%
+		\LD@XML@Read
+		\LD@XML@/JMdict
+	}%
+	\gdef\LD@XML@/JMdict{%
+		\LD@Time@Benchmark{TE: \LD@Entry@Number\LD@Space OK : \the\LD@Entry@Count\LD@Space Quirks : \the\LD@Entry@Quirks}%
+	}%
+
+}%
+%																							%
+%											</JMdict>											%
+% 																							%
+%																							%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\endinput

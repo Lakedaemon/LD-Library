@@ -1,0 +1,606 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                          Fontes                                                                       %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% : fontes true type
+%
+
+\def\Font #1@#2pt{\font\Fonteol=ec#1 at #2pt\Fonteol}
+
+\font\LD@Font@Book=cmbx10 scaled 2000\relax 
+%
+% cursives : georges, brigitte
+% 
+% Special : haunt=hauntaoe
+%
+% dingbats : fantastic, creature
+%
+
+%  : fonte romaine en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
+% 
+
+\font\seventeenrm=cmr12 scaled 1400
+\font\fourteenrm=cmr12 scaled 1200
+\font\twelverm=cmr12
+\font\elevenrm=cmr10 scaled 1100
+\font\tenrm=cmr10
+\font\ninerm=cmr9
+\font\eightrm=cmr8
+\font\sevenrm=cmr7
+\font\sixrm=cmr6
+\font\fiverm=cmr5
+
+%  : fonte romaine grasse en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
+% 
+
+%\font\seventeenbf=cmbx12 scaled 1400
+\font\seventeenbf=cmbx10 scaled 1700
+\font\fourteenbf=cmbx10 scaled 1400
+\font\twelvebf=cmbx12
+\font\elevenbf=cmbx10 scaled 1100
+\font\tenbf=cmbx10
+\font\ninebf=cmbx9
+\font\eightbf=cmbx8
+\font\sixbf=cmbx6
+\font\fivebf=cmbx10 at 5pt
+
+\font\chiffre=cmbx10 scaled 1600
+\font\gras=cmbx10 scaled 1100             % Gras romain (boldface)
+\font\TIT=cmbx12 scaled 1600              % Titres
+\font\titre=cmbx12 scaled 1200
+\font\pti=cmbx12 scaled 1200
+
+%  : fonte italique en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
+% 
+
+\font\seventeenit=cmti10 scaled 1700
+\font\fourteenit=cmti10 scaled 1400
+\font\twelveit=cmti12
+\font\elevenit=cmti10 scaled 1100
+\font\tenit=cmti10
+\font\nineit=cmti9
+\font\eightit=cmti8
+\font\sevenit=cmti7
+\font\sixit=cmti10 scaled 600
+\font\fiveit=cmti10 scaled 500
+
+%  : fonte italique math\'ematique en 6, 7, 8, 9, 10, 11 et 12  points
+% 
+
+\font\twelvei=cmmi10 scaled 1200
+\font\eleveni=cmmi10 scaled 1100
+\font\teni=cmmi10
+\font\ninei=cmmi9
+\font\eighti=cmmi8
+\font\seveni=cmmi7
+\font\sixi=cmmi6
+
+% \msafam : famille de symboles amstex en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
+%
+
+\font\seventeenmsa=msam10 at 17pt   
+\font\fourteenmsa=msam10 at 14pt
+\font\twelvemsa=msam10 at 12pt
+\font\tenmsa=msam10
+\font\ninemsa=msam10 at 9pt
+\font\eightmsa=msam10 at 8pt
+\font\sevenmsa=msam7
+\font\sixmsa=msam10 at 6pt
+\font\fivemsa=msam5
+
+\newfam\msafam
+\textfont\msafam=\tenmsa
+\scriptfont\msafam=\sevenmsa
+\scriptscriptfont\msafam=\fivemsa
+
+% \scalnfam : famille de lettres de ronde en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
+% \scal=\scalnfam en 10 points
+
+\font\seventeenscaln=eusm10 at 17pt
+\font\fourteenscaln=eusm10 at 14pt
+\font\twelvescaln=eusm10 at 12pt
+\font\tenscaln=eusm10
+\font\ninescaln=eusm10 scaled 900
+\font\eightscaln=eusm10 scaled 800
+\font\sevenscaln=eusm10 scaled 700
+\font\sixscaln=eusm10 scaled 600
+\font\fivescaln=eusm5
+
+\newfam\scalnfam
+\textfont\scalnfam=\tenscaln
+\scriptfont\scalnfam=\sevenscaln
+\scriptscriptfont\scalnfam=\fivescaln
+
+\def\scal{\fam\scalnfam\tenscaln}
+
+% : famille de fontes slanted en 5, 6, 7, 8, 9 et 10  points
+% 
+\font\tensl=cmsl10
+\font\ninesl=cmsl9                 
+\font\eightsl=cmsl8
+\font\sevensl=cmsl10 at 7pt
+\font\sixsl=cmsl10 at 6pt
+\font\fivesl=cmsl10 at 5pt
+
+
+% \gotfam : famille de lettres gothiques en 5, 6, 7, 8, 9 et 10  points
+% \got=\gotfam en 10 points
+
+\font\tengot=eufm10                       
+\font\ninegot=eufm10 at 9pt
+\font\eightgot=eufm10 at 8truept
+\font\sevengot=eufm7
+\font\sixgot=eufm10 at 6 truept
+\font\fivegot=eufm5
+
+\newfam\gotfam
+\textfont\gotfam=\tengot
+\scriptfont\gotfam=\sevengot
+\scriptscriptfont\gotfam=\fivegot
+\def\got{\fam\gotfam\tengot}
+
+% \bbfam : famille de lettres évidées pour titres en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
+% \bb=\bbfam en 10 points
+
+\font\seventeenbb=msbm10 at 17pt     
+\font\fourteenbb=msbm10 at 14pt
+\font\twelvebb=msbm10 at 12pt
+\font\tenbb=msbm10                   
+\font\ninebb=msbm10 at 9pt
+\font\eightbb=msbm10 at 8pt
+\font\sevenbb=msbm7
+\font\sixbb=msbm10 at 6pt
+\font\fivebb=msbm5
+
+\newfam\bbfam
+\textfont\bbfam=\tenbb
+\scriptfont\bbfam=\sevenbb
+\scriptscriptfont\bbfam=\fivebb
+
+\def\bb{\fam\bbfam\tenbb}
+
+%  : fonte italique grasse pour titres en 9, 10, 12, 11, 12, 13, 14 et 17 points
+% 
+
+\font\seventeenti=cmbxti10 scaled 1700
+\font\fourteenti=cmbxti10 at 14pt
+\font\thirteenti=cmbxti10 at 13pt
+\font\twelveti=cmbxti10 scaled 1200
+\font\eleventi=cmbxti10 at 11pt
+\font\tenti=cmbxti10
+\font\nineti=cmbxti10 at 9pt
+\newfam\bolditfam
+\textfont\bolditfam=\tenti
+\def\boldit{\fam\bolditfam\tenti}
+
+%  : fonte italique math\'ematique grasse pour titres en 9, 10, 11, 12, 14 et 17 points
+% 
+
+\font\seventeenib=cmmib10 scaled 1700
+\font\fourteenib=cmmib10 scaled 1400
+\font\twelveib=cmmib10 scaled 1200
+\font\elevenib=cmmib10 scaled 1100
+\font\tenib=cmmib10
+\font\nineib=cmmib10 scaled 900
+
+% \scalbfam : famille de lettres de ronde grasses en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
+% \scalb=\scalbfam en 10 points
+
+\font\seventeenscalb=eusb10  at 17pt 
+\font\fourteenscalb=eusb10 at 14pt
+\font\twelvescalb=eusb10 at 12pt
+\font\tenscalb=eusb10      
+\font\ninescalb=eusb10 scaled 900
+\font\eightscalb=eusb10 scaled 800
+\font\sevenscalb=eusb10 scaled 700
+\font\sixscalb=eusb10 scaled 600
+\font\fivescalb=eusb5
+
+\newfam\scalbfam
+\textfont\scalbfam=\tenscalb
+\scriptfont\scalbfam=\sevenscalb
+\scriptscriptfont\scalbfam=\fivescalb
+
+\def\scalb{\fam\scalbfam\tenscalb}
+
+
+% \pcapfam : famille de petites capitales en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
+% \pcap=\pcapfam en 10 points
+
+
+\font\seventeenpcap=cmcsc10 at 17pt
+\font\fourteenpcap=cmcsc10 at 17pt
+\font\twelvepcap=cmcsc10 at 17pt
+\font\tenpcap=cmcsc10
+\font\ninepcap=cmcsc9
+\font\eightpcap=cmcsc8
+\font\sevenpcap=cmcsc10 scaled 700
+\font\sixpcap=cmcsc10 scaled 600
+\font\fivepcap=cmcsc10 scaled 500
+
+\newfam\pcapfam
+\textfont\pcapfam=\tenpcap
+\scriptfont\pcapfam=\sevenpcap
+\scriptscriptfont\pcapfam=\fivepcap
+
+\def\pcap{\fam\pcapfam\tenpcap}
+
+% : famille de lettres typewritter en 5, 6, 7, 8, 9, et 10 points
+% 
+
+\font\tentt=cmtt10
+\font\ninett=cmtt9                 
+\font\eighttt=cmtt8
+\font\seventt=cmtt10 scaled 700
+\font\sixtt=cmtt10 scaled 600
+\font\fivett=cmtt10 scaled 500
+
+% : famille de symboles pour titres  en 6, 8, 9, 10, 12, 14, et 17 points
+% 
+
+\font\seventeensy=cmsy10 scaled 1700
+\font\fourteensy=cmsy10 scaled 1400
+\font\twelvesy=cmsy10 scaled 1200
+\font\tensy=cmsy10
+\font\ninesy=cmsy9
+\font\eightsy=cmsy8
+\font\sixsy=cmsy6
+
+
+% : famille de ? en 5, 6, 7, 8, 9, 10, 12, 14, et 17 points
+% 
+
+\font\seventeenex=cmex10 at 17pt
+\font\fourteenex=cmex10 at 14pt
+\font\twelveex=cmex10 at 12pt
+\font\tenex=cmex10
+\font\nineex=cmex10 at 9pt
+\font\eightex=cmex10 at 8pt
+\font\sevenex=cmex10 at 7pt
+\font\sixex=cmex10 at 6pt
+\font\fiveex=cmex10 at 5pt
+
+% : famille de  lettres grecques plombees en 5, 6, 7, 8, 9, 10, 11, 12, 13 et 14 points
+% 
+
+\font\fourteengp=cmmi10 at 14pt
+\font\thirteengp=cmmib10 at 13pt
+\font\twelvegp=cmmib10 at 12pt
+\font\elevengp=cmmib10 at 11pt
+\font\tengp=cmmib10
+\font\ninegp=cmmib10 at 9pt
+\font\eightgp=cmmib8
+\font\sevengp=cmmib7
+\font\sixgp=cmmib6
+\font\fivegp=cmmib5
+
+% : famille de lettres gothiques diverses en 12  points
+% 
+
+\font\yfrak=yfrak scaled 2000
+\font\yswab=yswab scaled 1200
+\font\twelveygoth=ygoth scaled 1200
+\font\twentyygoth=ygoth scaled 2000
+\font\thirtyygoth=ygoth scaled 4000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                              Paragraphes, fontes et points                                              %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+% Paragraphes en 5 points
+%
+
+\def\fivepts{%
+\textfont0=\fiverm\scriptfont0=\fiverm\scriptscriptfont0=\fiverm
+\def\rm{\fam0\fiverm}%
+%\textfont1=\fivei\scriptfont1=\fivei
+%\scriptscriptfont1=\fivei\def\oldstyle{\fam1\fivei}%
+%\textfont2=\fivesy\scriptfont2=\fivey\scriptscriptfont2=\fivesy
+%\textfont3=\fiveex\scriptfont3=\fiveex
+%\textfont\itfam=\fiveit
+%\def\it{\fam\itfam\fiveit}%
+%\textfont\slfam=\fivesl
+%\def\sl{\fam\slfam\fivesl}%
+%\textfont\bbfam=\fivebb \scriptfont\bbfam=\fivebb\scriptscriptfont\bbfam=\fivebb
+%%\def\bb{\fam\bbfam\fivebb}%
+%\textfont\msafam=\fivemsa\scriptfont\msafam=\fivemsa
+%\textfont\scalnfam=\fivescaln
+%\def\scaln{\fam\scalnfam\fivescaln}%
+%\textfont\bffam=\fivebf\scriptfont\bffam=\fivebf\scriptscriptfont\bffam=\fivebf
+%\def\bf{\fam\bffam\fivebf}%
+%\textfont\ttfam=\fivett
+\abovedisplayskip=1pt plus1pt minus 2pt
+\belowdisplayskip=1pt plus0pt minus 2pt
+\abovedisplayshortskip= 1pt plus 2pt minus 1pt
+\belowdisplayshortskip= 1pt plus 2pt minus 1pt
+\smallskipamount=1pt plus 1pt minus 2pt
+\medskipamount=2pt plus 2pt minus 2pt
+\bigskipamount=3pt plus 3pt minus 3pt
+\setbox\strutbox=\hbox{\vrule height 3pt depth 2pt width 0pt}%
+\parfillskip=0pt
+\normalbaselineskip=3pt\normalbaselines\rm}
+
+
+
+% Paragraphes en 7 points
+%
+
+\def\sevenpts{%
+\textfont0=\sevenrm\scriptfont0=\sixrm\scriptscriptfont0=\fiverm
+\def\rm{\fam0\sevenrm}%
+\textfont1=\seveni\scriptfont1=\sixi
+\scriptscriptfont1=\fivei\def\oldstyle{\fam1\seveni}%
+\textfont2=\sevensy\scriptfont2=\sixsy\scriptscriptfont2=\fivesy
+\textfont3=\sevenex\scriptfont3=\fiveex
+\textfont\itfam=\sevenit
+\def\it{\fam\itfam\sevenit}%
+\textfont\slfam=\sevensl
+\def\sl{\fam\slfam\sevensl}%
+\textfont\bbfam=\sevenbb \scriptfont\bbfam=\sixbb\scriptscriptfont\bbfam=\fivebb
+\def\bb{\fam\bbfam\sevenbb}%
+\textfont\msafam=\sevenmsa\scriptfont\msafam=\sixmsa
+\textfont\scalnfam=\sevenscaln
+\def\scaln{\fam\scalnfam\sevenscaln}%
+\textfont\bffam=\sevenbf\scriptfont\bffam=\sixbf\scriptscriptfont\bffam=\fivebf
+\def\bf{\fam\bffam\sevenbf}%
+\textfont\ttfam=\seventt
+\abovedisplayskip=2pt plus2pt minus 2pt
+\belowdisplayskip=2pt plus1pt minus 2pt
+\abovedisplayshortskip= 1pt plus 2pt minus 1pt
+\belowdisplayshortskip= 1pt plus 2pt minus 1pt
+\smallskipamount=2pt plus 1pt minus 2pt
+\medskipamount=3pt plus 2pt minus 2pt
+\bigskipamount=7pt plus 3pt minus 3pt
+\setbox\strutbox=\hbox{\vrule height 5pt depth 2pt width 0pt}%
+\normalbaselineskip=9pt\normalbaselines\rm}
+
+
+% Paragraphes en 8 points
+%
+
+\def\eightpts{%
+\textfont0=\eightrm\scriptfont0=\sixrm\scriptscriptfont0=\fiverm
+\def\rm{\fam0\eightrm}%
+\textfont1=\eighti\scriptfont1=\sixi
+\scriptscriptfont1=\fivei\def\oldstyle{\fam1\seveni}%
+\textfont2=\eightsy\scriptfont2=\sixsy\scriptscriptfont2=\fivesy
+\textfont3=\eightex\scriptfont3=\sixex
+\textfont\itfam=\eightit
+\def\it{\fam\itfam\eightit}%
+\textfont\slfam=\eightsl
+\def\sl{\fam\slfam\eightsl}%
+\textfont\bbfam=\eightbb \scriptfont\bbfam=\sixbb\scriptscriptfont\bbfam=\fivebb
+\def\bb{\fam\bbfam\eightbb}%
+\textfont\msafam=\eightmsa\scriptfont\msafam=\sixmsa
+\textfont\scalnfam=\eightscaln
+\def\scaln{\fam\scalnfam\eightscaln}%
+\textfont\ttfam=\eighttt
+\def\tt{\fam\ttfam\eighttt}%
+\textfont\bffam=\eightbf\scriptfont\bffam=\sixbf\scriptscriptfont\bffam=\fivebf
+\def\bf{\fam\bffam\eightbf}%
+\textfont\pcapfam=\eightpcap
+\def\pcap{\fam\pcapfam\eightpcap}%
+\abovedisplayskip=2pt plus2pt minus 2pt
+\belowdisplayskip=2pt plus1pt minus 2pt
+\abovedisplayshortskip= 1pt plus 2pt minus 1pt
+\belowdisplayshortskip= 1pt plus 2pt minus 1pt
+\smallskipamount=2pt plus 1pt minus 2pt
+\medskipamount=3pt plus 2pt minus 2pt
+\bigskipamount=7pt plus 3pt minus 3pt
+\setbox\strutbox=\hbox{\vrule height 5pt depth 2pt width 0pt}%
+\normalbaselineskip=9pt\normalbaselines
+\rm}
+
+% Paragraphes en 9 points
+%
+
+\def\ninepts{%
+\textfont0=\ninerm\scriptfont0=\sixrm\scriptscriptfont0=\fiverm
+\def\rm{\fam0\ninerm}%
+\textfont1=\ninei\scriptfont1=\sixi
+\scriptscriptfont1=\fivei\def\oldstyle{\fam1\ninei}%
+\textfont2=\ninesy\scriptfont2=\sixsy\scriptscriptfont2=\fivesy
+\textfont3=\nineex\scriptfont3=\sixex
+\textfont\itfam=\nineit
+\def\it{\fam\itfam\nineit}%
+\textfont\slfam=\ninesl
+\def\sl{\fam\slfam\ninesl}%
+\textfont\bbfam=\ninebb\scriptfont\bbfam=\sixbb\scriptscriptfont\bbfam=\fivebb
+\def\bb{\fam\bbfam\ninebb}%
+\textfont\msafam=\ninemsa\scriptfont\msafam=\sixmsa\scriptscriptfont\msafam=\fivemsa
+\textfont\scalnfam=\ninescaln
+\def\scaln{\fam\scalnfam\ninescaln}%
+\textfont\ttfam=\ninett
+\def\tt{\fam\ttfam\ninett}%
+\textfont\bffam=\ninebf\scriptfont\bffam=\sixbf\scriptscriptfont\bffam=\fivebf
+\def\bf{\fam\bffam\ninebf}%
+\abovedisplayskip=3pt plus2pt minus 2pt
+\belowdisplayskip=3pt plus1pt minus 2pt
+\abovedisplayshortskip= 2pt plus 2pt minus 1pt
+\belowdisplayshortskip= 2pt plus 2pt minus 1pt
+\smallskipamount=2pt plus 1pt minus 2pt
+\medskipamount=3pt plus 2pt minus 2pt
+\bigskipamount=7pt plus 3pt minus 3pt
+\setbox\strutbox=\hbox{\vrule height 5pt depth 2pt width 0pt}%
+\normalbaselineskip=10.5pt plus.3pt minus.3pt\normalbaselines\rm}
+
+
+% Paragraphes en 10 points
+%
+
+\def\tenpts{%
+\textfont0=\tenrm\scriptfont0=\sevenrm\scriptscriptfont0=\fiverm
+\def\rm{\fam0\tenrm}%
+\textfont1=\teni\scriptfont1=\seveni
+\scriptscriptfont1=\fivei\def\oldstyle{\fam1\teni}%
+\textfont2=\tensy\scriptfont2=\sevensy\scriptscriptfont2=\fivesy
+\textfont3=\tenex\scriptfont3=\sevenex
+\textfont\itfam=\tenit
+\def\it{\fam\itfam\tenit}%
+\textfont\slfam=\tensl
+\def\sl{\fam\slfam\tensl}%
+\textfont\bbfam=\tenbb\scriptfont\bbfam=\sevenbb\scriptscriptfont\bbfam=\fivebb
+\def\bb{\fam\bbfam\tenbb}%
+\textfont\msafam=\tenmsa\scriptfont\msafam=\sevenmsa\scriptscriptfont\msafam=\fivemsa
+\textfont\scalnfam=\tenscaln
+\def\scaln{\fam\scalnfam\tenscaln}%
+\textfont\ttfam=\tentt
+\def\tt{\fam\ttfam\tentt}%
+\textfont\bffam=\tenbf\scriptfont\bffam=\sevenbf\scriptscriptfont\bffam=\fivebf
+\def\bf{\fam\bffam\tenbf}%
+%\abovedisplayskip=3pt plus2pt minus 2pt
+%\belowdisplayskip=3pt plus1pt minus 2pt
+%\abovedisplayshortskip= 2pt plus 2pt minus 1pt
+%\belowdisplayshortskip= 2pt plus 2pt minus 1pt
+%\smallskipamount=2pt plus 1pt minus 2pt
+%\medskipamount=3pt plus 2pt minus 2pt
+%\bigskipamount=7pt plus 3pt minus 3pt
+%\setbox\strutbox=\hbox{\vrule height 5pt depth 2pt width 0pt}%
+%\normalbaselineskip=10.5pt plus.3pt minus.3pt\normalbaselines
+\rm}
+
+% Paragraphes en 11 points
+
+\def\elevenpts{%
+\textfont0=\elevenrm\scriptfont0=\ninerm
+\textfont1=\elevenib\scriptfont1=\ninei}
+
+
+% Paragraphes en 12 points
+
+\def\twelvepts{%
+\textfont0=\twelverm\scriptfont0=\tenrm\def\rm{\fam0\twelverm}%
+\textfont1=\twelveib\scriptfont1=\teni%
+\textfont2=\twelvesy\scriptfont2=\tensy\scriptscriptfont2=\eightsy
+\textfont3=\twelveex
+\textfont\itfam=\twelveti
+\def\it{\fam\itfam\twelveti}%
+\textfont\bffam=\twelvebf\scriptfont\bffam=\tenbf\scriptscriptfont\bffam=\eightbf
+\def\bf{\fam\bffam\twelvebf}%
+\textfont\bbfam=\twelvebb \scriptfont\bbfam=\tenbb
+\def\bb{\fam\bbfam\twelvebb}%
+\textfont\msafam=\twelvemsa\scriptfont\msafam=\tenmsa
+\textfont\scalnfam=\twelvescaln
+\normalbaselineskip=15pt\normalbaselines\rm}
+
+
+% Paragraphes en 14 points
+
+\def\fourteenpts{%
+\textfont0=\fourteenrm\scriptfont0=\twelverm\def\rm{\fam0\fourteenrm}%
+\textfont1=\fourteenib\scriptfont1=\twelveib%
+\textfont2=\fourteensy\scriptfont2=\twelvesy\scriptscriptfont2=\tensy
+\textfont3=\fourteenex
+\textfont\itfam=\fourteenti
+\def\it{\fam\itfam\fourteenti}%
+\textfont\bffam=\fourteenbf\scriptfont\bffam=\twelvebf\scriptscriptfont\bffam=\tenbf
+\def\bf{\fam\bffam\fourteenbf}%
+\textfont\bbfam=\fourteenbb \scriptfont\bbfam=\twelvebb
+\def\bb{\fam\bbfam\fourteenbb}%
+\textfont\msafam=\fourteenmsa\scriptfont\msafam=\twelvemsa
+\textfont\scalnfam=\twelvescaln
+\normalbaselineskip=18pt\normalbaselines\rm}
+
+%%%%%% lettres grecques plombées
+%
+
+\def\gphuit{%
+\textfont0=\eightbf\scriptfont0=\sixbf\scriptscriptfont0=\fivebf
+\textfont1=\eightgp\scriptfont1=\sixgp\scriptscriptfont1=\fivegp}
+
+\def\gpdix{%
+\textfont0=\tenbf\scriptfont0=\sevenbf\scriptscriptfont0=\fivebf
+\textfont1=\tengp\scriptfont1=\sevengp\scriptscriptfont1=\fivegp}
+
+\def\gponze{%
+\textfont0=\elevenbf\scriptfont0=\eightbf\scriptscriptfont0=\sixbf
+\textfont1=\elevengp\scriptfont1=\eightgp\scriptscriptfont1=\sixgp}
+
+\def\gpdouze{%
+\textfont0=\twelvebf\scriptfont0=\tenbf\scriptscriptfont0=\ninebf
+\textfont1=\twelvegp\scriptfont1=\tengp\scriptscriptfont1=\ninegp}
+
+\def\gptreize{%
+\textfont0=\thirteenbf\scriptfont0=\elevenbf\scriptscriptfont0=\tenbf
+\textfont1=\thirteengp\scriptfont1=\elevengp\scriptscriptfont1=\tengp}
+
+ \def\gpquatorze{%
+\textfont0=\fourteenbf\scriptfont0=\twelvebf\scriptscriptfont0=\elevenbf
+\textfont1=\fourteengp\scriptfont1=\twelvegp\scriptscriptfont1=\elevengp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                  Changements de fontes                                                    %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\ob#1{{\bb #1}}%         math
+\def\sc#1{{\scal #1}}%       rond
+
+%\def\og#1{{\bf #1}}%          gras
+%\def\oc#1{{\cal #1}}%         rond
+%\def\on#1{{\rm #1}}%         romain
+%\def\op#1{%                       lettres plombées pauvres
+%\setbox\olbox=\hbox{$#1$}\kern-.025em\copy\olbox
+%\kern-\wd\olbox\kern.05em
+%\copy\olbox\kern-\wd\olbox\kern-.025em\raise .0433em\box\olbox}
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                    Nouveaux Caractères                                                     %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\def\undefine#1{\let#1\undefined}
+
+\def\newsymbol#1#2#3#4#5{\let\next@\relax
+\ifnum#2=\@ne\let\next@\msafam@\else
+\ifnum#2=\tw@\let\next@\bbfam@\fi\fi
+\mathchardef#1="#3\next@#4#5}
+
+\def\mathhexbox@#1#2#3{\relax
+\ifmmode\mathpalette{}{\m@th\mathchar"#1#2#3}%
+\else\leavevmode\hbox{$\m@th\mathchar"#1#2#3$}\fi}
+
+\def\hexnumber@#1{\ifcase#1 0\or 1\or 2\or 3\or 4\or 5\or 6\or 7\or 8\or
+9\or A\or B\or C\or D\or E\or F\fi}
+
+\def\setboxz@h{\setbox\z@\hbox}
+\def\wdz@{\wd\z@}
+\def\boxz@{\box\z@}
+
+\edef\msafam@{\hexnumber@\msafam}
+\mathchardef\dabar@"0\msafam@39
+
+\edef\bbfam@{\hexnumber@\bbfam}
+\def\widehat#1{\setboxz@h{$\m@th#1$}%
+\ifdim\wdz@>\tw@ em\mathaccent"0\bbfam@5B{#1}%
+\else\mathaccent"0362{#1}\fi}
+
+\def\widetilde#1{\setboxz@h{$\m@th#1$}%
+\ifdim\wdz@>\tw@ em\mathaccent"0\bbfam@5D{#1}%
+\else\mathaccent"0365{#1}\fi}
+
+\newsymbol\leqq 1335          % superieur ou egal(=)
+\newsymbol\leqslant 1336
+\newsymbol\lessgtr 1337       % superieur ou inferieur
+\newsymbol\backprime 1038     % apostrophe de gauche a droite
+\newsymbol\risingdotseq 133A  % egal entre points (bas puis haut)
+\newsymbol\fallingdotseq 133B % egal entre points (haut puis bas)
+\newsymbol\succcurlyeq 133C   % superieur ou egal tordu
+\newsymbol\geqq 133D          % inferieur ou egal(=)
+\newsymbol\geqslant 133E
+\newsymbol\nmid 232D
+\newsymbol\nexists 2040
+\newsymbol\smallsetminus 2272
+\newsymbol\varnothing 203F

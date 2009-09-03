@@ -1,0 +1,527 @@
+% Module Base de donnees d'exercices version 1.0
+%
+% Instructions : \exo, \Exercices, \Solution
+%
+%
+%
+%                 To Do 
+%
+%
+%
+%   1 clean the code
+%   2 doc       
+%   3 output/input Exercices -> TDs & Cours
+%   4 Improve display of Exercices (dingbats, mathml)
+%   5 corrige + indications
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%						Level									%
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 0 	Bac
+% 1	Sup
+% 2 	Spé
+% 3	Licence
+% 4	Maitrise
+% 5	DEA+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%						Fight									%
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%				PT			PT*/MP		MP*
+% -1 (évident)			Trop facile
+% 0 (application du cours)	Facile			Trop facile
+% 1 (adapter le cours)		Facile/Moyen		Facile			Trop facile
+% 2 (Ensam)			Moyen/dur		Facile/Moyen		Facile
+% 3 (Centrale/Mines)		Dur/Baleze		Moyen/dur		Facile/Moyen
+% 4 (Polytechnique)		Baleze/Infernal	Dur/Baleze		Moyen/dur
+% 5 (Ens Ulm)			Infernal/Impossible	Baleze/Infernal	Dur/Baleze
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%						Learn									%
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% -1 (Perte de temps)		
+% 0 (Entrainement)		0 idée
+% 1 (Formateur)		1+ idée nouvelle
+% 2 (Classique)		2+ idées nouvelles
+% 3 (Culte)			3+ idées nouvelles
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%						Notion : classement par notion, concept				%
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtoks\LD@String@Toks@A
+\newtoks\LD@String@Toks@B
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  should not be here
+\def\LD@String@Append#1#2{%
+	\LD@String@Toks@A={#1}%
+	\LD@String@Toks@B=\EA{#2}%
+	\edef#2{\the\LD@String@Toks@B\the\LD@String@Toks@A}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Exo@Notion@Add#1#2{%
+	\EA\def\CS #1\EC{#2}%
+	\ifcsname LD@Exo@Notion@List\endcsname
+		\EA\LD@String@Append\EA{\CS Tech@#1\EC}\LD@Exo@Technique@List
+	\else
+		\EA\def\EA\LD@Exo@Technique@List\EA{\CS Tech@#1\EC}%
+	\fi
+}%
+%%
+\LD@Exo@Notion@Add{Developpement par rapport a une colonne}{Developpement par rapport a une colonne}%
+\LD@Exo@Notion@Add{Recurrence lineaire}{Recurrence lineaire}%
+\LD@Exo@Notion@Add{Forme alternee}{Forme alternee}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%						Field: classement par thèmes					%
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Exo@Theme@Add#1#2{%
+	\EA\def\CS #1\EC{#2}%
+	\ifcsname LD@Exo@Theme@List\endcsname
+		\EA\LD@String@Append\EA{\CS #1\EC}\LD@Exo@Theme@List
+	\else
+		\EA\def\EA\LD@Exo@Theme@List\EA{\CS #1\EC}%
+	\fi
+}%
+
+
+%% Fondements
+
+\LD@Exo@Theme@Add{Logique}{Logique}%
+\LD@Exo@Theme@Add{Récurrences}{Récurrences}%
+\LD@Exo@Theme@Add{Applications}{Applications}%
+
+
+%% Géométrie
+
+\LD@Exo@Theme@Add{GéométriePlane}{Géométrie plane}%
+\LD@Exo@Theme@Add{GéométrieSpatiale}{Géométrie de l'espace}%
+\LD@Exo@Theme@Add{Courbes}{Courbes}%
+\LD@Exo@Theme@Add{Coniques}{Coniques}%
+\LD@Exo@Theme@Add{AbscisseCurviligne}{Abscisse Curviligne}%
+\LD@Exo@Theme@Add{RepèreDeFrenet}{Repère de Frenet}%
+\LD@Exo@Theme@Add{Courbure}{Courbure}%
+\LD@Exo@Theme@Add{Torsion}{Torsion}%
+\LD@Exo@Theme@Add{Hélices}{Hélices}%
+\LD@Exo@Theme@Add{Enveloppes}{Enveloppes}%
+\LD@Exo@Theme@Add{Développées}{Développées}%
+\LD@Exo@Theme@Add{Développantes}{Développantes}%
+\LD@Exo@Theme@Add{Roulement}{Roulement}%
+\LD@Exo@Theme@Add{Surfaces}{Surfaces}%
+\LD@Exo@Theme@Add{Quadriques}{Quadriques}%
+
+%% Algèbre
+
+\LD@Exo@Theme@Add{NombresComplexes}{Nombres Complexes}%
+\LD@Exo@Theme@Add{Trigonométrie}{Trigonométrie}%
+\LD@Exo@Theme@Add{NombresEntiers}{Nombres entiers}%
+\LD@Exo@Theme@Add{Arithmétique}{Arithmétique}%
+\LD@Exo@Theme@Add{Groupes}{Groupes}%
+\LD@Exo@Theme@Add{Anneaux}{Anneaux}%
+\LD@Exo@Theme@Add{Polynômes}{Polynômes}%
+\LD@Exo@Theme@Add{FractionsRationnelles}{Fractions rationnelles}%
+\LD@Exo@Theme@Add{EspacesVectoriels}{Espaces vectoriels}%
+\LD@Exo@Theme@Add{DimensionFinie}{Dimension finie}%
+\LD@Exo@Theme@Add{Rang}{Rang}%
+\LD@Exo@Theme@Add{SystèmesLinéaires}{Systèmes linéaires}%
+\LD@Exo@Theme@Add{RécurrencesLinéaires}{Récurrences linéaires}%
+\LD@Exo@Theme@Add{Matrices}{Matrices}%
+\LD@Exo@Theme@Add{FormesMultilinéaires}{Formes multilinéaires}%
+\LD@Exo@Theme@Add{Déterminant}{Déterminant}%
+\LD@Exo@Theme@Add{ValeursPropres}{Valeurs propres}%
+\LD@Exo@Theme@Add{VecteursPropres}{Vecteurs propres}%
+\LD@Exo@Theme@Add{PolynômesCaractéristiques}{Polynômes caractéristiques}%
+\LD@Exo@Theme@Add{Diagonalisation}{Diagonalisation}%
+\LD@Exo@Theme@Add{Trigonalisation}{Trigonalisation}%
+\LD@Exo@Theme@Add{Réduction}{Réduction}%
+\LD@Exo@Theme@Add{SystèmesDifférentiels}{Systèmes différentiels}%
+
+\LD@Exo@Theme@Add{EspacesPréHilbertiens}{Espaces pré-Hilbertiens}%
+\LD@Exo@Theme@Add{InégalitéDeCauchySchwarz}{Inégalité de Cauchy-Schwarz}%
+\LD@Exo@Theme@Add{Orthonormalisation}{Orthonormalisation}%
+\LD@Exo@Theme@Add{EndomorphismesSymétriques}{Endomorphismes symétriques}%
+\LD@Exo@Theme@Add{MatricesSymétriques}{Matrices symétriques}%
+\LD@Exo@Theme@Add{FormesQuadratiques}{Formes quadratiques}%
+\LD@Exo@Theme@Add{EndomorphismesOrthogonaux}{Endomorphismes orthogonaux}%
+\LD@Exo@Theme@Add{MatricesOrthogonales}{Matrices orthogonales}%
+
+%% Analyse
+
+\LD@Exo@Theme@Add{Fonctions}{Fonctions}%
+\LD@Exo@Theme@Add{TrigonométrieHyperbolique}{Trigonométrie hyperbolique}%
+\LD@Exo@Theme@Add{Convexite}{Convexité}%
+\LD@Exo@Theme@Add{CourbesParamétréesCartésiennes}{Courbes paramétrées cartésiennes}%
+\LD@Exo@Theme@Add{CourbesParamétréesPolaires}{Courbes paramétrées polaires}%
+
+%% Topologie
+
+\LD@Exo@Theme@Add{Normes}{Normes}%
+\LD@Exo@Theme@Add{Suites}{Suites}%
+\LD@Exo@Theme@Add{Topologie}{Topologie}%
+\LD@Exo@Theme@Add{Connexité}{Connexité}%
+\LD@Exo@Theme@Add{Compacité}{Compacité}%
+
+\LD@Exo@Theme@Add{FonctionsDePlusieursVariables}{Fonctions de plusieurs variables}%
+\LD@Exo@Theme@Add{Continuité}{Continuité}%
+\LD@Exo@Theme@Add{Dérivation}{Dérivation}%
+\LD@Exo@Theme@Add{Extrema}{Extrema}%
+\LD@Exo@Theme@Add{EquationsAuxDérivéesPartielles}{Equation aux dérivées partielles}%
+\LD@Exo@Theme@Add{ThéorèmeDeRolle}{Théorème De Rolle}%
+\LD@Exo@Theme@Add{DéveloppementsLimités}{Développement limités}%
+\LD@Exo@Theme@Add{Limites}{Limites}%
+\LD@Exo@Theme@Add{Equivalents}{Equivalents}%
+\LD@Exo@Theme@Add{EquationsDifférentielles}{Equations différentielles}%
+\LD@Exo@Theme@Add{EquationsDifférentiellesAVariablesSéparables}{Equations différentielles à variables séparables}%
+\LD@Exo@Theme@Add{EquationsDifférentiellesLinéairesDuPremierOrdre}{Equations différentielles linéaires du premier ordre}%
+\LD@Exo@Theme@Add{EquationsDifférentiellesLinéairesDuSecondOrdre}{Equations différentielles linéaires du second ordre}%
+\LD@Exo@Theme@Add{Primitives}{Primitives}%
+\LD@Exo@Theme@Add{Intégrales}{Intégrales}%
+\LD@Exo@Theme@Add{SommesDeRiemann}{Sommes de Riemann}%
+\LD@Exo@Theme@Add{Intégration}{Intégration}%
+\LD@Exo@Theme@Add{IntégralesGénéralisées}{Intégrales généralisées}%
+\LD@Exo@Theme@Add{FonctionsDéfiniesParUneIntégrale}{Fonctions définies par une intégrale}%
+\LD@Exo@Theme@Add{IntégralesMultiples}{Intégrales multiples}%
+\LD@Exo@Theme@Add{IntégralesCurvilignes}{Intégrales curvilignes}%
+\LD@Exo@Theme@Add{Aires}{Aires}%
+\LD@Exo@Theme@Add{Volumes}{Volumes}%
+
+\LD@Exo@Theme@Add{Séries}{Séries}%
+\LD@Exo@Theme@Add{SériesNumériques}{Séries numériques}%
+\LD@Exo@Theme@Add{SériesDeFonctions}{Séries de fonctions}%
+\LD@Exo@Theme@Add{SériesEntières}{Séries entières}%
+\LD@Exo@Theme@Add{SériesDeFourier}{Séries de Fourier}%
+
+
+\LD@Exo@Theme@Add{ChampsDeVecteurs}{Champs de vecteurs}%
+\LD@Exo@Theme@Add{PotentielsScalaires}{Potentiel scalaire}%
+\LD@Exo@Theme@Add{PotentielsVecteurs}{Potentiel vecteur}%
+
+% Algorythmique
+
+\LD@Exo@Theme@Add{Programmation}{Programmation}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%						Type									%
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cours -> illustration du cours, classiques. 
+% TD -> simples, applications, entrainement
+% Exo -> plus dur, classiques
+% Colle
+\def\Colles{Colles}%
+\def\Cours{Cours}%
+\def\Exercices{Exercices}%
+\def\TravauxDirigés{Travaux dirigés}%
+\def\Problèmes{Problèmes}%
+\def\Others{Autres}%
+\def\Mathematica{Mathematica}%
+\def\Maple{Maple}%
+% Autre -> vide ?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%						Origin									%
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\MP{MP}%
+\def\Capaces{$\kappa$}%
+\def\Lakedaemon{$\Lambda$}% Λ 
+\def\Isabelle{Isa}%
+\def\Mercier{M'}%
+\def\Quercia{MP*}%
+\def\BanquePT{B. PT}%
+\def\CCP{CCP}%
+\def\Fac{Fac}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%						Exo									%
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcount\LD@Exo@Count\LD@Exo@Count=0\relax
+\def\sol{\@getoptionalarg\LD@Maths@Sol}%
+\def\LD@Maths@Sol#1. #2\par{%
+	\LD@Option@Process{,}%
+	\def\LD@Trash{Sol={#2}}% 
+	\def\LD@Temp{#1}%
+	\trim\LD@Temp
+	\EA\let\CS DataSol\LD@Temp\EC\LD@Trash
+}%
+\def\Solution{\@getoptionalarg\LD@Maths@Solution}%
+\def\LD@Maths@Solution#1{%
+	\def\LD@Maths@Label@Internal{#1}%
+	\LD@Option@Process{,}%
+	\ifcsname DataSol#1\endcsname
+		\LD@Data@Def{Sol}{Sol#1}\LD@Sol@@Sol
+		\LD@Maths@Solution@Display
+	\fi
+}%
+\def\LD@Solution@Display@Code{}%
+\def\LD@Maths@Solution@Text{%
+	{\bf Corrig\'e de l'exercice \refn{labelexo\LD@Maths@Label@Internal}.}\PAR
+}%
+\def\LD@Maths@Solution@Display{%
+	{\LD@Solution@Display@Code
+	\noindent
+	\LD@Maths@Solution@Text 
+	\ignorespaces\LD@Sol@@Sol
+	}%
+}%
+\def\exo{\@getoptionalarg\LD@Maths@Exo}%
+\def\LD@Maths@Exo#1. #2\par{%
+	\def\LD@Option@@Origin{}%
+	\def\LD@Option@@Level{}%
+	\def\LD@Option@@Fight{}%
+	\def\LD@Option@@Learn{}%
+	\def\LD@Option@@Field{}%
+	\def\LD@Option@@Type{}%
+	\def\LD@Option@@Solution{}%
+	\def\LD@Option@@Indication{}%
+	\def\LD@Option@@Notion{}%
+	\LD@Option@Process{,}%
+	\edef\LD@Temp{Level={\LD@Option@@Level} Fight={\LD@Option@@Fight} Learn={\LD@Option@@Learn} Field=}%
+	\EA\LD@String@Append\EA{\EA{\LD@Option@@Field} Type=}\LD@Temp
+	\EA\LD@String@Append\EA{\EA{\LD@Option@@Type} Origin=}\LD@Temp
+	\EA\LD@String@Append\EA{\EA{\LD@Option@@Origin} Sol=}\LD@Temp
+	\EA\LD@String@Append\EA{\EA{\LD@Option@@Solution} Ind=}\LD@Temp
+	\EA\LD@String@Append\EA{\EA{\LD@Option@@Indication} Notion=}\LD@Temp
+	\EA\LD@String@Append\EA{\EA{\LD@Option@@Notion} Exo=}\LD@Temp
+	\LD@String@Append{{#2}}\LD@Temp
+	\def\LD@Label{#1}%
+	\trim\LD@Label
+	\EA\let\CS Data\LD@Exo@Prefix\LD@Label\EC\LD@Temp
+	\LD@Loop@For\LD@Theme=\LD@Option@@Field\WithSeparator |\Do{%
+		\unless\ifcsname LD@Exo@Theme@@\LD@Option@@Level\endcsname
+			\EA\edef\CS LD@Exo@Theme@@\LD@Option@@Level\EC{\LD@Theme ,}%
+		\else
+%%%%			\edef\LD@Temp{\LD@Theme}%
+\ifx\LD@Theme\LD@Empty
+\EA\def\EA\LD@Temp\EA{\LD@Theme}%
+\else
+\edef\LD@Temp{\LD@Theme}%
+\fi
+%%%% Fix ?
+			\EA\let\EA\LD@Trash\CS LD@Exo@Theme@@\LD@Option@@Level\EC
+			\edef\LD@Test{,\LD@Trash ,\LD@Theme,}%
+			\EA\LD@String@Split\EA\LD@Test\EA{\EA,\LD@Temp ,}\LD@Trash\LD@Test
+			\ifx\LD@Test\LD@Empty
+				\EA\let\EA\LD@Trash\CS LD@Exo@Theme@@\LD@Option@@Level\EC
+				\EA\edef\CS LD@Exo@Theme@@\LD@Option@@Level\EC{\LD@Trash ,\LD@Temp}%	
+			\fi
+		\fi	
+		\unless\ifcsname LD@Exo@Theme@@\LD@Option@@Level @@\LD@Theme @@\LD@Option@@Type\endcsname
+			\EA\edef\CS LD@Exo@Theme@@\LD@Option@@Level @@\LD@Theme @@\LD@Option@@Type\EC{\LD@Exo@Prefix\LD@Label}%
+		\else
+			\EA\let\EA\LD@Trash\CS LD@Exo@Theme@@\LD@Option@@Level @@\LD@Theme @@\LD@Option@@Type\EC
+			\EA\edef\CS LD@Exo@Theme@@\LD@Option@@Level @@\LD@Theme @@\LD@Option@@Type\EC{\LD@Trash,\LD@Exo@Prefix\LD@Label}%	
+		\fi
+	}%
+}%
+\def\Exercice{\@getoptionalarg\LD@Maths@Exercice}%
+\def\LD@Maths@Exercice#1{%
+	\def\LD@Option@@Label{#1}%
+	\LD@Option@Process{,}%
+	\ifcsname Data#1\endcsname
+		\LD@Data@Def{Exo}{#1}\LD@Exo@@Exo
+		\LD@Data@Def{Level}{#1}\LD@Exo@@Level
+		\LD@Data@Def{Fight}{#1}\LD@Exo@@Fight
+		\LD@Data@Def{Learn}{#1}\LD@Exo@@Learn
+		\LD@Data@Def{Field}{#1}\LD@Exo@@Field
+		\LD@Data@Def{Type}{#1}\LD@Exo@@Type
+		\LD@Data@Def{Origin}{#1}\LD@Exo@@Origin
+		\LD@Data@Def{Sol}{#1}\LD@Exo@@Solution
+		\LD@Data@Def{Ind}{#1}\LD@Exo@@Indication
+		\LD@Data@Def{Notion}{#1}\LD@Exo@@Notion
+		\global\advance\LD@Exo@Count by1\relax % \global
+		\definexref{labelexo#1}{\the\LD@Exo@Count}{exolabel}%
+		\LD@Maths@Exercice@Display
+	\fi
+}%
+\def\LD@Maths@Exercice@Text{\underline{\mbox{\bf Exercice}}}%
+\def\LD@Exercice@Display@Code{}%
+\def\LD@Exercice@Display@Code@Post{}%
+\newif\ifLD@Inferno@Master@\LD@Inferno@Master@true
+\def\LD@Maths@Exercice@MetaData{%
+	\smash{%
+		\unless\ifx\LD@Exo@@Origin\LD@Empty
+			\def\LD@Temp{}%%%%%%%%%%%%%%%%%%%%%%%%%%    don't display these 
+			\EA\EA\EA\def\EA\EA\EA\LD@Test\EA\EA\EA{\EA\LD@Temp\LD@Exo@@Origin}%
+			\EA\LD@String@Split\EA\LD@Test\EA{\LD@Exo@@Origin}\LD@Trash\LD@Test
+			\ifx\LD@Test\LD@Empty
+				\raise4pt\llap{\fivepts(\LD@Exo@@Origin)\quad}%
+			\fi
+		\fi
+		\if Y\LD@Exo@Label@@Show
+			\llap{$\underline{\hbox{{\eightpts \LD@Option@@Label}}}$\quad}%
+		\fi
+		\vbox{%
+			\fivepts
+			\llap{%
+				\LD@Space
+				\def\LD@Temp{0}%
+				\unless\ifx\LD@Exo@@Fight\LD@Temp
+					\LD@Exo@@Fight
+				\fi
+			}%
+			\llap{%
+				\LD@Space
+				\def\LD@Temp{0}%
+				\unless\ifx\LD@Exo@@Learn\LD@Temp
+					\LD@Exo@@Learn
+				\fi
+			}%
+		}%
+	}%
+}%
+\def\LD@Maths@Exercice@Level{%
+	\unless\ifx\LD@Exo@@Level\LD@Empty
+			\ifcase\LD@Exo@@Level
+				^{\flat\flat}%
+			\or 
+				^{\flat}%
+			\or 
+			\or
+				^{\sharp}%
+			\or
+				^{\sharp\sharp}%
+			\or
+				^{\sharp\sharp\sharp}%
+			\or
+			\else
+			\fi
+	\fi
+}%
+\def\LD@Maths@Exercice@Display{%
+	{\LD@Exercice@Display@Code
+	\noindent
+	$
+	\LD@Maths@Exercice@MetaData
+	\LD@Maths@Exercice@Text
+	\LD@Maths@Exercice@Level
+	$ \the\LD@Exo@Count. \ignorespaces\LD@Exo@@Exo}%
+	\LD@Exercice@Display@Code@Post
+}%
+\newcount\LD@Count@Temp
+\def\LD@Exercice@Display@Code{\eightpts}%
+\def\LD@Display#1{%
+	\LD@Count@Temp=#1\relax
+	\ifcase\LD@Count@Temp
+	\or
+	Math. Sup.
+	\or
+	Math. Sp\'e
+	\else
+	\fi
+}%
+\newcount\LD@Exo@Total\LD@Exo@Total=0\relax
+\def\LD@Exo@Label@Show{%
+	\def\LD@Exo@Label@@Show{Y}%
+}%
+\def\LD@Exo@Label@Hide{%
+	\def\LD@Exo@Label@@Show{N}%
+}%
+\LD@Exo@Label@Hide
+\def\LD@Exo@Theme@Display#1#2#3{%
+	{\LD@Loop@For\LD@Theme=#2\WithSeparator\Do{%
+		\goodbreak\bigskip
+		\centerline{\LD@Font@Arial \LD@Theme}%
+		\edef\LD@Temp{null, \LD@Font@Arial\LD@Theme.}%
+		\EA\Chapter\LD@Temp\PAR\medskip
+		{\LD@Loop@For\LD@Exo@Type=#3\WithSeparator ,\Do{%
+			\ifcsname LD@Exo@Theme@@#1@@\LD@Theme @@\LD@Exo@Type\endcsname
+			\edef\LD@Temp{null, \LD@Font@Arial\LD@Exo@Type.}%
+			\EA\Section\LD@Temp\PAR
+				%\medskip\noindent$\underline{\hbox{\LD@Font@Arial\LD@Exo@Type}}$\medskip\noindent
+				\EA\let\EA\LD@Exo@List\CS LD@Exo@Theme@@#1@@\LD@Theme @@\LD@Exo@Type\EC
+				{\LD@Loop@For\LD@Exo@Label=\LD@Exo@List\WithSeparator ,\Do{%
+					\EA\Exercice\EA{\LD@Exo@Label}\medskip\noindent
+					\global\advance\LD@Exo@Total by1\relax
+				}}%
+			\fi
+		}}%
+	}}%
+}%
+\gdef\LD@Exercice@Solution@List{}%
+\gdef\LD@Exercice@Indication@List{}%
+\gdef\LD@Exercice@Notion@List{}%
+\def\LD@Exercice@Display@Code@Post{%
+	\ifcsname LD@Exo@@Solution\endcsname
+		\unless\ifx\LD@Exo@@Solution\LD@Empty
+			\ifLD@Inferno@Master@
+				\pn{\eightpts Solution : \eightpts \LD@Exo@@Solution}%
+			\else
+				\ifx\LD@Exercice@Solution@List\LD@Empty
+					\EA\gdef\EA\LD@Exercice@Solution@List\EA{\LD@Option@@Label}%
+				\else
+					\EA\EA\EA\gdef\EA\EA\EA\LD@Exercice@Solution@List\EA\EA\EA{\EA\LD@Exercice@Solution@List\EA ,\LD@Option@@Label}%
+				\fi
+			\fi
+		\fi
+	\fi
+	\ifcsname LD@Exo@@Notion\endcsname
+		\unless\ifx\LD@Exo@@Notion\LD@Empty
+			\ifLD@Inferno@Master@
+				\pn{\eightpts Notions intervenant dans la solution : \eightpts \LD@Exo@@Notion}%
+			\else
+				\ifx\LD@Exercice@Notion@List\LD@Empty
+					\EA\gdef\EA\LD@Exercice@Notion@List\EA{\LD@Option@@Label}%
+				\else
+					\EA\EA\EA\gdef\EA\EA\EA\LD@Exercice@Notion@List\EA\EA\EA{\EA\LD@Exercice@Notion@List\EA ,\LD@Option@@Label}%
+				\fi
+			\fi	
+		\fi
+	\fi
+	\ifcsname LD@Exo@@Indication\endcsname
+		\unless\ifx\LD@Exo@@Indication\LD@Empty
+			\ifLD@Inferno@Master@
+				\pn{\eightpts Indication : \eightpts \LD@Exo@@Indication}%	
+			\else
+				\ifx\LD@Exercice@Indication@List\LD@Empty
+					\EA\gdef\EA\LD@Exercice@Indication@List\EA{\LD@Option@@Label}%
+					\else
+					\EA\EA\EA\gdef\EA\EA\EA\LD@Exercice@Indication@List\EA\EA\EA{\EA\LD@Exercice@Indication@List\EA ,\LD@Option@@Label}%
+				\fi
+			\fi
+		\fi
+	\fi
+	\medskip\penalty-100
+}%
+\def\LD@Exo@Sol@Display{%
+	{\EA\LD@Loop@For\EA\LD@Exo@Label\EA=\csname LD@Exercice@Solution@List\endcsname\WithSeparator ,\Do{%
+		\LD@Data@Def{Sol}\LD@Exo@Label\LD@Temp
+		\noindent{\eightpts \ref{labelexo\LD@Exo@Label}. \LD@Temp}
+		\medskip
+	}}%
+
+}%
+\def\LD@Exo@Notion@Display{%
+	{\EA\LD@Loop@For\EA\LD@Exo@Label\EA=\csname LD@Exercice@Notion@List\endcsname\WithSeparator ,\Do{%
+		\LD@Data@Def{Notion}\LD@Exo@Label\LD@Temp
+		\noindent\pn{\eightpts \ref{labelexo\LD@Exo@Label} : \LD@Temp}%
+		\medskip
+	}}%
+}%
+
+
+\def\LD@Exo@Indication@Display{%
+	{\EA\LD@Loop@For\EA\LD@Exo@Label\EA=\csname LD@Exercice@Indication@List\endcsname\WithSeparator ,\Do{%
+		\LD@Data@Def{Ind}\LD@Exo@Label\LD@Temp
+		\noindent\pn{\eightpts \ref{labelexo\LD@Exo@Label}. \LD@Temp}%
+		\medskip
+	}}%
+
+}%
+
+\def\LD@Exo@Prefix{PT}%
+\input ExosPT.tex
+\def\LD@Exo@Prefix{PTSI}%
+\input ExosPTSI.tex
+\endinput

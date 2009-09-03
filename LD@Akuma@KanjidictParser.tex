@@ -1,0 +1,592 @@
+\catcode`@=11\relax
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												%
+%				Xml Parser for Kanjidict					%
+%												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input LD@XMLParser.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																							%
+%											<kanjidic2>											%
+% 																							%
+%																							%
+\gdef\kanjidic#1>{%
+	\LD@XML@Read
+	\LD@XML@kanjidic
+}%
+\gdef\LD@XML@kanjidic{%
+	\LD@XML@Parse%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																	%
+%								<header>								%
+% 																	%
+%																	%
+\gdef\header>{%
+	\LD@XML@Read
+	\LD@XML@header
+}%
+\gdef\LD@XML@header{%
+	\LD@XML@Parse
+}%
+%%%%%%%%%%%%%%%%%%%%	<file_version>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\file_version>{%
+		\LD@XML@Read
+		\LD@XML@file_version
+	}%
+	\gdef\LD@XML@file_version #1</file_version>{%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<database_version>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\database_version>{%
+		\LD@XML@Read
+		\LD@XML@database_version
+	}%
+	\gdef\LD@XML@database_version #1</database_version>{%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<date_of_creation>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\date_of_creation>{%
+		\LD@XML@Read
+		\LD@XML@date_of_creation
+	}%
+	\gdef\LD@XML@date_of_creation #1-#2-#3</date_of_creation>{%
+		\def\LD@Kanjidic@Date{#3/#2/#1}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<date_of_creation>
+{%
+	\catcode`/=11\relax
+	\gdef\/header>{%
+		\LD@XML@Read
+		\LD@XML@/header
+	}%
+	\gdef\LD@XML@/header{%
+		\LD@XML@Parse
+	}%
+}%
+%																	%
+%																	%
+%								</header>								%
+%																	%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																	%
+%								<character>								%
+% 																	%
+%																	%
+\gdef\character>{%
+	\LD@XML@Read
+	\LD@XML@character
+}%
+\gdef\LD@XML@character{%
+	\LD@XML@Parse
+}%
+%%%%%%%%%%%%%%%%%%%%	<literal>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\literal>{%
+		\LD@XML@Read
+		\LD@XML@literal
+	}%
+	\gdef\LD@XML@literal#1</literal>{%
+		\def\LD@Kanji{#1}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<codepoint>					%
+% 											%
+%											%
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\codepoint>{%
+		\LD@XML@Read
+		\LD@XML@codepoint
+	}%
+	\gdef\LD@XML@codepoint #1</codepoint>{%
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</codepoint>					%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<radical>					%
+% 											%
+%											%
+{%
+	\gdef\radical>{%
+		\LD@XML@Read
+		\def\LD@Kanji@Nelson{}%
+		\LD@XML@radical
+	}%
+	\gdef\LD@XML@radical{%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<rad_value>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\rad_value#1>{%
+		\LD@XML@Read
+		\edef\LD@Test{#1classical}%
+		\LD@String@Split\LD@Test{classical}\LD@trash\LD@Test
+		\ifx\LD@Test\LD@Empty
+			\let\LD@XML@Next\LD@XML@rad_value@Nelson
+		\else
+			\let\LD@XML@Next\LD@XML@rad_value@Classical
+		\fi
+		\LD@XML@Next
+	}%
+	\gdef\LD@XML@rad_value@Classical#1</rad_value>{%
+		\def\LD@Kanji@Classical{#1}%
+		\LD@XML@Parse
+	}%
+	\gdef\LD@XML@rad_value@Nelson#1</rad_value>{%
+		\def\LD@Kanji@Nelson{#1}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	</radical>
+{%
+	\catcode`/=11\relax
+	\gdef\/radical>{%
+		\LD@XML@Read
+		\LD@XML@/radical
+	}%
+	\gdef\LD@XML@/radical{%
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</radical>					%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<misc>						%
+% 											%
+%											%
+{%
+	\gdef\misc>{%
+		\LD@XML@Read
+		\def\LD@StrokeCount{}%
+		\def\LD@Frequency{}%
+		\def\LD@RadName{}%
+		\LD@XML@misc
+	}%
+	\gdef\LD@XML@misc{%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<stroke_count>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\stroke_count>{%
+		\LD@XML@Read
+		\LD@XML@stroke_count
+	}%
+	\gdef\LD@XML@stroke_count#1</stroke_count>{%
+		\ifx\LD@StrokeCount\LD@Empty
+			\def\LD@StrokeCount{#1}%
+		\else
+			\def\LD@StrokeCount{,#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<freq>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\freq>{%
+		\LD@XML@Read
+		\LD@XML@freq
+	}%
+	\gdef\LD@XML@freq#1</freq>{%
+		\def\LD@Frequency{#1}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<grade>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\grade>{%
+		\LD@XML@Read
+		\LD@XML@grade
+	}%
+	\gdef\LD@XML@grade#1</grade>{%
+		\def\LD@Grade{#1}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<rad_name>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\rad_name>{%
+		\LD@XML@Read
+		\LD@XML@rad_name
+	}%
+	\gdef\LD@XML@rad_name#1</rad_name>{%
+		\ifx\LD@RadName\LD@Empty
+			\def\LD@RadName{#1}%
+		\else
+			\def\LD@RadName{\LD@RadName,#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<jlpt> % this is new
+{%
+	\catcode`<=11\relax
+	\catcode`/=11\relax
+	\gdef\jlpt>{%
+		\LD@XML@Read
+		\LD@XML@jlpt
+	}%
+	\gdef\LD@XML@jlpt #1</jlpt>{%
+%		\ifx\LD@RadName\LD@Empty
+%			\def\LD@RadName{#1}%
+%		\else
+%			\def\LD@RadName{\LD@RadName,#1}%
+%		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<variant>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\variant#1>{%
+		\LD@XML@Read
+		\LD@XML@variant
+	}%
+	\gdef\LD@XML@variant#1</variant>{%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	</misc>
+{%
+	\catcode`/=11\relax
+	\gdef\/misc>{%
+		\LD@XML@Read
+		\LD@XML@/misc
+	}%
+	\gdef\LD@XML@/misc{%
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</misc>					%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<dic_number>					%
+% 											%
+%											%
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\dic_number>{%
+		\LD@XML@Read
+		\LD@XML@dic_number
+	}%
+	\gdef\LD@XML@dic_number #1</dic_number>{%
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</dic_number>				%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<query_code>					%
+% 											%
+%											%
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\query_code>{%
+		\LD@XML@Read
+		\LD@XML@query_code
+	}%
+	\gdef\LD@XML@query_code #1</query_code>{%
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</query_code>				%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%											%
+%					<reading_meaning>				%
+% 											%
+%											%
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\catcode`\_=11\relax
+	\gdef\reading_meaning>{%
+		\LD@XML@Read
+		\edef\LD@Reading@On{}%
+		\edef\LD@Reading@Kun{}%
+		\edef\LD@Reading@Nanori{}%
+		\edef\LD@Reading@Grouped{}%
+		\edef\LD@Meaning@Buffer{}%
+		\LD@XML@reading_meaning
+	}%
+	\gdef\LD@XML@reading_meaning{%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%							%
+%			<rmgroup>			%
+% 							%
+%							%
+{%
+	\gdef\rmgroup>{%
+		\LD@XML@Read
+		\LD@XML@rmgroup
+	}%
+	\gdef\LD@XML@rmgroup{% 
+		\unless\ifx\LD@Reading@Grouped\LD@Empty
+			\edef\LD@Reading@Grouped{\LD@Reading@Grouped |}%
+		\fi
+		\def\LD@Meaning@fr{}%
+		\def\LD@Meaning@en{}%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<reading>
+{%
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\reading#1>{%
+		\LD@XML@Read
+		\let\LD@XML@Next\LD@XML@reading@Ignore
+		\edef\LD@Test{#1ja_on}%
+		\LD@String@Split\LD@Test{ja_on}\LD@trash\LD@Test
+		\unless\ifx\LD@Test\LD@Empty
+			\let\LD@XML@Next\LD@XML@reading@On
+		\fi
+		\edef\LD@Test{#1ja_kun}%
+		\LD@String@Split\LD@Test{ja_kun}\LD@trash\LD@Test
+		\unless\ifx\LD@Test\LD@Empty
+			\let\LD@XML@Next\LD@XML@reading@Kun
+		\fi
+		\LD@XML@Next
+	}%
+	\gdef\LD@XML@reading@On#1</reading>{%
+		\ifx\LD@Reading@On\LD@Empty
+			\edef\LD@Reading@On{#1}%
+		\else
+			\edef\LD@Reading@On{\LD@Reading@On,#1}%
+		\fi
+		\ifx\LD@Reading@Grouped\LD@Empty
+			\edef\LD@Reading@Grouped{#1}%
+		\else
+			\edef\LD@Reading@Grouped{\LD@Reading@Grouped, #1}%
+		\fi
+		\LD@XML@Parse
+	}%
+	\gdef\LD@XML@reading@Kun#1</reading>{%
+		\ifx\LD@Reading@Kun\LD@Empty
+			\edef\LD@Reading@Kun{#1}%
+		\else
+			\edef\LD@Reading@Kun{\LD@Reading@Kun,#1}%
+		\fi
+		\ifx\LD@Reading@Grouped\LD@Empty
+			\edef\LD@Reading@Grouped{#1}%
+		\else
+			\edef\LD@Reading@Grouped{\LD@Reading@Grouped, #1}%
+		\fi
+		\LD@XML@Parse
+	}%
+	\gdef\LD@XML@reading@Ignore#1</reading>{%
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	<meaning>
+{%
+	\global\let\LD@TeX@meaning@Saved\meaning
+	% no choice here, we have to save the \meaning primitive. 
+	\catcode`\_=11\relax
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\catcode`"=11\relax
+	\gdef\meaning#1>{%
+		\LD@XML@Read
+		\edef\LD@Test{#1}%
+		\let\LD@XML@Next\LD@XML@meaning@drop
+		\ifx\LD@Test\LD@Empty
+			\let\LD@XML@Next\LD@XML@meaning@en
+		\fi
+		\edef\LD@Test{#1"fr"}%
+		\LD@String@Split\LD@Test{"fr"}\LD@trash\LD@Test
+		\unless\ifx\LD@Test\LD@Empty
+			\let\LD@XML@Next\LD@XML@meaning@fr
+		\fi
+		\LD@XML@Next
+	}%
+	\gdef\LD@XML@meaning@drop#1</meaning>{%
+		\LD@XML@Parse
+	}%
+	\gdef\LD@XML@meaning@en#1</meaning>{%
+		\ifx\LD@Meaning@en\LD@Empty
+			\edef\LD@Meaning@en{#1}%
+		\else
+			\edef\LD@Meaning@en{\LD@Meaning@en,#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+	\gdef\LD@XML@meaning@fr#1</meaning>{%
+		\ifx\LD@Meaning@fr\LD@Empty
+			\edef\LD@Meaning@fr{#1}%
+		\else
+			\edef\LD@Meaning@fr{\LD@Meaning@fr,#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%	</rmgroup>
+{%
+	\catcode`/=11\relax
+	\gdef\/rmgroup>{%
+		\LD@XML@Read
+		\LD@XML@/rmgroup
+	}%
+	\gdef\LD@XML@/rmgroup{%
+		\ifx\LD@Meaning@fr\LD@Empty
+			\edef\LD@Reading@Grouped{\LD@Reading@Grouped\LD@Space : \LD@Meaning@en}%
+			\ifx\LD@Meaning@Buffer\LD@Empty
+				\edef\LD@Meaning@Buffer{\LD@Meaning@en}%
+			\else
+				\edef\LD@Meaning@Buffer{\LD@Meaning@Buffer, \LD@Meaning@en}%
+			\fi
+		\else
+			\edef\LD@Reading@Grouped{\LD@Reading@Grouped\LD@Space : \LD@Meaning@fr}%
+			\ifx\LD@Meaning@Buffer\LD@Empty
+				\edef\LD@Meaning@Buffer{\LD@Meaning@fr}%
+			\else
+				\edef\LD@Meaning@Buffer{\LD@Meaning@Buffer, \LD@Meaning@fr}%
+			\fi
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%							%
+%			</rmgroup>			%
+% 							%
+%							%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%	<nanori>
+{%
+	\catcode`/=11\relax
+	\catcode`<=11\relax
+	\gdef\nanori>{%
+		\LD@XML@Read
+		\LD@XML@nanori
+	}%
+	\gdef\LD@XML@nanori#1</nanori>{%
+		\ifx\LD@Reading@Nanori\LD@Empty
+			\edef\LD@Reading@Nanori{#1}%
+		\else
+			\edef\LD@Reading@Nanori{\LD@Reading@Nanori,#1}%
+		\fi
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%	</reading_meaning>
+{%
+	\catcode`/=11\relax
+	\catcode`_=11\relax
+	\gdef\/reading_meaning>{%
+		\LD@XML@Read
+		\LD@XML@/reading_meaning
+	}%
+	\gdef\LD@XML@/reading_meaning{%
+		\LD@XML@Parse
+	}%
+}%
+%											%
+%					</reading_meaning>				%
+% 											%
+%											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{%
+	\catcode`/=11\relax
+	\gdef\/character>{%
+		\LD@XML@Read
+		\LD@XML@/character
+	}%
+	\gdef\LD@XML@/character{%
+		\LD@XML@character@Do
+		\LD@XML@Parse
+	}%
+}%
+%																	%
+%								</character>							%
+% 																	%
+%																	%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{%
+	\catcode`/=11\relax
+	\gdef\/kanjidic#1>{%
+		\LD@XML@Read
+		\LD@XML@/kanjidic
+	}%
+	\gdef\LD@XML@/kanjidic{%
+		\global\let\meaning\LD@TeX@meaning@Saved
+		\endinput
+	}%
+	% we restore the \meaning primitive 
+}%
+%																							%
+%											</kanjidic2>											%
+% 																							%
+%																							%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\Ignore #1\Ignore{}
+\endinput

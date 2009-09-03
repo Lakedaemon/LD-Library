@@ -1,0 +1,151 @@
+\LD@Core@IncludeOnce{LD@Loop}%
+%
+%
+% Caution ! Some commands will have weird behavior and/or produce errors if you feed them with explicit argument instead of control sequences
+% (this is due to an expandafter). For these commands : never code \Command{arg} but code \def\temp{arg}\Command\temp
+% 
+% Such commands are : \LD@String@Split, \LD@String@Length, \LD@String@LastChar
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												%
+%					Dead : Loop	 					%
+%												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% #2 must NOT be {} but it can be an empty \cs 
+\def\LD@Loop@For#1=#2\WithSeparator#3\Do#4{%
+	\EA\def\EA\LD@Loop@For@Tail\EA{#2}%
+	\unless\ifx\LD@Loop@For@Tail\LD@Empty
+		\EA\def\EA\LD@Loop@For@Tail\EA{\LD@Loop@For@Tail #3}%
+		\def\LD@Loop@Gobble##1#3##2\LD@Loop@Empty{%
+			\def#1{##1}%
+			\def\LD@Loop@For@Tail{##2}%
+		}%
+		\def\LD@Loop@For@Iterate{%
+			\ifx\LD@Loop@For@Tail\LD@Empty
+				\let\LD@Loop@For@Next\relax
+			\else	
+				\EA\LD@Loop@Gobble\LD@Loop@For@Tail\LD@Loop@Empty
+				#4\relax
+				\let\LD@Loop@For@Next\LD@Loop@For@Iterate
+			\fi
+			\LD@Loop@For@Next
+		}%
+		\LD@Loop@For@Iterate
+	\fi
+}%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Loops
+
+% <ded> loops as long as there is a token in the #1 edef expanded string
+\def\ForEach#1:=#2\do#3{%
+	\edef\LD@ForEach@Tail{#2}%
+	\def\LD@Gobble##1##2\LD@Empty{%
+		\def#1{##1}%
+		\def\LD@ForEach@Tail{##2}%
+	}%
+	\def\LD@ForEach@Iterate{%
+		\ifx\LD@ForEach@Tail\LD@Empty
+			\let\LD@ForEach@Next=\relax
+		\else	
+			\EA\LD@Gobble\LD@ForEach@Tail\LD@Empty
+			#3\relax
+			\let\LD@ForEach@Next=\LD@ForEach@Iterate
+		\fi
+		\LD@ForEach@Next
+	}%
+	\LD@ForEach@Iterate
+}%
+\def\LD@For#1:=#2\With#3\Do#4{%
+	\edef\LD@For@Tail{#2}%
+	\unless\ifx\LD@For@Tail\LD@Empty
+		\edef\LD@For@Tail{\LD@For@Tail #3}%
+		\def\LD@Gobble##1#3##2\LD@Empty{%
+			\def#1{##1}%
+			\def\LD@For@Tail{##2}%
+		}%
+		\def\LD@For@Iterate{%
+			\ifx\LD@For@Tail\LD@Empty
+				\let\LD@For@Next=\relax
+			\else	
+				\EA\LD@Gobble\LD@For@Tail\LD@Empty
+				#4\relax
+				\let\LD@For@Next=\LD@For@Iterate
+			\fi
+			\LD@For@Next
+		}%
+		\LD@For@Iterate
+	\fi
+}%
+\def\LD@ForOne#1:=#2\With#3\Do#4{%
+	\xdef\LD@ForOne@Tail{#2}%
+	\unless\ifx\LD@ForOne@Tail\LD@Empty
+			\xdef\LD@ForOne@Tail{\LD@ForOne@Tail #3}%
+		\gdef\LD@GobbleOne##1#3##2\LD@Empty{%
+			\def#1{##1}%
+			\xdef\LD@ForOne@Tail{##2}%
+		}%
+		\gdef\LD@ForOne@Iterate{%
+			\ifx\LD@ForOne@Tail\LD@Empty
+				\global\let\LD@ForOne@Next=\relax
+			\else	
+				\EA\LD@GobbleOne\LD@ForOne@Tail\LD@Empty
+				#4\relax
+				\global\let\LD@ForOne@Next=\LD@ForOne@Iterate
+			\fi
+			\LD@ForOne@Next
+		}%
+		\LD@ForOne@Iterate
+	\fi
+}%
+
+\def\LD@Ignore#1\LD@Relax{}%
+
+
+
+% usage :
+%
+% \LD@ParseFile{Letter:/Path/File.ext}{#1...#9 as in the parameter definition of a macro}{code to execute for each line}{catcode changes : \catcode`\\=11,...}%
+%
+
+\def\LD@ParseFile#1#2#3#4{%
+	\begingroup
+		\endlinechar=-1\relax% what does this do ? 
+		\CS def\EC\LD@ParseFile@Code #2\LD@Empty{{#3}}% why is the group necessary here ?
+		\openin\LD@ParseFile@InputFile=#1\relax
+		\def\LD@ParseFile@Iterate{%
+		\ifeof\LD@ParseFile@InputFile
+			\let\LD@ParseFile@Next=\relax
+		\else
+			\read\LD@ParseFile@InputFile to\LD@ParseFile@InputLine
+			\unless\ifx\LD@ParseFile@InputLine\LD@Empty
+	 			\EA\LD@ParseFile@Code\LD@ParseFile@InputLine\LD@Empty
+			\fi
+			\let\LD@ParseFile@Next\LD@ParseFile@Iterate
+		\fi
+		\LD@ParseFile@Next
+		}%
+		{#4\LD@ParseFile@Iterate}%
+		\closein\LD@ParseFile@InputFile
+	\endgroup
+}%
+\endinput

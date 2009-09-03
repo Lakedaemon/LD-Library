@@ -1,0 +1,319 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																%
+%					\LD@Core@IncludeOnce #1  						%
+%																%
+%				Ensure that Library #1 is included only once					%
+%																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Core@IncludeOnce#1{%
+	\expandafter\ifx\csname LD@Core@IncludeOnce@#1\endcsname\endinput
+		\endinput 
+	\else
+		\expandafter\let\csname LD@Core@IncludeOnce@#1\endcsname=\endinput
+	\fi
+}%
+\LD@Core@IncludeOnce{LD@Core}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																%
+%							Define alias cs	  						%
+%																%
+%																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\let\EA=\expandafter
+\let\CS=\csname
+\let\EC=\endcsname
+\let\Par\par
+\def\LD@Empty{}%
+\def\LD@Relax{\relax}%
+\def\LD@Space{ }%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																%
+%						Expandafter shortcuts							%
+%																%
+%																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\let\LD@EaB\expandafter
+\def\LD@EaBC#1#2{%
+	\expandafter\expandafter\expandafter#1\expandfter#2%
+}%
+\def\LD@EabC#1#2{%
+	\expandafter#1\expandfter#2%
+}%
+\def\LD@EaBCD#1#2#3{%
+	\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+	#1\expandafter\expandafter\expandafter#2\expandfter#3%
+}%
+\def\LD@EaBcD#1#2#3{%
+	\expandafter\expandafter\expandafter#1\expandafter#2\expandfter#3%
+}%
+\def\LD@EabCD#1#2#3{%
+	\expandafter\expandafter\expandafter#1\expandafter\expandafter\expandafter#2%
+	\expandfter#3%
+}%
+\def\LD@EabcD#1#2#3{%
+	\expandafter#1\expandafter#2\expandfter#3%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																%
+%							Define registers			  				%
+%																%
+%																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tokens
+\newtoks\LD@ToksOne
+\newtoks\LD@ToksTwo
+
+% Boxes
+\newbox\LD@Box
+\newbox\LD@Box@One
+
+% Dimensions
+\newdimen\LD@Dimen
+\newdimen\LD@Dim@One
+
+% To use with char, catcode and `
+\newcount\LD@CharOne
+\newcount\LD@CharTwo
+
+% Counters
+\newcount\LD@Counter
+\newcount\LD@Counter@Temp@A
+\newcount\LD@Counter@Temp@B
+
+
+
+% Temporary Counter : These are global counters because they could be used at different level of grouping. And we don't want to saturate the save stack with it. 
+% Warning : don't ever call an undead or a living \LD@Macro between the moment you set it and the moment you use it (it could change and produce weird effect if the \LD@Macro uses the same TempCounter)
+\newcount\LD@TempCounter@A
+\global\LD@TempCounter@A=0\relax
+
+% Temporary Macros : These are global counters because they could be used at different level of grouping. And we don't want to saturate the save stack with it. 
+% Warning : don't ever call an undead or living \LD@Macro between the moment you set it and the moment you use it (it could change and produce weird effect if the \LD@Macro uses the same TempCounter)
+%\gdef\LD@Temp@A{}%
+%\gdef\LD@Temp@Trash%
+
+% user count 
+\newcount\LD@Zero
+\newcount\LD@One
+\newcount\LD@Two
+\newcount\LD@Three
+\newcount\LD@Four
+\newcount\LD@Five
+
+% Maths Library
+
+%Time Macro
+\newcount\LD@Time@Counter@Moment
+\newcount\LD@Time@Counter@Lapse
+
+
+% XML Macro
+\newwrite\LD@XML@Output@One
+\newwrite\LD@XML@Output@Two
+\newwrite\LD@XML@Output@Three
+
+% Yomigata Macro
+
+% To Parse File 
+\newread\LD@ParseFile@InputFile
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  	Obsolete
+
+% Local Api number Count : don't use globally
+\newcount\LD@Counter@A
+\newcount\LD@Counter@B
+\newcount\LD@Counter@C
+\newcount\LD@Counter@D
+\newcount\LD@Counter@E
+% global Api number Count
+\newcount\LD@Counter@GA
+\newcount\LD@Counter@GB
+\newcount\LD@Counter@GC
+\newcount\LD@Counter@GD
+\newcount\LD@Counter@GE
+
+%Time Macro
+\newcount\LD@Time@Moment
+\newcount\LD@Time@Lapse
+
+% XML Macro
+\newwrite\LD@XML@OutputOne
+\newwrite\LD@XML@OutputTwo
+\newwrite\LD@XML@OutputThree
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																%
+%					\LD@String@IfSubString #1#2#3#4					%
+%																%
+%			executes #3 if #2 is a substring of #1, executes #4 otherwise			%
+%																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% to do : sanitize the code
+\def\LD@String@IfSubString#1#2#3#4{%
+	\edef\LD@SubString@Token{#2}%
+	\EA\EA\EA\def\EA\EA\EA\LD@SubString@Test\EA\EA\EA{\EA#1\LD@SubString@Token}%
+	\EA\LD@String@Split\EA\LD@SubString@Test\EA{\LD@SubString@Token}\LD@SubString@Trash\LD@SubString@Test
+	\ifx\LD@SubString@Test\LD@Empty
+		#4%
+	\else
+		#3%
+	\fi
+}%
+%\def\LD@String@IfSubString#1#2#3#4{%
+%	\EA\def\EA\LD@IfSubString@Process\EA##1#2##2\LD@Empty{%
+%		\def\LD@String@Test{##2}%
+%		\ifx\LD@String@Test\LD@Empty
+%			#3%
+%		\else
+%			#4%
+%		\fi
+%	}%
+%	\EA\EA\EA\LD@IfSubString@Process \EA#1#2\LD@Empty
+%	\EA\EA\EA\def\EA\EA\EA\LD@String@Test\EA\EA\EA{\EA#1#2}%
+%	\EA\LD@String@Split\EA\LD@String@Test\EA{#2}\LD@String@Trash\LD@String@Test
+%	\ifx\LD@String@Test\LD@Empty
+%		#3%
+%	\else
+%		#4%
+%	\fi
+%}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%														%
+%						Options support						%
+%														%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Option@Process#1{%
+	\unless\ifx\@optionalarg\LD@Empty
+		\def\LD@Option@@{}%
+		\LD@Loop@For\LD@Option@Member=\@optionalarg\WithSeparator #1\Do{%
+			\EA\def\EA\LD@Temp\EA{\LD@Option@Member =}%
+			\LD@String@Split\LD@Temp =\LD@Option@Key\LD@Option@Value
+			\trim\LD@Option@Key
+			\ifx\LD@Option@Value\LD@Empty
+				\EA\def\EA\LD@Option@@\EA{\LD@Option@Key}%
+			\else
+				\LD@String@Split\LD@Option@Value =\LD@Option@Value\LD@Trash %%%%% strange construction \LD@Temp needed ? global against local def ?
+				\EA\def\EA\LD@Temp\EA{\LD@Option@Value}%
+				\EA\let\CS LD@Option@@\LD@Option@Key\EC\LD@Temp
+			\fi
+		}%
+	\fi
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                 Maths : Euclidian division (Undead)                                  %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Maths@EuclidianDiv#1#2#3#4{%
+	\LD@Counter@Temp@B=#1\relax
+	\divide\LD@Counter@Temp@B by#2\relax
+	\LD@Counter@Temp@A=\LD@Counter@Temp@B\relax
+	\multiply\LD@Counter@Temp@B by#2\relax
+	\advance\LD@Counter@Temp@B by-#1\relax
+	\LD@Counter@Temp@B=-\LD@Counter@Temp@B\relax
+	#3=\LD@Counter@Temp@A\relax
+	\edef#4{\the\LD@Counter@Temp@B}%	
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%														%
+%						Time  Library							%
+%														%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Time@Date{\the\year\backslash\the\month\backslash\the\day}%
+\def\LD@Time@ToUndredth#1#2:#3:#4,#5.{% #1 must be a counter
+	\global#1=#2\relax
+	\global\multiply#1 by 60\relax
+	\global\advance#1 by #3\relax
+	\global\multiply#1 by 60\relax
+	\global\advance#1 by #4\relax
+	\global\multiply#1 by 100\relax
+	\global\advance#1 by #5\relax
+}%
+\def\LD@Time@ToTime#1#2{% #1 must be a counter
+	\LD@Maths@EuclidianDiv#1{100}#1\LD@Temp@A
+	\LD@Maths@EuclidianDiv#1{60}#1\LD@Temp@B
+	\edef\LD@Temp@B{\LD@Temp@B s\LD@Temp@A}%
+	\LD@Maths@EuclidianDiv#1{60}#1\LD@Temp@A
+	\edef#2{\the#1h\LD@Temp@A m\LD@Temp@B}%
+}%
+\def\LD@Time@Display#1#2{%
+	\LD@Time@ToTime#1\LD@Time@Temp@A
+	\immediate\write16{Done in \LD@Time@Temp@A}%
+	\immediate\write16{#2}%
+}%
+\def\LD@Time@Write{%
+	\immediate\write18{echo \percentchar time\percentchar.>C:/TeX/Output/LD@Time@Stamp.tex}%
+}%
+\def\LD@Time@Start#1{%
+	\immediate\write16{now XeTeXing...}%
+	\LD@Time@Write
+	\EA\LD@Time@ToUndredth\EA\LD@Time@Moment\input LD@Time@Stamp.tex\relax
+}%
+\def\LD@Time@Benchmark{\@getoptionalarg\@LD@Time@Benchmark}%
+\def\@LD@Time@Benchmark#1{%
+	\LD@Time@Lapse=\LD@Time@Moment\relax
+	\LD@Time@Write
+	\EA\LD@Time@ToUndredth\EA\LD@Time@Moment\input LD@Time@Stamp.tex\relax
+	\advance\LD@Time@Lapse by-\LD@Time@Moment\relax
+	\LD@Time@Lapse=-\LD@Time@Lapse\relax
+	\advance\LD@Time@Lapse by-5\relax % to counter the IO lag.
+	\ifx\@optionalarg\LD@Empty
+		\LD@Time@Display\LD@Time@Lapse{#1}%
+	\else
+		\LD@Time@ToTime\LD@Time@Lapse#1%
+	\fi
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%														%
+%						Stats								%
+%														%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Stat@Update#1{%
+\begingroup
+	\ifcsname LD@Stat@#1\endcsname
+		\LD@Counter@A=\CS LD@Stat@#1\EC\relax
+		\advance\LD@Counter@A by1\relax
+		\EA\xdef\CS LD@Stat@#1\EC{\the\LD@Counter@A}% increment
+	\else
+		\EA\xdef\CS LD@Stat@#1\EC{1}% initialisation and increment
+	\fi
+\endgroup
+}%
+\def\LD@Stat@Display#1{%
+	\ifcsname LD@Stat@#1\endcsname
+		\LD@Counter@A=\CS LD@Stat@#1\EC\relax
+		\ifnum\LD@Counter@A<10\relax
+			0\the\LD@Counter@A
+		\else
+			\the\LD@Counter@A
+		\fi	
+	\else
+		\LD@Stat@Zero% =0
+	\fi
+}% Fails Beautifully
+\def\LD@Stat@Zero{}% defines what to display/execute when the count is =0
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%														%
+%						Data								%
+%														%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Data@Set#1#2#3{%
+	\def\LD@Data@Extract##1#1=##2##3\LD@Data@ExtractEnd{%
+		\xdef#3{##2}% is x necessary ? Fix this !
+	}%
+	\ifcsname Data#2\endcsname
+		\EA\EA\EA\LD@Data@Extract\CS Data#2\EC\LD@Data@ExtractEnd
+	\else
+		\let#3\relax
+	\fi
+}% Fails Beautifully
+\def\LD@Data@Def#1#2#3{%
+	\def\LD@Data@Extract##1#1=##2##3\LD@Data@ExtractEnd{%
+		\def#3{##2}%
+	}%
+	\ifcsname Data#2\endcsname
+		\EA\EA\EA\LD@Data@Extract\CS Data#2\EC\LD@Data@ExtractEnd
+	\else
+		\let#3\relax
+	\fi
+}% Fails Beautifully
+\endinput

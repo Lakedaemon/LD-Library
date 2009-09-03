@@ -1,0 +1,173 @@
+\catcode`@=11\relax
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																	%
+%								Objects								%
+% 																	%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcount\LD@XML@Entity@Count
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																	%
+%								Functions								%
+% 																	%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@XML@Parse{%
+	\catcode60=0\relax
+}% 
+\def\LD@XML@Read{%
+	\catcode60=11\relax
+}%
+{%
+	\catcode`[=11\relax
+	\catcode`]=11\relax
+	\gdef\LD@Assign#1#2#3{% Assign arguments contained in #1 cs (expended once) into a main argument #2 cs and an optional argument #3
+		\edef\LD@Assign@Tail{#1]}%
+		\LD@String@Split\LD@Assign@Tail ]\LD@Assign@Head\LD@Assign@Tail
+		\ifx\LD@Assign@Tail\LD@Empty
+			\edef#2{\LD@Assign@Head}%
+			\def#3{}%
+		\else
+			\LD@String@Split\LD@Assign@Tail ]#2\LD@Trash
+			\LD@String@Split\LD@Assign@Head [\LD@Trash #3%
+		\fi
+	}%
+}%
+
+\def\LD@Catcode@Change#1#2{%
+	\LD@Counter@A=`#1\relax
+	\LD@Counter@B=\catcode`#1\relax
+	\edef\LD@Temp{\the\LD@Counter@A=\the\LD@Counter@B}%
+	\EA\EA\EA\def\EA\EA\EA\LD@Catcode@Restore\EA\EA\EA{\EA\EA\EA\catcode\EA\LD@Temp\EA\relax\LD@Catcode@Restore}%
+	\catcode`#1=#2\relax
+}%
+\def\LD@XML@Parser#1{%
+	\LD@Time@Benchmark{Parsing #1...}%
+	\xdef\LD@XML@SavedTimeStart{\the\LD@Time@Moment}%
+	\begingroup
+		%\newlinechar=`\^^M\relax
+		%\xdef\LD@Newline{^^M}%
+		%\catcode`\^^M=13\relax
+		%\catcode`@=11\relax
+		%\catcode`]=0\relax
+		%\catcode`>=12\relax
+		%\def\>{\catcode`\]=11\relax}%
+		%\catcode9=13\relax% Tabs
+		%\catcode`(=11\relax
+		%\catcode`)=11\relax
+		%\catcode`.=11\relax
+		%\catcode`:=11\relax
+		%\catcode`§=11\relax
+		%\catcode`*=11\relax
+		%\catcode`-=11\relax
+		%\catcode`,=11\relax
+		%\catcode`¤=0\relax
+%		\catcode`$=11\relax% Maths
+%		\catcode`^=11\relax% Superscript
+%		\catcode`_=11\relax% Subscript
+%		\catcode`&=11\relax% Alignement
+%		\catcode`\#=11\relax% Parameters
+%		\catcode`?=11\relax
+%		\catcode`!=11\relax
+%		\catcode`[=11\relax
+%		\catcode`~=11\relax
+%		\catcode`/=11\relax
+%		\catcode`'=11\relax
+%		\catcode`"=11\relax
+%		\catcode`+=11\relax
+%		\catcode`°=11\relax
+%		\catcode`;=11\relax
+%		\catcode`µ=11\relax
+%		\catcode`£=11\relax
+%		\catcode`¨=11\relax
+%		\catcode`\{=11\relax
+%		\catcode`\}=11\relax
+	\def\LD@Catcode@Restore{}%
+	\LD@Loop@For\LD@Loop@A=\$,\^,\_,\&,\#,?,!,[,~,!,[,~,/,',",+,°,;,µ,£,¨,\{,\},\%,@,\\\WithSeparator,\Do{%
+		\EA\LD@Catcode@Change\EA{\LD@Loop@A}{11}%
+	}%
+		\LD@XML@Init
+		\input #1%
+%		\catcode92=0\relax
+%		\catcode64=11\relax
+%		\LD@Catcode@Restore
+	\endgroup
+	\LD@Time@Moment=\LD@XML@SavedTimeStart\relax	
+	\LD@Time@Benchmark [silent]\LD@Temp
+	\immediate\write16{Parsing of #1 done in \LD@Temp.}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																							%
+%											?xml												%
+% 																							%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{%
+	\catcode`?=11\relax
+	\gdef\?xml #1?>{%
+		\global\LD@XML@Entity@Count=0\relax
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	<--  comments  -->
+
+{%
+	\catcode`!=11\relax
+	\gdef\!--{%
+		\LD@XML@Read
+		\LD@XML@Comment
+	}%
+}%
+\long\gdef\LD@XML@Comment #1-->{% 
+	\LD@XML@Parse
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	!DOCTYPE
+{%
+	\catcode`!=11\relax
+	\catcode`[=11\relax
+	\catcode`]=11\relax
+	\gdef\!DOCTYPE#1[{%
+		\LD@XML@Parse
+	}%
+	\gdef\LD@XML@Init{%
+		\catcode`>=12\relax
+		\def\>{%
+			\catcode`\]=11\relax
+		}%
+		\catcode`]=0\relax
+		\LD@XML@Parse
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	 !ELEMENT
+{%
+	\catcode`!=11\relax
+	\gdef\!ELEMENT{%
+		\LD@XML@Read
+		\LD@XML@Element
+	}%
+}%
+\gdef\LD@XML@Element #1>{%
+	\LD@XML@Parse
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	!ATTLIST
+{%
+	\catcode`!=11\relax
+	\gdef\!ATTLIST{%
+		\LD@XML@Read
+		\LD@XML@Attlist
+	}%
+}%
+\gdef\LD@XML@Attlist #1>{%
+	\LD@XML@Parse
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	!ENTITY
+{%
+	\catcode`!=11\relax
+	\gdef\!ENTITY{%
+		\LD@XML@Read
+		\LD@XML@Entity
+	}%
+}%
+\gdef\LD@XML@Entity #1 #2>{%
+	\EA\xdef\CS LD@Entity@#1\EC{\the\LD@XML@A}%
+	\global\advance\LD@XML@Entity@Count by1\relax
+	\LD@XML@Parse
+}%
+\endinput

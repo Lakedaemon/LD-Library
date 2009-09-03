@@ -1,0 +1,100 @@
+% Beware of the strange bug with the output (can't use the same filename...got to change path and filename)
+\input pgfmath.tex
+\let\EA=\expandafter
+\let\CS=\csname
+\let\EC=\endcsname
+\catcode`@=11\relax
+\def\LD@Empty{}%
+\let\LD@Par\par
+%\def\Filename{C:/Tex/Mathematicon/Graphes/gr3.eps}
+%\def\Name{gr3}
+% \LD@ParseFile{Letter:/Path/File.ext}{#1...#9 as in the parameter definition of a macro}{code to execute for each line}{catcode changes : \catcode`\\=11,...}%
+%
+% To Parse File 
+\newread\LD@ParseFile@InputFile
+\def\LD@ParseFile#1#2#3#4{%
+		\immediate\write16{Parsing #1}%
+	\begingroup
+		\endlinechar=-1\relax% what does this do ? 
+		\CS def\EC\LD@ParseFile@Code #2\LD@Empty{{#3}}% why is the group necessary here ?
+		\openin\LD@ParseFile@InputFile=#1\relax
+		\def\LD@ParseFile@Iterate{%
+		\ifeof\LD@ParseFile@InputFile
+			\let\LD@ParseFile@Next=\relax
+		\else
+			\read\LD@ParseFile@InputFile to\LD@ParseFile@InputLine
+			\unless\ifx\LD@ParseFile@InputLine\LD@Empty
+	 			\EA\LD@ParseFile@Code\LD@ParseFile@InputLine\LD@Empty
+			\fi
+			\let\LD@ParseFile@Next\LD@ParseFile@Iterate
+		\fi
+		\LD@ParseFile@Next
+		}%
+		{#4\LD@ParseFile@Iterate}%
+		\closein\LD@ParseFile@InputFile
+	\endgroup
+}%
+\def\LD@String@Split#1#2#3#4{%
+	\def\LD@String@Test{#1}%
+	\unless\ifx\LD@String@Test\LD@Empty
+		\def\LD@String@Split@Cut A##1#2##2LD@Stop{% 
+			\def#3{##1}%
+			\def#4{##2}%
+		}% 
+		\EA\LD@String@Split@Cut\EA A#1LD@Stop
+	\else
+			\def#3{}%
+			\def#4{}%
+	\fi
+}% 
+\def\LD@String@IfSubString#1#2#3#4{%
+	\edef\LD@SubString@Token{#2}%
+	\EA\EA\EA\def\EA\EA\EA\LD@SubString@Test\EA\EA\EA{\EA#1\LD@SubString@Token}%
+	\EA\LD@String@Split\EA\LD@SubString@Test\EA{\LD@SubString@Token}\LD@SubString@Trash\LD@SubString@Test
+	\ifx\LD@SubString@Test\LD@Empty
+		#4%
+	\else
+		#3%
+	\fi
+}%
+\def\LD@Space{ }%
+{\catcode`:=11\relax
+\catcode`\%=11\relax
+	\gdef\Substring{%%BoundingBox:}
+	\gdef\LD@Scan %%BoundingBox: #1 #2 #3 #4\LD@Scan{\pgfmathparse{floor(#1)}\let\LD@One\pgfmathresult\LD@Truncate\LD@One
+		\pgfmathparse{floor(#2)}\let\LD@Two\pgfmathresult\LD@Truncate\LD@Two
+		\pgfmathparse{ceil(#3)}\let\LD@Three\pgfmathresult\LD@Truncate\LD@Three
+		\pgfmathparse{ceil(#4)}\let\LD@Four\pgfmathresult\LD@Truncate\LD@Four
+		\immediate\write\FilteredFile{%%BoundingBox: \LD@One\LD@Space\LD@Two\LD@Space\LD@Three\LD@Space\LD@Four }\relax
+		\immediate\write\FilteredFile{%%HiResBoundingBox: #1 #2 #3 #4 }\relax
+	}%
+}%
+\def\LD@Truncate#1{%
+	\def\LD@Truncate@Split ##1.##2\LD@Empty{%
+		\def#1{##1}%
+	}%
+	\expandafter\LD@Truncate@Split#1\LD@Empty
+}%
+\newwrite\FilteredFile
+\immediate\openout\FilteredFile=C:/TeX/Images/Eps/\Name.eps\relax% got to change the name or bug !
+\newcount\LD@Parse@Line\global\LD@Parse@Line=0\relax
+\EA\LD@ParseFile\EA{\Filename}{#1}{%
+	L \global\advance\LD@Parse@Line by 1\relax\the\LD@Parse@Line\LD@Par
+	\LD@String@IfSubString\LD@ParseFile@InputLine\Substring{%
+		\EA\LD@Scan\LD@ParseFile@InputLine\LD@Scan
+	}{%
+		\immediate\write\FilteredFile{\LD@ParseFile@InputLine}%
+	}%
+}{%
+	\catcode`\%=11\relax
+	\catcode`:=11\relax
+	\catcode`\\=11\relax
+	\catcode`\{=11\relax
+	\catcode`\}=11\relax
+	\catcode`\#=11\relax
+	\catcode`\&=11\relax
+}%
+\immediate\write16{Parsed \the\LD@Parse@Line\LD@Space lines of \Filename}%
+\closeout\FilteredFile
+\bye
+

@@ -1,0 +1,443 @@
+\LD@Core@IncludeOnce{LD@String}%
+%
+%
+% Caution ! Some commands will have weird behavior and/or produce errors if you feed them with explicit argument instead of control sequences
+% (this is due to an expandafter). For these commands : never code \Command{arg} but code \def\temp{arg}\Command\temp
+% 
+% Such commands are : \LD@String@Split, \LD@String@Length, \LD@String@LastChar
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												%
+%					Dead : Split	 					%
+%												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% #1 must NOT be {} but it can be an empty \cs 
+\def\LD@String@Split#1#2#3#4{%
+	\def\LD@String@Split@Cut A##1#2##2\LD@String@Split@End{% 
+		\def#3{##1}%
+		\def#4{##2}%
+	}% 
+	\EA\LD@String@Split@Cut\EA A#1\LD@String@Split@End
+}% 
+\def\LD@String@Split#1#2#3#4{%
+	%\def\LD@String@Test{#1}%%%%% erreur
+	\unless\ifx\LD@Empty#1%
+		\def\LD@String@Split@Cut A##1#2##2LD@Stop{% 
+			\def#3{##1}%
+			\def#4{##2}%
+		}% 
+		\EA\LD@String@Split@Cut\EA A#1LD@Stop
+	\else
+			\def#3{}%
+			\def#4{}%
+	\fi
+}% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												%
+%					Dead : \LD@String@Append	#1 to #2		%
+%					Dead : \LD@String@Prepend	#1 to #2		%
+%												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtoks\LD@String@Toks@A
+\newtoks\LD@String@Toks@B
+\def\LD@String@Append#1#2{%
+	\LD@String@Toks@A={#1}%
+	\LD@String@Toks@B=\EA{#2}%
+	\edef#2{\the\LD@String@Toks@B\the\LD@String@Toks@A}%
+}%
+\def\LD@String@G@Append#1#2{%
+	\LD@String@Toks@A={#1}%
+	\LD@String@Toks@B=\EA{#2}%
+	\xdef#2{\the\LD@String@Toks@B\the\LD@String@Toks@A}%
+}%
+\def\LD@String@Prepend#1#2{%
+	\LD@String@Toks@A={#1}
+	\LD@String@Toks@B=\EA{#2}%
+	\edef#2{\the\LD@String@Toks@A\the\LD@String@Toks@B}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												%
+%					Dead : Length						%
+%												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% #1 must NOT be {} but it can be an empty \cs 
+\def\LD@String@Length#1#2{% inputs a cs string #1 and outputs a  #2 counter 
+	#2=0\relax
+	\def\LD@String@Length@Increment{%
+		\advance#2 by1\relax
+	}%
+	\EA\LD@String@Length@Get #1\LD@String@Length@End
+}%
+\def\LD@String@Length@Get #1{%
+	\ifx#1\LD@String@Length@End
+		\let\LD@String@Length@Next=\relax
+	\else
+		\LD@String@Length@Increment
+		\let\LD@String@Length@Next=\LD@String@Length@Get
+	\fi
+	\LD@String@Length@Next
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												%
+%					Dead : Last Char		 			%
+%												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% #1 must NOT be {} but it can be an empty \cs 
+\def\LD@String@LastChar#1#2#3{%
+	\def\LD@String@LastChar@Temp{}%
+	\def\LD@String@LastChar@PreviousChar{}%	
+	\def\LD@String@LastChar@Get ##1{%
+		\ifx##1\LD@String@LastChar@End
+			\let#2\LD@String@LastChar@Temp
+			\let#3\LD@String@LastChar@PreviousChar
+			\let\LD@String@LastChar@Next\relax
+		\else
+			\edef\LD@String@LastChar@Temp{\LD@String@LastChar@Temp\LD@String@LastChar@PreviousChar}%
+			\def\LD@String@LastChar@PreviousChar{##1}%
+			\let\LD@String@LastChar@Next\LD@String@LastChar@Get
+		\fi
+		\LD@String@LastChar@Next
+	}%
+	\EA\LD@String@LastChar@Get #1\LD@String@LastChar@End
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%														%
+%					Japanese Test	 : if #1 katakana #2 else #3				%
+%														%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@String@If@Katakana#1#2#3{%
+	\EA\LD@Counter@Temp@A\EA=\EA`#1\relax
+	\ifnum\LD@Counter@Temp@A<12535\relax
+		\ifnum\LD@Counter@Temp@A>12448\relax
+			% Katakana 12449-12534
+			#2%
+		\else
+			#3%
+		\fi
+	\else
+		#3%
+	\fi
+}%
+%% Pour changer la casse d'une chaine alphanumérique
+%% Usage \OLupper{abracaDAbra}
+%% -> ABRACADABRA
+%%\OLower{abracaDAbra}
+%% -> abracadabra
+
+
+\def\@LowerUpperDef#1#2{%
+\expandafter\xdef\csname @Lower#1\endcsname{#1}%
+\expandafter\xdef\csname @Lower#2\endcsname{#1}%
+\expandafter\xdef\csname @Lupper#1\endcsname{#2}%
+\expandafter\xdef\csname @Lupper#2\endcsname{#2}%
+}%
+
+\for\T@Letter:=aA,zZ,eE,rR,tT,yY,uU,iI,oO,pP,qQ,sS,dD,fF,gG,hH,jJ,kK,lL,mM,wW,xX,cC,vV,bB,nN,00,11,22,33,44,55,66,77,88,99,((,)),//,{-}{-},' '\do{%
+\expandafter\@LowerUpperDef\T@Letter}
+
+\newif\ifL@@p
+\def\LD@LowerCase#1{\xdef\T@il{#1\relax}\xdef#1{}\L@@ptrue\loop\LD@String@Split\T@il{}\He@d\T@il\xdef#1{#1\csname @Lower\He@d\endcsname}\if\relax\T@il\L@@pfalse\fi\ifL@@p\repeat}
+\def\LD@UpperCase#1{\xdef\T@il{#1\relax}\xdef#1{}\L@@ptrue\loop\Split\T@il{}\He@d\T@il\xdef#1{#1\csname @Lupper\He@d\endcsname}\if\relax\T@il\L@@pfalse\fi\ifL@@p\repeat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%                                         Definition (string separation)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Edef@Two#1#2#3#4{%
+			\edef#3{#1}%
+			\edef#4{#2}%
+}%
+
+
+
+
+% <odDD> Split #1 (expended once) around #2 and define #3 and #4 with the result
+\def\LD@Split#1#2#3#4{%
+	\ifx#1\LD@Empty
+		\def#3{}%
+		\def#4{}%
+	\else
+		\def\LD@Split@Cut A##1#2##2\LD@Split@CutEnd{% 
+			\def#3{##1}%
+			\def#4{##2}%
+		}% 
+		\EA\LD@Split@Cut\EA A#1\LD@Split@CutEnd
+	\fi
+}% 
+
+% <ooD>
+\def\LD@Concat#1#2#3{%
+	\LD@ToksOne=\expandafter{#1}%
+	\LD@ToksTwo=\expandafter{#2}%
+	\edef#3{\the\LD@ToksOne\the\LD@ToksTwo}%
+}% concatenes #1 and #2  (expanded once) and saves the result in #3
+% <ooG>
+\def\LD@XConcat#1#2#3{%
+	\LD@ToksOne=\expandafter{#1}%
+	\LD@ToksTwo=\expandafter{#2}%
+	\xdef#3{\the\LD@ToksOne\the\LD@ToksTwo}%
+}% concatenes #1 and #2  (expanded once) and saves the result in #3
+
+%%% String manipulation
+
+% <oDD>
+\def\LD@Assign#1#2#3{% Assign arguments contained in #1 cs (expended once) into a main argument #2 cs and an optional argument #3
+	\gdef\LD@Assign@Split##1\LD@Assign@End{%
+		\def#2{##1}%
+		\let#3=\@optionalarg
+	}%
+	\EA\@getoptionalarg\EA\LD@Assign@Split #1\LD@Assign@End
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												%
+%					Undead : String Hiraganize				%
+%												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@String@Hiraganize#1#2{% inputs a #1 cs containing a katakana string and outputs a #2 cs containing an hiragana string
+	\edef\LD@String@Hiraganize@Temp{#1}%
+	\def#2{}%
+	\def\LD@String@Hiraganize@AddChar##1{%
+		\LD@TempCounter@A=\EA`##1\relax 
+		\advance\LD@TempCounter@A by-12449\relax
+		\ifcase\LD@TempCounter@A
+			\edef#2{#2ぁ}\or
+			\edef#2{#2あ}\or
+			\edef#2{#2ぃ}\or
+			\edef#2{#2い}\or
+			\edef#2{#2ぅ}\or
+			\edef#2{#2う}\or
+			\edef#2{#2ぇ}\or
+			\edef#2{#2え}\or
+			\edef#2{#2ぉ}\or
+			\edef#2{#2お}\or
+			\edef#2{#2か}\or
+			\edef#2{#2が}\or
+			\edef#2{#2き}\or
+			\edef#2{#2ぎ}\or
+			\edef#2{#2く}\or
+			\edef#2{#2ぐ}\or
+			\edef#2{#2け}\or
+			\edef#2{#2げ}\or
+			\edef#2{#2こ}\or
+			\edef#2{#2ご}\or
+			\edef#2{#2さ}\or
+			\edef#2{#2ざ}\or
+			\edef#2{#2し}\or
+			\edef#2{#2じ}\or
+			\edef#2{#2す}\or
+			\edef#2{#2ず}\or
+			\edef#2{#2せ}\or
+			\edef#2{#2ぜ}\or
+			\edef#2{#2そ}\or
+			\edef#2{#2ぞ}\or
+			\edef#2{#2た}\or
+			\edef#2{#2だ}\or
+			\edef#2{#2ち}\or
+			\edef#2{#2ぢ}\or
+			\edef#2{#2っ}\or
+			\edef#2{#2つ}\or
+			\edef#2{#2づ}\or
+			\edef#2{#2て}\or
+			\edef#2{#2で}\or
+			\edef#2{#2と}\or
+			\edef#2{#2ど}\or
+			\edef#2{#2な}\or
+			\edef#2{#2に}\or
+			\edef#2{#2ぬ}\or
+			\edef#2{#2ね}\or
+			\edef#2{#2の}\or
+			\edef#2{#2は}\or
+			\edef#2{#2ば}\or
+			\edef#2{#2ぱ}\or
+			\edef#2{#2ひ}\or
+			\edef#2{#2び}\or
+			\edef#2{#2ぴ}\or
+			\edef#2{#2ふ}\or
+			\edef#2{#2ぶ}\or
+			\edef#2{#2ぷ}\or
+			\edef#2{#2へ}\or
+			\edef#2{#2べ}\or
+			\edef#2{#2ぺ}\or
+			\edef#2{#2ほ}\or
+			\edef#2{#2ぼ}\or
+			\edef#2{#2ぽ}\or
+			\edef#2{#2ま}\or
+			\edef#2{#2み}\or
+			\edef#2{#2む}\or
+			\edef#2{#2め}\or
+			\edef#2{#2も}\or
+			\edef#2{#2ゃ}\or
+			\edef#2{#2や}\or
+			\edef#2{#2ゅ}\or
+			\edef#2{#2ゆ}\or
+			\edef#2{#2ょ}\or
+			\edef#2{#2よ}\or
+			\edef#2{#2ら}\or
+			\edef#2{#2り}\or
+			\edef#2{#2る}\or
+			\edef#2{#2れ}\or
+			\edef#2{#2ろ}\or
+			\edef#2{#2ゎ}\or
+			\edef#2{#2わ}\or
+			\edef#2{#2ゐ}\or
+			\edef#2{#2ゑ}\or
+			\edef#2{#2を}\or
+			\edef#2{#2ん}\else
+		\fi
+	}%
+	\EA\LD@String@Hiraganize@Get\LD@String@Hiraganize@Temp\LD@String@Hiraganize@GetEnd
+}%
+\def\LD@String@Hiraganize@Get #1{%
+	\ifx#1\LD@String@Hiraganize@GetEnd
+		\let\LD@String@Hiraganize@Next\relax
+	\else
+		\LD@String@Hiraganize@AddChar#1
+		\let\LD@String@Hiraganize@Next=\LD@String@Hiraganize@Get
+	\fi
+	\LD@String@Hiraganize@Next
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                              平仮名 ou  片仮名　->   Romaji  Conversion
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\xdef\@LString{}%
+\xdef\@LLetter{}%
+%%
+%%  Append #2 to \@Lstring if next char (#3) is among ゃゅょぁぃぇぉャュョァィェォ. 
+%% and #1 if it isn't.
+%%
+%%
+\def\@Longletter#1#2#3#4{%
+		\EA\ifx\CS あ@#3\EC#4%
+				\if\@Letter#1%
+						\xdef\@LLetter{#2}%
+						\let\tempolp=\あ@ー
+				\fi
+		\fi
+}%　
+%%
+%%
+\def\@Ltest#1#2#3{%
+		\xdef\@Letter{#1}\def\argone{#1}\def\argtwo{#2}\def\tempolp{#3}%
+		\ifx\argone\argtwo
+		\else
+				\for\T@LKana:=ゃ,ゅ,ょ,ぁ,ぃ,ぅ,ぇ,ぉ,ャ,ュ,ョ,ァ,ィ,ゥ,ェ,ォ\do{%
+						\EA\ifx\CS あ@\T@LKana\EC#3%
+								\xdef\@Letter{#2}%
+						\fi
+				}%
+				\ifx o\argone
+						\ifx#3\あ@お
+								\xdef\@LLetter{o}\let\tempolp=\あ@ー
+						\fi
+				\fi
+		\fi
+%%
+%%  I chose not to make いい long.
+%%
+		\for\T@String:=aaあ,uuう,eeえ,ouう,AAー,IIー,UUー,EEー,OOー\do{%
+				\expandafter\@Longletter\T@String#3%
+		}%
+		\ifx\tempolp\あ@ー
+		\else
+			\EA\LD@String@G@Append\EA{\@Letter}\@LString
+		\fi
+		\tempolp
+}%
+%%
+%% Definition of a the \@Kana control sequence 
+%%
+\def\@Ldef#1 #2#3 #4\@L{%
+		\EA\gdef\CS あ@#1\EC{%
+			\LD@String@G@Append{#2}\@LString
+				\@Ltest{#3}{#4}%
+		}%
+}%
+%%
+%%
+%% Define the \@Kana control sequences whose Kana's ending is among aiueo. 
+%%
+%%
+\for\T@LKana:=ぁ {}a a,あ {\empty }a a,か ka a,さ sa a,た ta a,な na a,は ha a,ま ma a,ゃ {}a a,や ya a,ら ra a,わ wa a,が ga a,ざ za a,だ da a,ば ba a,ぱ pa a,ぃ {}i i,い {\empty }i i,き ki y,し {sh}i {},ち {ch}i {},に ni y,ひ hi y,み mi y,り ri y,ゐ wi i,ぎ gi y,じ ji {},ぢ ji i,び bi y,ぴ pi y,ぅ {\empty }u u,う {\empty }u u,く ku u,す su u,つ {ts}u u,ぬ nu u,ふ fu {},む mu y,ゅ {}u u,ゆ yu u,る ru u,ぐ gu u,ず zu u,づ zu u,ぶ bu u,ぷ pu u,ぇ {}e e,え {\empty}e e,け ke e,せ se e,て te e,ね ne e,へ he e,め me e,れ re e,ゑ we e,げ ge e,ぜ ze e,で de e,べ be e,ぺ pe e,ぉ {}o o,お {}o u,こ ko o,そ so o,と to o,の no o,ほ ho o,も mo o,ょ {}o o,よ yo o,ろ ro o,を wo o,ご go o,ぞ zo o,ど do o,ぼ bo o,ぽ po o,ァ {}A A,ア {\empty}A A,カ KA A,サ SA A,タ TA A,ナ NA A,ハ HA A,マ MA A,ャ {}A A,ヤ YA A,ラ RA A,ワ WA A,ガ GA A,ザ ZA A,ダ DA A,バ BA A,パ PA A,ィ {}I I,イ {\empty}I I,キ KI Y,シ {SH}I {},チ {CH}I {},ニ NI Y,ヒ HI Y,ミ MI Y,リ RI Y,ヰ WI I,ギ GI Y,ジ JI {},ヂ JI I,ビ BI Y,ピ PI Y,ゥ {\empty}U U,ウ {\empty}U U,ク KU U,ス SU U,ツ {TS}U U,ヌ NU U,フ FU {},ム MU U,ュ {}U U,ユ YU U,ル RU U,グ GU U,ズ ZU U,ヅ ZU U,ブ BU U,プ PU U,ェ {}E E,エ {\empty}E E,ケ KE E,セ SE E,テ TE {},ネ NE E,ヘ HE E,メ ME E,レ RE E,ヱ WE E,ゲ GE E,ゼ ZE E,デ DE {},ベ BE E,ペ PE E,ォ {}O O,オ {\empty}O O,コ KO O,ソ SO O,ト TO O,ノ NO O,ホ HO O,モ MO O,ョ {}O O,ヨ YO O,ロ RO O,ヲ WO O,ゴ GO O,ゾ ZO O,ド DO O,ボ BO O,ポ PO O\do{%
+		\EA\@Ldef\T@LKana\@L
+}%
+%%
+%%
+%%
+%% the \OLLong control sequence is a parameter that changes the format of the long letters
+%%
+%% \OLLong=\OLetter  :        ou > ou
+%% \OLLong=\OLOverline  :  ou > ô
+%%
+\def\OLetter#1#2{#1#2}%
+\def\OLOverline#1#2{$\overline{\hbox{#1}}$}%
+\let\OLLong=\OLetter
+\def\あ@ー{%
+	\EA\EA\EA\LD@String@G@Append\EA\EA\EA{\EA\EA\EA\OLLong\EA\@Letter\@LLetter}\@LString
+}%
+%%
+%%
+%% Define a few special \@Kana commands for んン and for the ponctuation.
+%%
+\def\@Lponcdef#1 #2\@L{%
+	\EA\gdef\CS あ@#1\EC{\LD@String@G@Append{#2}\@LString}%
+}%
+%%
+%%
+\for \T@LKana:=、 {,},　 { },ん n,ン N,？ ~? ,； ~; ,。 . ,： ~ : ,／ /,！ ~! ,％ \%,＊ *,＆ \&,゛ \",」 '',（ (,＿ \_,） ),＝ =,- -,～ -,＃ \#,｛ \{,［ [,「 ``,＠ @,］ ],｝ \},＊ *,a a,z z,e e,r r,t t,y y,u u,i i,o o,p p,q q,s s,d d,f f,g g,h h,j j,k k,l l,m m,w w,x x,c c,v v,b b,n n,A A,Z Z,E E,R R,T T,Y Y,U U,I I,O O,P P,Q Q,S S,D D,F F,G G,H H,J J,K K,L L,M M,W W,X X,C C,V V,B B,N N,â â,à à,é é,è è,ê ê,ù ù,û û,î î,ô ô,( (,) ),[ [,] ],' '\do{%
+		\EA\@Lponcdef\T@LKana\@L
+}%
+%%
+%%
+\def\あ@LRepeat#1{#1#1}%
+\def\あ@LRepe@t#1#2{#2#1#2}%
+\def\あ@っ#1{%
+	\EA\ifx\CS あ@（\EC#1%
+			\LD@String@G@Append\あ@LRepe@t\@LString
+	\else
+			\ifx\relax#1%
+					\あ@つ
+			\else
+					\LD@String@G@Append\あ@LRepeat\@LString
+			\fi
+	\fi 
+	#1%
+}%
+%\def\あ@ッ#1{\ifx\relax#1\あ@ツ\else\LD@String@G@Append\あ@LRepeat\@LString\fi}%
+%%
+%%
+\def\LD@Romanize#1{%
+	\xdef\@LString{}%
+	\xdef\@LParseString{}%
+	\xdef\@LTail{#1終}%
+	\loop
+		\LD@Split\@LTail{}\@LHead\@LTail
+	\unless\if 終\@LHead
+		\EA\LD@String@G@Append\CS あ@\@LHead\EC\@LParseString
+	\repeat
+	\@LParseString\relax
+	\xdef#1{\@LString}%
+}%
+%%
+%%
+\def\LD@romanize#1{%
+	\LD@Romanize#1%
+	#1%
+}%
+%%
+%%
+%%
+%% Usage 
+%%
+%\def\LD@Kana{ひらがなのほうが　Romajiより　いちばん　すき　ですよ}%
+%\def\LD@Kana{らがなのがよりいばんすですよ}%
+%\def\LD@Kana{みっつ　みっ（つ） みっ(つ)}%
+%\LD@romanize\LD@Kana
+%\bye
+%%
+%% ou
+%%
+%\Romanize ひらがなのほうが　Romajiより　いちばん　すき　ですよ\into\temp\temp
+%%
+\endinput

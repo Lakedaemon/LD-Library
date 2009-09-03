@@ -1,0 +1,756 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%													%
+%				\LD@Kanjidic@Load						%
+%													%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Kanjidic@Load{%
+	\directlua0{
+%		-- import the LuaXML module
+
+XML=require('XML')
+local Kanjidictfile = io.open( 'C:/TeX/Akuma/Kanjidic2.xml', 'rb' ):read( '*a' )
+local Kanjidict = XML(Kanjidictfile)
+
+function Get(Cell,Nil)
+	if Cell == nil then 
+		return Nil
+	else
+		return Cell['$']
+	end
+end
+
+Info={}
+for Index, Item in  ipairs(Kanjidict.kanjidic2.character) do
+	local Kanji = {}
+	Kanji.Number = Index
+	Kanji.Bushu = Item.radical['$']
+	Kanji.Strokes = Item.misc.stroke_count['$']
+	Kanji.Grade = Get(Item.misc.grade,-1)
+	Kanji.JLPT = Get(Item.misc.jlpt,-1)
+	Kanji.Frequency = Get(Item.misc.freq,-1)
+	Kanji.Reading_Meaning = Get(Item.reading_meaning,-1)
+	Info[Item.literal['$']] = Kanji
+end
+}}%
+
+
+\directlua0{
+	KanjiData={}
+	IndexToKanji={}
+	LD_Kanji_Data={}
+	DataE={}
+}%
+
+\endinput
+
+
+\newcount\LD@XML@Entries
+\def\LD@Kanjidic@Load{%
+	\input KanjiList.utf
+	\for\KanjiVar:=\JouyouKanji\do{%
+		\EA\def\csname Level\KanjiVar\endcsname{4}%
+	}%   Let's sanitize the JLPT !
+	\for\KanjiVar:=\KanjiJLPTDeux\do{%
+		\EA\def\csname Level\KanjiVar\endcsname{3}%
+	}%
+	\for\KanjiVar:=\KanjiJLPTTrois\do{%
+		\EA\def\csname Level\KanjiVar\endcsname{2}%
+	}%
+	\for\KanjiVar:=\KanjiJLPTQuatre\do{%
+		\EA\def\csname Level\KanjiVar\endcsname{1}%
+	}%
+	\for\KanjiVar:=\JouyouKanjiNotInJLPTun\do{%
+		\EA\def\csname Level\KanjiVar\endcsname{5}%
+	}%
+	\global\LD@XML@Entries=0\relax
+	\def\LD@XML@character@Do{%
+		\global\advance\LD@XML@Entries by1\relax
+		\ifcsname Level\LD@Kanji\endcsname
+			\edef\LD@JLPT{\CS Level\LD@Kanji\EC}%
+		\else
+			\def\LD@JLPT{5}%
+		\fi
+		\EA\xdef\CS Data\LD@Kanji\EC{Level={\LD@JLPT} Bushu={\LD@Kanji@Classical} Grade={\LD@Grade} Stroke Count={\LD@StrokeCount} Frequency={\LD@Frequency} On={\LD@Reading@On} Kun={\LD@Reading@Kun} Nanori={\LD@Reading@Nanori} Meanings={\LD@Meaning@Buffer} Grouped={\LD@Reading@Grouped}}%
+		\directlua0{
+			index="\LD@Kanji"
+			KanjiData[index.." Level"]="\LD@JLPT"
+			KanjiData[index.." Bushu"]="\LD@Kanji@Classical"
+			KanjiData[index.." Grade"]="\LD@Grade"
+			KanjiData[index.." Stroke Count"]="\LD@StrokeCount"
+			KanjiData[index.." Frequency"]="\LD@Frequency"
+			KanjiData[index.." On"]="\LD@Reading@On"
+			KanjiData[index.." Kun"]="\LD@Reading@Kun"
+			KanjiData[index.." Nanori"]="\LD@Reading@Nanori"
+%				["\LD@Kanji Meanings"]="\LD@Meaning@Buffer",
+%				["\LD@Kanji Grouped"]="\LD@Reading@Grouped"
+		}%
+		\EA\xdef\CS\the\LD@XML@Entries\EC{\LD@Kanji}%
+		\directlua0{
+				index="\LD@XML@Entries"
+				IndexToKanji[index]="\LD@Kanji"
+		}%
+		\unless\ifx\LD@Frequency\LD@Empty
+			\EA\xdef\CS KanjiN\LD@Frequency\EC{\LD@Kanji}%
+		\fi
+	}%
+	\input LD@XMLParser.tex
+	\input LD@Akuma@KanjidictParser.tex
+	\LD@XML@Parser{kanjidic2.xml}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%													%
+%					Yomigata Preprocessing				%
+%													%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\gdef\LD@KanjiData@Verbs{%
+	|うい|くき|ぐぎ|すし|つち|るり|ぬに|むみ|ぶび|=%
+}%
+\gdef\LD@KanjiData@RuVerbs{%
+	きぎけげしじせぜちぢてでひびぴへべぺりれいえみめにね%
+}%
+\gdef\LD@KanjiData@GodanRuVerbs{%
+	|帰る,かえる|入る,はいる|切る,きる|知る,しる|要る,いる|%
+}%
+\gdef\LD@KanjiData@Start{%
+	|かY,がN|きY,ぎN|くY,ぐN|けY,げN|こY,ごN|さY,ざN|しY,じN|すY,ずN|せY,ぜN|そY,ぞN|たY,だN|ちY,ぢN,じN|つY,づN,ずN|てY,でN|とY,どN|はY,ばN,ぱN|ひY,びN,ぴN|ふY,ぶN,ぷN|へY,べN,ぺN|=%
+	|ほY,ぼN,ぽN|カY,ガN|キY,ギN|クY,グN|ケY,ゲN|コY,ゴN|サY,ザN|シY,ジN|スY,ズN|セY,ゼN|ソY,ゾN|タY,ダN|チY,ヂN,ゾN|ツY,ヅN,ズN|テY,デN|トY,ドN|ハY,バN,パN|ヒY,ビN,ピN|フY,ブN,プN|=%
+	|ヘY,ベN,ペN|ホY,ボN,ポN|=%
+}% N means in the middle Y at beginning
+\gdef\LD@KanjiData@End{%
+	|つN,っN,つY|くN,っN,くY|っN,つY|ツN,ッN,ツY|ッN,ツY|クN,ッN,クY|=%
+}% N means in the middle Y at end
+\def\LD@KanjiData@Add#1#2#3{% Adds the reading variation in the #1#2 Control sequence, if it isn't already in. 
+	\ifcsname LD@KanjiData@#1#2#3\endcsname
+		\edef\LD@Temp@G{,\LD@Temp@C\LD@KanjiData@Middle\LD@Temp@E ,}%
+		\edef\LD@Temp@H{\CS LD@KanjiData@#1#2#3\EC\LD@Temp@G}%
+		\EA\LD@Split\EA\LD@Temp@H\EA{\LD@Temp@G}\LD@Temp@Trash\LD@Temp@H
+		\ifx\LD@Temp@H\LD@Empty
+			\EA\xdef \CS LD@KanjiData@#1#2#3\EC{\CS LD@KanjiData@#1#2#3\EC\LD@Temp@C\LD@KanjiData@Middle\LD@Temp@E ,}%
+			\directlua0{
+				index="#1#2#3"
+				LD_Kanji_Data[index] = LD_Kanji_Data[index] .. "\LD@Temp@C\LD@KanjiData@Middle\LD@Temp@E ,"
+			}%
+		\fi			
+	\else
+		\EA\xdef \CS LD@KanjiData@#1#2#3\EC{,\LD@Temp@C \LD@KanjiData@Middle\LD@Temp@E ,}%
+		\directlua0{
+			index="#1#2#3"
+			LD_Kanji_Data[index]=",\LD@Temp@C\LD@KanjiData@Middle\LD@Temp@E ,"
+		}%
+	\fi
+}%
+\def\LD@KanjiData@Reading@AddToPool#1{%
+		% Count the number of Tokens of the On reading \LD@Temp@A			
+		\LD@String@Length#1\LD@TempCounter@A
+		\ifnum\LD@Counter@A<\LD@TempCounter@A\relax
+			\LD@Counter@A=\LD@TempCounter@A\relax
+		\fi
+		% Adds it to the Reading Pool
+		\ifcsname  LD@KanjiData@\the\LD@TempCounter@A\endcsname
+			\EA\let\EA\LD@Temp@B\CS LD@KanjiData@\the\LD@TempCounter@A\EC
+			\EA\edef\CS LD@KanjiData@\the\LD@TempCounter@A\EC{%
+				\LD@Temp@B ,#1%
+			}%
+		\else
+			\EA\edef\CS LD@KanjiData@\the\LD@TempCounter@A\EC{#1}%
+		\fi
+}%
+
+\def\LD@Yomigana@Pool@Make#1#2#3#4{% #1  is the Kanji, #2 is on reading, #3 is Kun Reading and #4 is Nanori Reading output is the reading pool : LD@KanjiData@+number  max number is indicated by \LD@Counter@A
+	%%%% From this point, we pre-process the reading of the kanji
+	\LD@Counter@A=0\relax
+	%% Takes care of the On lectures
+	\for\LD@KanjiData@LoopA:=#2\do{%
+		% Hiraganize the reading
+		\LD@String@Hiraganize\LD@KanjiData@LoopA\LD@Temp@A % undead but doesn't use \LD@Temp@A
+		\LD@KanjiData@Reading@AddToPool\LD@Temp@A
+	}%
+	%% Takes care of the Kun lectures
+	\for\LD@KanjiData@LoopA:=#3\do{% 
+		% take care of the "-" if there is one.
+		\edef\LD@Temp@A{\LD@KanjiData@LoopA-}%
+		\LD@String@Split\LD@Temp@A-\LD@Temp@A\LD@Temp@Trash
+		\ifx\LD@Temp@A\LD@Empty	
+			% -Kun  -->  -Kun-  -->  {} et Kun-  --> Kun
+			\LD@String@Split\LD@Temp@Trash -\LD@Temp@A\LD@Temp@Trash
+		\fi
+		% remove the "." if there is one.
+		\edef\LD@Temp@A{\LD@Temp@A.}%
+		\LD@String@Split\LD@Temp@A.\LD@Temp@A\LD@Temp@Trash
+		\unless\ifx\LD@Temp@Trash\LD@Empty
+		% Verb-> noun Kun support
+			\LD@String@Split\LD@Temp@Trash.\LD@Temp@B\LD@Temp@Trash
+			\LD@String@LastChar\LD@Temp@B\LD@Temp@B\LD@Temp@C
+			\edef\LD@Test{\LD@KanjiData@Verbs |\LD@Temp@C}%
+			\EA\LD@String@Split\EA\LD@Test\EA{\EA |\LD@Temp@C}\LD@Temp@Trash\LD@Test
+			\ifx\LD@Test\LD@Empty
+				%not a verb
+				\edef\LD@Temp@D{\LD@Temp@A\LD@Temp@B\LD@Temp@C}%
+			\else
+				\unless\if る\LD@Temp@C
+					% a Godan verb that doesn't end with ru
+					\LD@String@Split\LD@Test{}\LD@Temp@C\LD@Temp@Trash
+					\edef\LD@Temp@D{\LD@Temp@A\LD@Temp@B\LD@Temp@C}%
+				\else
+					\edef\LD@Temp@D{\LD@Temp@A\LD@Temp@B}%
+					\LD@String@LastChar\LD@Temp@D\LD@Trash\LD@Temp@E
+					\edef\LD@Test{\LD@KanjiData@RuVerbs\LD@Temp@E}%
+					\EA\LD@String@Split\EA\LD@Test\LD@Temp@E\LD@Trash\LD@Test
+					\ifx\LD@Test\LD@Empty
+						% Verb ending with aru, uru or oru 
+						\edef\LD@Test{#1\LD@Temp@B\LD@Temp@C,\LD@Temp@A\LD@Temp@B\LD@Temp@C}%
+						\def\LD@Trash{来る,くる}% 
+						\ifx\LD@Trash\LD@Test
+							\edef\LD@Temp@D{き}%
+						\else
+							\def\LD@Trash{為る,する}% 
+							\ifx\LD@Trash\LD@Test
+								\edef\LD@Temp@D{し}%
+							\else
+								% Godan Verb ending with aru, uru or oru 
+								\edef\LD@Temp@D{\LD@Temp@A\LD@Temp@B り}%
+							\fi
+						\fi
+					\else
+						% a verb ending with iru or eru
+						\edef\LD@Test{|#1\LD@Temp@B\LD@Temp@C,\LD@Temp@A\LD@Temp@B\LD@Temp@C|}%
+						\edef\LD@Trash{\LD@KanjiData@GodanRuVerbs\LD@Test}% 
+						\EA\LD@String@Split\EA\LD@Trash\EA{\LD@Test}\LD@Trash\LD@Test
+						\ifx\LD@Test\LD@Empty
+							% Ichidan ru Verb
+							\edef\LD@Temp@D{\LD@Temp@A\LD@Temp@B}%
+						\else
+							% Godan ru Verb
+							\edef\LD@Temp@D{\LD@Temp@A\LD@Temp@B り}%
+						\fi
+					\fi
+				\fi
+			 \fi
+			\LD@KanjiData@Reading@AddToPool\LD@Temp@D
+		\fi
+		\LD@KanjiData@Reading@AddToPool\LD@Temp@A
+	}%
+	%% Takes care of the Nanori lectures
+	\for\LD@KanjiData@LoopA:=#4\do{%
+		\let\LD@Temp@A\LD@KanjiData@LoopA
+		\LD@KanjiData@Reading@AddToPool\LD@Temp@A
+	}%
+}%
+\def\LD@Yomigana@Pool@Process#1{%
+	\LD@Counter@B=0\relax
+	\loop
+		\advance\LD@Counter@B by1\relax
+		\ifcsname LD@KanjiData@\the\LD@Counter@B\endcsname
+			\edef\LD@Temp@A{\CS LD@KanjiData@\the\LD@Counter@B\EC}%
+			\for\LD@KanjiData@LoopA:=\LD@Temp@A\do{%
+				\LD@Split\LD@KanjiData@LoopA{}\LD@KanjiData@First\LD@KanjiData@Middle
+				% Get the possible beginnings of the Reading into \LD@Temp@A
+				\edef\LD@Temp@A{\LD@KanjiData@Start |\LD@KanjiData@First}%
+				\EA\LD@Split\EA\LD@Temp@A\EA{\EA|\LD@KanjiData@First}\LD@Temp@Trash\LD@Temp@A
+				\ifx\LD@Temp@A\LD@Empty
+					\edef\LD@Temp@A{\LD@KanjiData@First Y}%
+				\else
+					\edef\LD@Temp@A{\LD@KanjiData@First\LD@Temp@A}
+					\LD@Split\LD@Temp@A |\LD@Temp@A\LD@Temp@Trash
+				\fi
+				\ifnum\LD@Counter@B>1\relax
+					\LD@String@LastChar\LD@KanjiData@Middle\LD@KanjiData@Middle\LD@KanjiData@Last
+					% Get the possible endings of the Reading into \LD@Temp@B
+					\edef\LD@Temp@B{\LD@KanjiData@End |\LD@KanjiData@Last}%
+					\EA\LD@Split\EA\LD@Temp@B\EA{\EA|\LD@KanjiData@Last}\LD@Temp@Trash\LD@Temp@B
+					\ifx\LD@Temp@B\LD@Empty
+						\edef\LD@Temp@B{\LD@KanjiData@Last Y,\LD@KanjiData@Last N}%
+					\else
+						\edef\LD@Temp@B{\LD@KanjiData@Last\LD@Temp@B}
+						\LD@Split\LD@Temp@B |\LD@Temp@B\LD@Temp@Trash
+					\fi
+				\else
+					\def\LD@Temp@B{{}Y,{}N}%
+					\def\LD@KanjiData@Last{}%
+				\fi
+				{\for\LD@KanjiData@LoopB:=\LD@Temp@A\do{%
+					\EA\LD@Edef@Two\LD@KanjiData@LoopB\LD@Temp@C\LD@Temp@D
+					{\for\LD@KanjiData@LoopC:=\LD@Temp@B\do{%
+						\EA\LD@Edef@Two\LD@KanjiData@LoopC\LD@Temp@E\LD@Temp@F
+						\LD@KanjiData@Add{#1}\LD@Temp@D\LD@Temp@F
+						\if Y\LD@Temp@D
+							\LD@KanjiData@Add{#1}N\LD@Temp@F
+						\fi
+					}}%
+				}}%
+			}%
+		\fi
+	\ifnum\LD@Counter@B<\LD@Counter@A\relax
+	\repeat
+}%
+\def\LD@Yomigana@Kanji@Preprocess#1#2#3#4{%
+	\LD@Yomigana@Pool@Make{#1}{#2}{#3}{#4}%
+	\LD@Yomigana@Pool@Process{#1}%
+}%
+\def\LD@Yomigana@Kanji@Preprocessing{%
+	\global\LD@One=0\relax
+	\loop
+	{%%% grouping is for forgetting local parameters
+		\global\advance\LD@One by1\relax
+		\edef\LD@Kanji{\CS\the\LD@One\EC}%
+		\LD@Data@Set{On}\LD@Kanji\LD@Reading@On
+		\ifx\LD@Reading@On\relax
+			\def\LD@Reading@On{}%
+		\fi
+		\LD@Data@Set{Kun}\LD@Kanji\LD@Reading@Kun
+		\ifx\LD@Reading@Kun\relax
+			\def\LD@Reading@Kun{}%
+		\fi
+		\LD@Data@Set{Nanori}\LD@Kanji\LD@Reading@Nanori
+		\ifx\LD@Reading@Nanory\relax
+			\def\LD@Reading@Nanory{}%
+		\fi
+		\EA\LD@Yomigana@Kanji@Preprocess\EA{\LD@Kanji}\LD@Reading@On\LD@Reading@Kun\LD@Reading@Nanori
+	}%
+	\ifnum\LD@One<\LD@XML@Entries\relax
+	\repeat
+	\LD@Time@Benchmark{Kanji-Preprocessing done}
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%													%
+%					Pseudo-Kanji Preprocessing			%
+%													%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%、。，．・：；？！゛゜´｀¨＾￣＿ヽヾゝゞ〃仝ー―‐／\～‖｜…‥''""（）〔〕［］｛｝〈〉《》「」『』【】＋−±×÷＝≠＜＞≦≧∞∴♂♀°′″℃￥＄¢£％＃＆＊＠§☆★○●◎◇◆□■△▲▽▼※〒→←↑↓〓
+%
+%
+\def\LD@Yomigana@Preprocessing@Default{{%
+\for\LD@Letter:=Ａ{Ａ,エー,えー,ええ,えい},Ｂ{Ｂ,ビー,びー,びい,び,ベー},Ｃ{Ｃ,シー,しー,しい},Ｄ{Ｄ,ディー,でぃー,でぃ},Ｅ{Ｅ,イー,えー,えい},Ｆ{Ｆ,エフ,えふ},Ｇ{Ｇ,ジー},Ｈ{Ｈ,エッチ,ハー},%
+Ｉ{Ｉ,アイ,あい},Ｊ{Ｊ,ジェー,ジェイ,じぇい},Ｋ{Ｋ,ケー,けい},Ｌ{Ｌ,エル,える},Ｍ{Ｍ,エム,えむ},Ｎ{Ｎ,エヌ,えぬ},Ｏ{Ｏ,オー},Ｐ{Ｐ,ピー,ぴー},Ｑ{Ｑ,キュー,きゅう,きゅぜ},Ｒ{Ｒ,アール,あーる},%
+Ｓ{Ｓ,エス,えす},Ｔ{Ｔ,ティー,てぃー,てぃぜ,テー},Ｕ{Ｕ,ユー},Ｖ{Ｖ,ブイ},Ｗ{Ｗ},Ｘ{Ｘ,エックス},Ｙ{Ｙ,わい},Ｚ{Ｚ},ａ{ａ,エー,ええ},ｂ{ｂ,ビー,びい},ｃ{ｃ,シー,しい},ｄ{ｄ,ディー},ｅ{ｅ,イー},%
+ｆ{ｆ,エフ},ｇ{ｇ,ジー},ｈ{ｈ,エッチ},※{こめじるし},〒{ゆうびんきごう},%
+ｉ{ｉ,アイ},ｊ{ｊ},ｋ{ｋ},ｌ{ｌ,エル},ｍ{ｍ,エム},ｎ{ｎ,エヌ},ｏ{ｏ,オー},ｐ{ｐ,ピー,ペー},ｑ{ｑ,キュー},ｒ{ｒ,アール},ｓ{ｓ,エス},ｔ{ｔ,ティー},ｕ{ｕ,ユー},ｖ{ｖ,ブイ},ｗ{ｗ},ｘ{ｘ,エックス},ｙ{ｙ},ｚ{ｚ},%
+０{０},１{１,ひゃく},２{２,に},３{３,さん},４{４,し},５{５,ご},６{６,ろく},７{７,しち},８{８,はち},９{９,きゅう},%
+＋{プラス},α{アルファ},Α {アルファ},β {ベータ},Β{ベータ},Σ{シグマ},Ε{イプシロン,エプシロン},σ{シグマ},λ {ラムダ},Λ{ラムダ},ω{オメガ},Ζ{ゼータ},Ω{オメガ},Η{イータ,エータ},η{イータ},Π{パイ},θ{シータ},%
+ε{エプシロン,イプシロン},ζ{ゼータ},η{エータ},θ{テータ,シータ},Θ{シータ,テータ},ι{イオタ},Ι{イオタ},Μ{ミュー},Ν{ニュー},Ο{オミクロン},Ξ{クサイ,クシー,グザイ},Ρ{ロー},Τ{タウ},Υ{ウプシロン,ユプシロン},υ{ウプシロン},%
+Φ{ファイ,フィー},φ{ファイ},Χ{カイ,キー},χ{カイ},Ψ{プサイ,プシー},ψ{プサイ},×{ばつ,ペケ},%
+κ{カッパー,カッパ},Κ{カッパ,カッパー},μ{ミュー},ν{ニュー},ο{オミクロン},ξ{グザイ,クサイ,クシー},π{パイ},ρ{ロー},τ{タウ},υ{ユプシロン},φ{フィー},χ{キー},ψ{プシー},○{まる},〇{まる},→{やじるし},←{やじるし},%
+＠{アットマーク,ナルト},．{．}\do{%
+	\EA\LD@Edef@Two\LD@Letter\LD@Temp@A\LD@Temp@B
+	\EA\xdef \CS LD@KanjiData@\LD@Temp@A YY\EC{,\LD@Temp@B ,}%
+	\EA\xdef \CS LD@KanjiData@\LD@Temp@A NY\EC{,\LD@Temp@B ,}%
+	\EA\xdef \CS LD@KanjiData@\LD@Temp@A YN\EC{,\LD@Temp@B ,}%
+	\EA\xdef \CS LD@KanjiData@\LD@Temp@A NN\EC{,\LD@Temp@B ,}%
+	\directlua0{
+		LD_Temp_A="\LD@Temp@A"
+		LD_Kanji_Data[LD_Temp_A.."YY"]=",\LD@Temp@B ,"
+		LD_Kanji_Data[LD_Temp_A.."NY"]=",\LD@Temp@B ,"
+		LD_Kanji_Data[LD_Temp_A.."YN"]=",\LD@Temp@B ,"
+		LD_Kanji_Data[LD_Temp_A.."NN"]=",\LD@Temp@B ,"		
+	}%
+}%
+\def\LD@KanjiData@Tail{ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔかけ{}{}{}{}}%
+	\ForEach\LD@Letter:=ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ\do{%
+		\LD@Split\LD@KanjiData@Tail{}\LD@KanjiData@Head\LD@KanjiData@Tail
+		\unless\ifx\LD@KanjiData@Head\LD@Empty
+			\edef\LD@Temp{\LD@KanjiData@Head}%
+			% This Takes care of Hiragana
+%			\EA\xdef \CS LD@KanjiData@\LD@Temp YY\EC{,\LD@Temp ,}%
+%			\EA\xdef \CS LD@KanjiData@\LD@Temp NY\EC{,\LD@Temp ,}%
+%			\EA\xdef \CS LD@KanjiData@\LD@Temp YN\EC{,\LD@Temp ,}%
+%			\EA\xdef \CS LD@KanjiData@\LD@Temp NN\EC{,\LD@Temp ,}%
+			% This takes care of Katakana with hiragana reading
+			\EA\xdef \CS LD@KanjiData@\LD@Letter YY\EC{,\LD@Letter ,\LD@Temp ,}%
+			\EA\xdef \CS LD@KanjiData@\LD@Letter NY\EC{,\LD@Letter ,\LD@Temp ,}%
+			\EA\xdef \CS LD@KanjiData@\LD@Letter YN\EC{,\LD@Letter ,\LD@Temp ,}%
+			\EA\xdef \CS LD@KanjiData@\LD@Letter NN\EC{,\LD@Letter ,\LD@Temp ,}%
+			\directlua0{
+				LD_Letter="\LD@Letter"
+				LD_Kanji_Data[LD_Letter.."YY"]=",\LD@Letter ,\LD@Temp ,"	
+				LD_Kanji_Data[LD_Letter.."NY"]=",\LD@Letter ,\LD@Temp ,"	
+				LD_Kanji_Data[LD_Letter.."YN"]=",\LD@Letter ,\LD@Temp ,"	
+				LD_Kanji_Data[LD_Letter.."NN"]=",\LD@Letter ,\LD@Temp ,"	
+			}%
+		\else
+			% This takes care of Katakana without hiragana reading
+			\EA\xdef \CS LD@KanjiData@\LD@Letter YY\EC{,\LD@Temp ,}%
+			\EA\xdef \CS LD@KanjiData@\LD@Letter NY\EC{,\LD@Temp ,}%
+			\EA\xdef \CS LD@KanjiData@\LD@Letter YN\EC{,\LD@Temp ,}%
+			\EA\xdef \CS LD@KanjiData@\LD@Letter NN\EC{,\LD@Temp ,}%
+			\directlua0{
+				LD_Letter="\LD@Letter"
+				LD_Kanji_Data[LD_Letter.."YY"]=",\LD@Temp ,"	
+				LD_Kanji_Data[LD_Letter.."NY"]=",\LD@Temp ,"	
+				LD_Kanji_Data[LD_Letter.."YN"]=",\LD@Temp ,"	
+				LD_Kanji_Data[LD_Letter.."NN"]=",\LD@Temp ,"	
+			}%
+		\fi
+		%\EA\EA\EA\AddForeignKanji \EA\LD@Letter\EA{\LD@Temp}%
+	}%
+	%% ケ gets special treatment, 〆 too
+	\EA\xdef \CS LD@KanjiData@ケYY\EC{,ケ,け,げ,か,が,}%
+	\EA\xdef \CS LD@KanjiData@ケNY\EC{,ケ,け,か,}%
+	\EA\xdef \CS LD@KanjiData@ケYN\EC{,ケ,け,げ,か,が,}%
+	\EA\xdef \CS LD@KanjiData@ケNN\EC{,ケ,け,か,}%
+	\EA\xdef \CS LD@KanjiData@〆YY\EC{,しめ,じめ,}%
+	\EA\xdef \CS LD@KanjiData@〆NY\EC{,しめ,}%
+	\EA\xdef \CS LD@KanjiData@〆YN\EC{,しめ,じめ,}%
+	\EA\xdef \CS LD@KanjiData@〆NN\EC{,しめ,}%
+	\directlua0{
+		LD_Kanji_Data["ケYY"] = ",ケ,け,げ,か,が,"	
+		LD_Kanji_Data["ケNY"] = ",ケ,け,か,"	
+		LD_Kanji_Data["ケYN"] = ",ケ,け,げ,か,が,"	
+		LD_Kanji_Data["ケNN"] = ",ケ,け,か,"	
+		LD_Kanji_Data["〆YY"] = ",しめ,じめ,"	
+		LD_Kanji_Data["〆NY"] = ",しめ,"	
+		LD_Kanji_Data["〆YN"] = ",しめ,じめ,"	
+		LD_Kanji_Data["〆NN"] = ",しめ,"	
+		LD_Kanji_Data["〆NN"] = ",しめ,"
+		LD_Yomigana_KurikaeshiSymbols = "々ヽヾゝゞ"
+	}%
+	\gdef\LD@Yomigana@KurikaeshiSymbols{々ヽヾゝゞ}%
+}}%
+\def\LD@Yomigana@Preprocessing@JMnedict{%
+	\EA\xdef \CS LD@KanjiData@ゐYY\EC{,ゐ,い,}%
+	\EA\xdef \CS LD@KanjiData@ゐNY\EC{,ゐ,い,}%
+	\EA\xdef \CS LD@KanjiData@ゐYN\EC{,ゐ,い,}%
+	\EA\xdef \CS LD@KanjiData@ゐNN\EC{,ゐ,い,}%
+	\EA\xdef \CS LD@KanjiData@ゑYY\EC{,ゑ,え,}%
+	\EA\xdef \CS LD@KanjiData@ゑNY\EC{,ゑ,え,}%
+	\EA\xdef \CS LD@KanjiData@ゑYN\EC{,ゑ,え,}%
+	\EA\xdef \CS LD@KanjiData@ゑNN\EC{,ゑ,え,}%
+	\EA\xdef \CS LD@KanjiData@をYY\EC{,を,お,}%
+	\EA\xdef \CS LD@KanjiData@をNY\EC{,を,お,}%
+	\EA\xdef \CS LD@KanjiData@をYN\EC{,を,お,}%
+	\EA\xdef \CS LD@KanjiData@をNN\EC{,を,お,}%
+	\EA\xdef \CS LD@KanjiData@はYY\EC{,は,ば,ぱ,わ,}%
+	\EA\xdef \CS LD@KanjiData@はNY\EC{,は,わ,}%
+	\EA\xdef \CS LD@KanjiData@はYN\EC{,は,ば,ぱ,わ,}%
+	\EA\xdef \CS LD@KanjiData@はNN\EC{,は,わ,}%
+	\EA\xdef \CS LD@KanjiData@ほYY\EC{,ほ,ぼ,ぽ,お,}%
+	\EA\xdef \CS LD@KanjiData@ほNY\EC{,ほ,お,}%
+	\EA\xdef \CS LD@KanjiData@ほYN\EC{,ほ,ぼ,ぽ,お,}%
+	\EA\xdef \CS LD@KanjiData@ほNN\EC{,ほ,お,}%
+	\EA\xdef \CS LD@KanjiData@へYY\EC{,へ,べ,ぺ,え,}%
+	\EA\xdef \CS LD@KanjiData@へNY\EC{,へ,え,}%
+	\EA\xdef \CS LD@KanjiData@へYN\EC{,へ,べ,ぺ,え,}%
+	\EA\xdef \CS LD@KanjiData@へNN\EC{,へ,え,}%
+	\EA\xdef \CS LD@KanjiData@ひYY\EC{,ひ,び,ぴ,い,}%
+	\EA\xdef \CS LD@KanjiData@ひNY\EC{,ひ,い,}%
+	\EA\xdef \CS LD@KanjiData@ひYN\EC{,ひ,び,ぴ,い,}%
+	\EA\xdef \CS LD@KanjiData@ひNN\EC{,ひ,い,}%
+	\EA\xdef \CS LD@KanjiData@ふYY\EC{,ふ,ぶ,ぷ,う,}%
+	\EA\xdef \CS LD@KanjiData@ふNY\EC{,ふ,ぶ,ぷ,う,}%
+	\EA\xdef \CS LD@KanjiData@ふYN\EC{,ふ,ぶ,ぷ,う,}%
+	\EA\xdef \CS LD@KanjiData@ふNN\EC{,ふ,ぶ,ぷ,う,}%
+	\directlua0{
+		LD_Letter="\LD@Letter"
+		LD_Kanji_Data["ゐYY"]=",ゐ,い,"	
+		LD_Kanji_Data["ゐNY"]=",ゐ,い,"	
+		LD_Kanji_Data["ゐYN"]=",ゐ,い,"	
+		LD_Kanji_Data["ゐNN"]=",ゐ,い,"	
+		LD_Kanji_Data["ゑYY"]=",ゑ,え,"	
+		LD_Kanji_Data["ゑNY"]=",ゑ,え,"	
+		LD_Kanji_Data["ゑYN"]=",ゑ,え,"	
+		LD_Kanji_Data["ゑNN"]=",ゑ,え,"	
+		LD_Kanji_Data["をYY"]=",を,お,"	
+		LD_Kanji_Data["をNY"]=",を,お,"	
+		LD_Kanji_Data["をYN"]=",を,お,"	
+		LD_Kanji_Data["をNN"]=",を,お,"	
+		LD_Kanji_Data["はYY"]=",は,ば,ぱ,わ,"	
+		LD_Kanji_Data["はNY"]=",は,わ,"	
+		LD_Kanji_Data["はYN"]=",は,ば,ぱ,わ,"	
+		LD_Kanji_Data["はNN"]=",は,わ,"	
+		LD_Kanji_Data["ほYY"]=",ほ,ぼ,ぽ,お,"	
+		LD_Kanji_Data["ほNY"]=",ほ,お,"	
+		LD_Kanji_Data["ほYN"]=",ほ,ぼ,ぽ,お,"	
+		LD_Kanji_Data["ほNN"]=",ほ,お,"	
+		LD_Kanji_Data["へYY"]=",へ,べ,ぺ,え,"	
+		LD_Kanji_Data["へNY"]=",へ,え,"	
+		LD_Kanji_Data["へYN"]=",へ,べ,ぺ,え,"	
+		LD_Kanji_Data["へNN"]=",へ,え,"	
+		LD_Kanji_Data["ひYY"]=",ひ,び,ぴ,い,"	
+		LD_Kanji_Data["ひNY"]=",ひ,い,"	
+		LD_Kanji_Data["ひYN"]=",ひ,び,ぴ,い,"	
+		LD_Kanji_Data["ひNN"]=",ひ,い,"	
+		LD_Kanji_Data["ふYY"]=",ふ,ぶ,ぷ,う,"	
+		LD_Kanji_Data["ふNY"]=",ふ,ぶ,ぷ,う,"	
+		LD_Kanji_Data["ふYN"]=",ふ,ぶ,ぷ,う,"	
+		LD_Kanji_Data["ふNN"]=",ふ,ぶ,ぷ,う,"	
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%													%
+%					Regular Compounds					%
+%													%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\gdef\LD@Yomigana@Compounds{%
+	|今日,きょう|眼鏡,めがね|部屋,へや|何時,いつ|如何,どう|悪戯,いたずら|為替,かわせ|かたぎ|相撲,すもう|大和,やまと|相撲,ずもう|土産,みやげ|海苔,のり|蝦夷,えぞ|海豚,いるか|自棄,やけ|団扇,うちわ|
+	|雲雀,ひばり|飛蝗,ばった|酸漿,ほおずき|似非,えせ|上手,うま|山羊,やぎ|山葵,わさび|時雨,しぐれ|従兄弟,いとこ|従姉妹,いとこ|小豆,あずき|梅雨,つゆ|博士,はかせ|烏賊,いか|何方,どちら|何方,どっち|
+	|何故,なぜ|昨日,きのう|一昨日,おととい|可愛,かわい|
+}%
+\directlua0{
+		LD_Yomigana_Compounds = [[|今日,きょう|眼鏡,めがね|部屋,へや|何時,いつ|如何,どう|悪戯,いたずら|為替,かわせ|かたぎ|相撲,すもう|大和,やまと|相撲,ずもう|土産,みやげ|海苔,のり|蝦夷,えぞ|海豚,いるか|自棄,やけ|団扇,うちわ|
+		|雲雀,ひばり|飛蝗,ばった|酸漿,ほおずき|似非,えせ|上手,うま|山羊,やぎ|山葵,わさび|時雨,しぐれ|従兄弟,いとこ|従姉妹,いとこ|小豆,あずき|梅雨,つゆ|博士,はかせ|烏賊,いか|何方,どちら|何方,どっち|
+		|何故,なぜ|昨日,きのう|一昨日,おととい|可愛,かわい|]]
+	}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%													%
+%				\LD@Yomigana@Compute					%
+%													%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\directlua0{
+	
+	
+	function LD_Yomigana_Compute(LD_Yomigana_L_Kanji, LD_Yomigana_L_Kana) 
+		% initializes things and starts the recursive process
+		% QuirkMode  : 0 (regular) 1 (Null quirk) 2 (non Null quirk)
+%%%		LD_Yomigana_Kurikaeshi_G_Kana="" % global
+%%%		LD_Yomigana_Kurikaeshi_G_Kanji="" % global	
+%%%		LD_Yomigana_Kurikaeshi_G_Mode="" % global	
+%		LD_Yomigana_L_Start="Y" %  : First ? Y or N   %		LD_Yomigana_L_End="Y" % : Last ? Y or N
+		local LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_Process(0 , 0, LD_Yomigana_L_Kanji, LD_Yomigana_L_Kana, unicode.utf8.len(LD_Yomigana_L_Kanji), unicode.utf8.len(LD_Yomigana_L_Kana), "Y", "Y") 
+		 return  LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level
+	end
+
+	function LD_Yomigana_Process(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kanji, LD_Yomigana_L_Kana, LD_Yomigana_Counter_L_Kanji, LD_Yomigana_Counter_L_Kana, LD_Yomigana_L_Start, LD_Yomigana_L_End)
+		local LD_Yomigana_GlobalFurigana
+		% The Lakedaemonian Recursive Function implementing a kind of Dichotomy.  
+		if LD_Yomigana_Counter_L_Kanji == 1 then
+			% one Kanji
+			LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_OneKanji(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kanji, LD_Yomigana_L_Kana, LD_Yomigana_L_Start, LD_Yomigana_L_End) 
+		elseif  unicode.utf8.find(LD_Yomigana_Compounds, "|" .. LD_Yomigana_L_Kanji .. "," .. LD_Yomigana_L_Kana .. "|") == nil then
+			% Split kanji string and Kana string 
+			LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_Dichotomy(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kanji, LD_Yomigana_L_Kana, LD_Yomigana_Counter_L_Kanji, LD_Yomigana_Counter_L_Kana, LD_Yomigana_L_Start, LD_Yomigana_L_End)
+		else 
+			% Support for Regular Compounds. Return stuff
+			LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Mode = unicode.utf8.rep("*|", LD_Yomigana_Counter_L_Kanji-1) .. "*" .. 	LD_Yomigana_L_Kana .. "|", 0
+%			LD_Yomigana_Kurikaeshi_G_Kana = ""
+%			LD_Yomigana_Kurikaeshi_G_Kanji = ""
+%			LD_Yomigana_Kurikaeshi_G_Mode = ""										
+		end
+		return LD_Yomigana_GlobalFurigana,LD_Yomigana_Quirks_G_Level,LD_Yomigana_Quirks_G_Mode
+	end
+	
+	function LD_Yomigana_OneKanji(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kanji, LD_Yomigana_L_Kana, LD_Yomigana_L_Start, LD_Yomigana_L_End)
+		local LD_Yomigana_GlobalFurigana
+		%
+		% One Kanji case. 
+		% This case does the Grunt Work (it compares with the lectures) and happens a lot. 	
+		%
+		local LD_Yomigana_Test = LD_Kanji_Data[LD_Yomigana_L_Kanji .. LD_Yomigana_L_Start .. LD_Yomigana_L_End] 
+		if not(LD_Yomigana_Test == nil) then
+			if unicode.utf8.find(LD_Yomigana_Test, "," .. LD_Yomigana_L_Kana .. "," ) == nil then
+				% Quirk case
+				LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_QuirkCase( LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kana) 
+			else
+				% Valid case
+				LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_ValidCase(LD_Yomigana_L_Kana)
+			end
+%%%			LD_Yomigana_Kurikaeshi_G_Kanji=LD_Yomigana_L_Kanji % global
+		else
+			if LD_Yomigana_L_Kanji == LD_Yomigana_L_Kana then 
+				% Valid case
+				LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_ValidCase(LD_Yomigana_L_Kana)
+%%%				LD_Yomigana_Kurikaeshi_G_Kanji=LD_Yomigana_L_Kanji % global usefull for kana
+			else
+				% Case Unknown
+				LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_Unknown(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kanji, LD_Yomigana_L_Kana)
+			end
+		end
+		return LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode
+	end		
+			
+	function LD_Yomigana_ValidCase(LD_Yomigana_L_Kana)
+		%LD_Yomigana_GlobalFurigana = LD_Yomigana_L_Kana .. "|"
+		%LD_Yomigana_Quirks_G_Mode = 0
+		return LD_Yomigana_L_Kana .. "|", 0
+	end
+		
+	function LD_Yomigana_QuirkCase(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kana)
+		if LD_Yomigana_Quirks_G_Mode < 2 then
+			LD_Yomigana_Quirks_G_Level = LD_Yomigana_Quirks_G_Level + 1
+		else
+			% Forbidden case
+			LD_Yomigana_Quirks_G_Level = LD_Yomigana_Quirks_G_Level + 666
+		end
+		if LD_Yomigana_L_Kana == "" then
+			LD_Yomigana_Quirks_G_Mode = 1 
+		else
+			LD_Yomigana_Quirks_G_Mode = 2 
+		end
+		return "*" .. LD_Yomigana_L_Kana .. "|", LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode
+	end
+	
+	function LD_Yomigana_Unknown(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kanji, LD_Yomigana_L_Kana)
+		local LD_Yomigana_GlobalFurigana
+		LD_Yomigana_Quirks_G_Level = LD_Yomigana_Quirks_G_Level + 9
+		if LD_Yomigana_L_Kana == "" then
+			% Quirk case
+			LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_QuirkCase(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kana) 		
+%		elseif not(unicode.utf8.find(LD_Yomigana_KurikaeshiSymbols,LD_Yomigana_L_Kanji)== nil) then
+%			LD_Yomigana_Kurikaeshi_Support() for the time being
+		else
+			local Kanji_number = unicode.utf8.byte(LD_Yomigana_L_Kanji)
+			if Kanji_number > 12352 and Kanji_number < 12436 and Kanji_number +96 == unicode.utf8.byte(LD_Yomigana_L_Kana) then 
+				% "Valid" case hiragana with katakana reading
+				LD_Yomigana_Quirks_G_Level = LD_Yomigana_Quirks_G_Level - 9
+				LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_ValidCase(LD_Yomigana_L_Kana)
+			else 
+				% Quirk case
+				LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode = LD_Yomigana_QuirkCase(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kana) 
+			end
+		end	
+%		LD_Yomigana_Kurikaeshi_G_Kanji="" % it is unknown....
+		return LD_Yomigana_GlobalFurigana, LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode
+	end
+	
+	function LD_Yomigana_Dichotomy(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_L_Kanji, LD_Yomigana_L_Kana, LD_Yomigana_Counter_L_Kanji, LD_Yomigana_Counter_L_Kana, LD_Yomigana_L_Start, LD_Yomigana_L_End)		
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%
+		%	-- First Compute \LD@Yomigana@Counter@S@KanjiA=[(T+1)/2] avec T =\LD@Yomigana@Counter@L@Kanji
+		%
+		local LD_Yomigana_Counter_S_KanjiA = math.floor ((LD_Yomigana_Counter_L_Kanji + 1) / 2)
+		local LD_Yomigana_Counter_S_KanjiB = LD_Yomigana_Counter_L_Kanji-LD_Yomigana_Counter_S_KanjiA
+		%
+		%	-- now split the Tangostring with  the first [(T+1)/2] tokens in TangoA and the remains in TangoB
+		%
+		local LD_Yomigana_TangoA = unicode.utf8.sub(LD_Yomigana_L_Kanji, 1, LD_Yomigana_Counter_S_KanjiA)
+		local LD_Yomigana_TangoB = unicode.utf8.sub(LD_Yomigana_L_Kanji, -LD_Yomigana_Counter_S_KanjiB,-1)
+		%
+		%	-- Do the same with Kanas : put the first [(K+1)/2] kanas in KanaA 
+		%     -- and the remaining kanas in KanaB avec K =LD_Yomigana_Counter_L_Kana
+		%
+		local LD_Yomigana_Counter_S_KanaA = math.floor ((LD_Yomigana_Counter_L_Kana + 1) / 2)
+		local LD_Yomigana_Counter_S_KanaB = LD_Yomigana_Counter_L_Kana - LD_Yomigana_Counter_S_KanaA
+		local LD_Yomigana_Counter_S_KanaC = LD_Yomigana_Counter_S_KanaA
+		local LD_Yomigana_Counter_S_KanaD = LD_Yomigana_Counter_S_KanaB
+		%
+		%	-- now split the Tangostring with  the first [(n+1)/2] tokens in KanaA and the remains in KanaB 
+		%
+		local LD_Yomigana_KanaA = unicode.utf8.sub(LD_Yomigana_L_Kana, 1, LD_Yomigana_Counter_S_KanaA)
+		local LD_Yomigana_KanaB = unicode.utf8.sub(LD_Yomigana_L_Kana, -LD_Yomigana_Counter_S_KanaB,-1)
+		local LD_Yomigana_KanaC = LD_Yomigana_KanaA
+		local LD_Yomigana_KanaD = LD_Yomigana_KanaB
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+		local LD_Yomigana_S_Furigana, LD_Yomigana_Quirks_S_Mode
+		local LD_Yomigana_Quirks_S_Level = 667
+		local LD_Yomigana_Counter_Loop = LD_Yomigana_Counter_L_Kana 
+		% we could do the loop with a for statement but then we would have to break it
+		repeat 
+			local LD_Yomigana_L_FuriganaA, LD_Yomigana_L_FuriganaB, LD_Yomigana_Quirks_L_Level, LD_Yomigana_Quirks_L_Mode
+			if 2 * math.floor(LD_Yomigana_Counter_Loop / 2) == LD_Yomigana_Counter_Loop then
+				% Even walk
+				LD_Yomigana_L_FuriganaA, LD_Yomigana_Quirks_L_Level, LD_Yomigana_Quirks_L_Mode = LD_Yomigana_Process(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_TangoA, LD_Yomigana_KanaA, LD_Yomigana_Counter_S_KanjiA, LD_Yomigana_Counter_S_KanaA, LD_Yomigana_L_Start, "N") 
+				% Test if it is usefull to continue
+				if LD_Yomigana_Quirks_L_Level < LD_Yomigana_Quirks_S_Level then 
+					% we go for the first solution. Now bring the second Daemon to the fray
+					LD_Yomigana_L_FuriganaB, LD_Yomigana_Quirks_L_Level, LD_Yomigana_Quirks_L_Mode = LD_Yomigana_Process(LD_Yomigana_Quirks_L_Level, LD_Yomigana_Quirks_L_Mode, LD_Yomigana_TangoB, LD_Yomigana_KanaB, LD_Yomigana_Counter_S_KanjiB, LD_Yomigana_Counter_S_KanaB, "N", LD_Yomigana_L_End) 
+				end
+				% Crabwalk in the Even case... \LD@Yomigana@KanaC grows \LD@Yomigana@KanaD shrinkens 
+				LD_Yomigana_KanaC =  LD_Yomigana_KanaC .. unicode.utf8.sub(LD_Yomigana_KanaD, 1, 1) 
+				LD_Yomigana_Counter_S_KanaC = LD_Yomigana_Counter_S_KanaC + 1
+				LD_Yomigana_Counter_S_KanaD = LD_Yomigana_Counter_S_KanaD - 1
+				if LD_Yomigana_Counter_S_KanaD == 0 then
+					LD_Yomigana_KanaD = ""
+				else
+					LD_Yomigana_KanaD = unicode.utf8.sub(LD_Yomigana_KanaD, -LD_Yomigana_Counter_S_KanaD)
+				end	
+			else
+				% Odd walk
+				LD_Yomigana_L_FuriganaA, LD_Yomigana_Quirks_L_Level, LD_Yomigana_Quirks_L_Mode = LD_Yomigana_Process(LD_Yomigana_Quirks_G_Level, LD_Yomigana_Quirks_G_Mode, LD_Yomigana_TangoA, LD_Yomigana_KanaC, LD_Yomigana_Counter_S_KanjiA, LD_Yomigana_Counter_S_KanaC, LD_Yomigana_L_Start, "N") 
+				% Test if it is usefull to continue
+				if LD_Yomigana_Quirks_L_Level < LD_Yomigana_Quirks_S_Level then 
+					% we go for the first solution, now bring the second Daemon to the fray
+					LD_Yomigana_L_FuriganaB, LD_Yomigana_Quirks_L_Level, LD_Yomigana_Quirks_L_Mode = LD_Yomigana_Process(LD_Yomigana_Quirks_L_Level, LD_Yomigana_Quirks_L_Mode, LD_Yomigana_TangoB, LD_Yomigana_KanaD, LD_Yomigana_Counter_S_KanjiB, LD_Yomigana_Counter_S_KanaD, "N", LD_Yomigana_L_End) 
+				end
+				% Crabwalk in the odd case... \LD@Yomigana@KanaA Shrinkens \LD@Yomigana@KanaB grows 
+				LD_Yomigana_KanaB = unicode.utf8.sub(LD_Yomigana_KanaA, -1) ..  LD_Yomigana_KanaB
+				LD_Yomigana_Counter_S_KanaB = LD_Yomigana_Counter_S_KanaB + 1
+				LD_Yomigana_Counter_S_KanaA = LD_Yomigana_Counter_S_KanaA - 1
+				LD_Yomigana_KanaA = unicode.utf8.sub(LD_Yomigana_KanaA, 1, LD_Yomigana_Counter_S_KanaA)
+			end
+			%%% function LD_Yomigana_CrabWalk_Update()
+			if LD_Yomigana_Quirks_L_Level < LD_Yomigana_Quirks_S_Level then
+				% We have a winner here, save it's data
+				LD_Yomigana_S_Furigana = LD_Yomigana_L_FuriganaA .. LD_Yomigana_L_FuriganaB
+				LD_Yomigana_Quirks_S_Mode = LD_Yomigana_Quirks_L_Mode
+				LD_Yomigana_Quirks_S_Level = LD_Yomigana_Quirks_L_Level
+				if LD_Yomigana_Quirks_G_Level == LD_Yomigana_Quirks_L_Level then
+					LD_Yomigana_Counter_Loop = 0 % break the loop : quirk level didn't increase !
+				end
+			end
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			LD_Yomigana_Counter_Loop = LD_Yomigana_Counter_Loop  - 1
+		until LD_Yomigana_Counter_Loop < 0			
+		%%% function LD_Yomigana_Dichotomy_Return()
+		return LD_Yomigana_S_Furigana, LD_Yomigana_Quirks_S_Level, LD_Yomigana_Quirks_S_Mode
+	end                                                    
+	
+%	LD_Yomigana_Compute("本","ほん")
+%	LD_Yomigana_Compute("本","ん")
+%	LD_Yomigana_Compute("日本","にほん")
+%	LD_Yomigana_Compute("大丈夫","だいじょうぶ")
+%	LD_Yomigana_Compute("運転手","うんてんしゅ")
+%	LD_Yomigana_Compute("本部","ほんぶ")
+%	LD_Yomigana_Compute("本","ん")
+%	LD_Yomigana_Compute("日本","にん")
+%	LD_Yomigana_Compute("大丈夫","だじょうぶ")
+%	LD_Yomigana_Compute("運転手","だいじょうぶ")
+%	LD_Yomigana_Compute("本部","ほん")
+
+}%
+
+\def\LD@Yomigana#1#2{% initializes things and starts the recursive process
+	\directlua0{Furigana,Quirks_Level=LD_Yomigana_Compute("#1","#2")}
+	\xdef\LD@Yomigana@GlobalFurigana{%
+		\directlua0{tex.print(unicode.utf8.sub(Furigana,1,-2))}%
+	}%
+	\xdef\LD@Yomigana@Quirks@G@Level{%
+		\directlua0{tex.print(Quirks_Level)}%
+	}%
+%
+%	\global\let\LD@Yomigana@Scan@Kurikaeshi@Saved\LD@Yomigana@Scan@Kurikaeshi
+%	\global\let\LD@Yomigana@Kana@Scan@Katakana@Saved\LD@Yomigana@Kana@Scan@Katakana
+}%
+\savecatcodetable1\relax
+\catcodetable1\relax
+\catcode`\$=11\relax% Maths
+\catcode`\^=11\relax% Superscript
+\catcode`\_=11\relax% Subscript
+\catcode`\&=11\relax% Alignement
+\catcode`\#=11\relax% Parameters
+\catcode`?=11\relax
+\catcode`!=11\relax
+\catcode`[=11\relax
+\catcode`~=11\relax
+\catcode`/=11\relax
+\catcode`'=11\relax
+\catcode`"=11\relax
+\catcode`+=11\relax
+\catcode`°=11\relax
+\catcode`;=11\relax
+\catcode`µ=11\relax
+\catcode`£=11\relax
+\catcode`¨=11\relax
+\catcode`\{=11\relax
+\catcode`\%=11\relax
+\catcode`¤=0\relax
+\catcode`\\=11¤relax
+¤catcodetable0¤relax
+	
+\def\LD@XML@Parser#1{%
+	\LD@Time@Benchmark{Parsing #1...}%
+	\xdef\LD@XML@SavedTimeStart{\the\LD@Time@Moment}%
+	\catcodetable1\relax
+		\catcode`>=12\relax
+		\def\>{%
+			¤catcode`¤]=11¤relax
+		}%
+		\catcode`]=0\relax
+		\catcode60=0\relax
+		\input #1\relax
+	\catcodetable0\relax
+	\LD@Time@Moment=\LD@XML@SavedTimeStart\relax	
+	\LD@Time@Benchmark [silent]\LD@Temp
+	\immediate\write16{Parsing of #1 done in \LD@Temp.}%
+}%
+
+\endinput

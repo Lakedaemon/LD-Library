@@ -1,0 +1,226 @@
+%% LD@Layout.tex : layout of the document
+%
+%  Dependencies : 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                  ParamÃ¨tres d'une page                                                    %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% diffÃ©rents formats de pages
+\def\formatpage{
+\hsize150truemm
+\vsize 240truemm
+\hoffset=5truemm
+\voffset=-3truemm
+\pretolerance=500
+\tolerance=1000
+\brokenpenalty=5000
+\parindent3mm
+}
+%\formatpage
+
+\def\olspept{
+%\magnification 1200
+\hsize180truemm\vsize 270truemm\hoffset=-10truemm\voffset=-13truemm
+\pretolerance=500\tolerance=1000\brokenpenalty=5000
+\parindent3mm
+}
+
+
+\def\dimstand{\hsize 150truemm\vsize 240truemm\hoffset=5truemm\voffset=0truemm}
+
+\def\dimart{\hsize126truemm\vsize186truemm\hoffset16truemm\voffset=24truemm}
+
+%%
+
+
+
+\interfootnoteskip=0pt
+\let\note=\numberedfootnote
+\everyfootnote={\eightpoint\leftskip=5truemm\rightskip5truemm}
+
+
+%%
+
+
+\newcount\chstart
+\chstart=\pageno
+\headline={\ifnum\pageno=\chstart {\hfill} \else {\hss \tenrm --\ \folio\ --\hss}\fi}
+\footline={\hfill}
+\normalbaselines
+\frenchspacing
+
+%%
+\newif\ifMidFolio
+\MidFoliotrue            % numÃ©ro de page au mileu du haut de page par d\'efaut
+
+\newif\ifpagetitre \pagetitretrue
+\newtoks\hautpagetitre \hautpagetitre={\hfill}
+\newtoks\baspagetitre \baspagetitre={\hfill}
+\newtoks\auteurcourant \auteurcourant={\hfill}
+\newtoks\titrecourant \titrecourant={\hfill}
+\newtoks\hautpagegauche
+\newtoks\hautpagedroite
+\newtoks\hautpagemilieu
+\hautpagemilieu={\tenrm\hfil -- \folio\ -- \hfil}
+\hautpagegauche={\ifMidFolio\the\hautpagemilieu\else\tenrm\folio\hfil\the\auteurcourant\hfil\fi}
+\hautpagedroite={\ifMidFolio\the\hautpagemilieu\else\hfil\the\titrecourant\hfil\tenrm\folio\fi}
+\newtoks\baspagegauche \baspagegauche={\hfil}
+\newtoks\baspagedroite \baspagedroite={\hfil}
+\headline={\ifpagetitre\the\hautpagetitre
+\else\ifodd\pageno\the\hautpagedroite\else\the\hautpagegauche\fi\fi }
+\footline={\ifpagetitre\the\baspagetitre
+\else\ifodd\pageno\the\baspagedroite
+\else\the\baspagegauche\fi\fi \global\pagetitrefalse}
+
+\def\nopagenumber{\headline={\hfill}\footline={\hfill}}
+%\def\numpgsuiv{ \chstart=\pageno\pageno=\chstart}
+
+\def\pageblanche{\vfill\eject\pagetitretrue
+\null\vfill\eject
+\pagetitretrue
+}
+
+
+\def\hautspages#1#2{\auteurcourant={\ninepcap#1}\titrecourant={\nineit#2}\MidFoliofalse}
+
+\ifnum\chstart=\pageno \pagetitretrue\fi
+%\ifnum\pageno=\chstart \pagetitretrue \fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                 Notes en marge gauche                                                     %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\def\leftnote#1{\vadjust{\setbox1=\vtop{\hsize 20mm\parindent=0pt\eightpoint
+\baselineskip=9pt\rightskip=4mm plus 4mm\vskip-4.7mm#1}\hbox{\kern-2cm\smash{\box1}}}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                 Notes en bas de page                                                       %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Pour que les accents se placent correctement en mode math en corps 8 et 6
+\skewchar\eighti='177 \skewchar\sixi='177
+\skewchar\eightsy='60 \skewchar\sixsy='60
+
+%
+% [Format : \note{texte de la note} avec numerotation automatique]
+%
+%
+\let\footnotea=\footnote
+\catcode`@=11
+\message{output routines,}
+\newinsert\footins
+\def\footnote#1{\let\@sf\empty % parameter #2 (the text) is read later
+  \ifhmode\edef\@sf{\spacefactor\the\spacefactor}\/\fi
+\hbox{$^{(#1)}$}\@sf\vfootnote{#1.}}
+\def\vfootnote#1{\insert\footins\bgroup
+  \interlinepenalty\interfootnotelinepenalty
+  \splittopskip\ht\strutbox % top baseline for broken footnotes
+  \splitmaxdepth\dp\strutbox \floatingpenalty\@MM
+  \leftskip\z@skip \rightskip\z@skip \spaceskip\z@skip \xspaceskip\z@skip
+  \textindent{#1}\footstrut\futurelet\next\fo@t}
+\def\fo@t{\ifcat\bgroup\noexpand\next \let\next\f@@t
+  \else\let\next\f@t\fi \next}
+\def\f@@t{\bgroup\aftergroup\@foot\let\next}
+\def\f@t#1{#1\@foot}
+\def\@foot{\strut\egroup}
+\def\footstrut{\vbox to\splittopskip{}}
+\skip\footins=\bigskipamount % space added when footnote is present
+\count\footins=800 % footnote magnification factor (1 to 1)
+\dimen\footins=8in % maximum footnotes per page
+
+%
+%\anote=\footnote de plain (2 arguments)
+%
+\def\anote#1#2{\footnotea{\hbox{$^{#1}$}}{\eightpts#2}}
+%\catcode`@=12 % the "@" signs are no longer letters
+
+%reference de note
+ \def\defrefnote#1{\definexref{#1}{{\the\footnotenumber}}{refnotes}}
+ \def\refnote#1{\ref{#1}}
+
+
+
+%\def\note#1#2{\footnote{#1}{\noindent\eightpts #2\vskip-10pt\par}}
+%\def\note#1#2{\hbox{$^{(#1)}$}\footnote{}{\eightpts$#1.$#2\vskip-10pt\par}}
+\def\pclm#1#2{\noi\bf#1\sl\ #2}
+
+\def\footnoterule{\kern -2pt\hrule width 7truecm\kern 2.4pt}
+
+%reference croisee a des numeros de notes
+\def\xnotedef#1{\definexref{#1}{\noexpand\number\footnotenumber}{Note}}%
+\def\noteref{\ref}
+
+
+%
+% Fin notes
+%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                  NumÃ©rotation des Ã©quation (Ã  gauche par dÃ©faut)                           %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ % choix numerotation gauche ou droite: defaut=gauche, \numadroite{oui} -> a droite
+ 
+  
+\newif\ifNumGauche
+\NumGauchetrue
+
+\ifNumGauche\let\eqno=\leqno\let\eqalignno=\leqalignno
+\else\let\leqno=\eqno\let\leqalignno=\eqalignno
+\fi
+
+
+
+
+% Layout
+
+\def\AFiveLayout{%
+\global\hsize135truemm\global\vsize192truemm\voffset=-17truemm
+\hoffset=-19truemm
+\pretolerance=500\tolerance=1000\brokenpenalty=5000
+\parindent0mm
+\paperwidth=148.5truemm
+\paperheight=210truemm
+\pdfpagewidth=148.5truemm
+\pdfpageheight=210truemm}%
+%
+\def\TangoLayoutLandscape{%
+\hsize270truemm\vsize 187truemm\hoffset=-13truemm\voffset=-17truemm
+\pretolerance=500\tolerance=1000\brokenpenalty=5000
+\parindent0mm
+\pdfpagewidth=297truemm
+\pdfpageheight=210truemm
+\paperwidth=297truemm
+\paperheight=210truemm
+}%
+\def\LD@AFour@Book{%
+	\hsize170truemm\relax
+	\vsize 250truemm\relax
+	\hoffset=-5truemm\relax
+	\voffset=-13truemm\relax
+	\pretolerance=500\relax
+	\tolerance=1000\relax
+	\brokenpenalty=5000\relax
+	\parindent3mm% fix this for \item ?
+	\paperwidth=210truemm\relax
+	\paperheight=297truemm\relax
+	\pdfpagewidth=210truemm\relax
+	\pdfpageheight=297truemm\relax
+}%
+\endinput

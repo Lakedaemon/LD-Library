@@ -1,0 +1,30 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                   Typographie anglaise ou française                                 %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newif\ifFrenchText
+\FrenchTexttrue
+
+\catcode`\@=11
+
+\catcode`\;=\active
+\def;{\ifFrenchText\relax\ifhmode\ifdim\lastskip>\z@\unskip\fi
+   \kern.2em\fi\string;\else\string;\fi}
+
+\catcode`\:=\active
+\def:{\ifFrenchText\relax\ifhmode\ifdim\lastskip>\z@\unskip\fi
+\penalty\@M\ \fi\string:\else\string:\fi}
+
+\catcode`\!=\active
+\def!{\ifFrenchText\relax\ifhmode\ifdim\lastskip>\z@\unskip\fi
+   \kern.2em\fi\string!\else\string!\fi}
+
+\catcode`\?=\active
+\def?{\ifFrenchText\relax\ifhmode\ifdim\lastskip>\z@\unskip\fi
+   \kern.2em\fi\string?\else\string?\fi}
+
+\catcode`\@=12
+\endinput

@@ -1,0 +1,393 @@
+\catcode`@=11\relax
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												%
+%				Table OF Content (TOC)					%
+%												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcount\LD@Toc@Counter@Chapter\LD@Toc@Counter@Chapter=0\relax
+\newcount\LD@Toc@Counter@Section\LD@Toc@Counter@Section=0\relax
+\newcount\LD@Toc@Counter@Subsection\LD@Toc@Counter@Subsection=0\relax
+
+
+
+\def\LD@Toc@Insert#1{%
+	\write\tocfile{#1}%
+}%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%								%
+%			TOC : Display				%
+%								%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\tocbookentry#1#2{%
+	\medskip\noindent
+	\centerline{\LD@Font@Book#1}\par
+}%
+\def\tocchapterentry#1#2{%
+	\global\advance\LD@Toc@Counter@Chapter by 1\relax
+	\global\LD@Toc@Counter@Section=0\relax
+	\global\LD@Toc@Counter@Subsection=0\relax
+	\noindent
+	{\quad\bf\the\LD@Toc@Counter@Chapter\quad}%
+	{\hskip-2mm #1\dotfill\hskip3mm\rm#2}\par
+}%
+\def\tocsectionentry#1#2{%
+	\global\advance\LD@Toc@Counter@Section by 1\relax
+	\global\LD@Toc@Counter@Subsection=0\relax
+	\noindent
+	{\qquad\eightpts\the\LD@Toc@Counter@Chapter.\the\LD@Toc@Counter@Section\quad}%
+	{\hskip-2mm\eightpts#1\dotfill\hskip3mm\rm#2}\par
+}%
+\def\tocsubsectionentry#1#2{%
+	\global\advance\LD@Toc@Counter@Subsection by 1\relax
+	\noindent
+	{\quad\qquad\eightpts\the\LD@Toc@Counter@Chapter.\the\LD@Toc@Counter@Section.\the\LD@Toc@Counter@Subsection\quad}%
+	{\hskip-2mm\eightpts#1\dotfill\hskip3mm\rm#2}\par
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                 Toc : Chapter, Section, Subsection                                                              %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\def\CitSec#1{\refn{§#1}} 
+\newif\ifCenteredchapter\Centeredchaptertrue
+
+\long\def\Book #1,#2.{%   
+	 \goodbreak\noindent\writetocentry{book}{#2}{\centerline{\LD@Font@Book#2}}\nobreak
+}%
+
+
+\long\def\Chapter #1, #2.{%
+	\init\titredeux
+	\ifSecLabelEq
+		\init\eqnumber
+	\fi
+%	\ifHtml
+%		\writetocentry{chapter}{#2}%
+%		\EndP
+%		\ifCenteredchapter
+%			\HCode{<div class="centerline">}%
+%		\else
+%			\HCode{<div class="flushleft">}%
+%		\fi
+%		\HCode{<span class="chapter">}%
+%		{\fontetitreun\incr{\titreun}.\ \fontetitreun #2}%
+%		\HCode{</span></div>}%
+%		\par
+%	\else 
+		\removelastskip
+		\par
+		\bigskip\bigskip\goodbreak
+		\vskip0pt plus.01\vsize\penalty-200\vskip0pt plus-.01\vsize\goodbreak
+		\noindent
+		\writetocentry{chapter}{#2}%
+		{%
+		\ifCenteredchapter
+			\parindent0mm\raggedcenter
+		\fi
+		\fontetitreun
+		\incr\titreun.\ \fontetitreun #2\par
+		}%
+		\nobreak
+		\medskip
+		\definexref{chap#1}{\the\titreun}{}%\definexref{#1}{#2}{}\definexref{ǧ§#1}{\the\pageno}{}% fix this
+%	\fi
+}%
+
+\long\def\Section #1, #2.{\init{\titretrois}\ifSecLabelEq\init{\eqnumber}\fi
+\ifHtml\writetocentry{section}{#2}\EndP\HCode{<div class="noindent"><span class="section">}{\fontetitredeuxb\the\titreun.\incr{\titredeux}.\ \fontetitredeuxb#2}\HCode{</span></div>}\PAR\else 
+\ifdim\lastskip<\bigskipamount\removelastskip\bigskip\fi
+                                    \vskip0pt plus.001\vsize\penalty-150\vskip0pt plus-.01\vsize
+                                     \init{\titretrois}\writetocentry{section}{#2}{\noindent\fontetitredeuxb
+                                      \the\titreun.\incr{\titredeux}.\ \fontetitredeuxb#2}\nobreak\smallskip\par
+\definexref{sec#1}{\the\titreun.\the\titredeux}{}%\definexref{ǧ#1}{#2}{}\definexref{ǧ§#1}{\the\pageno}{}%
+\fi}
+
+\long\def\Subsection #1, #2.{\ifHtml
+\writetocentry{subsection}{#2}\EndP\HCode{<div class="noindent"><span class="subsection">}{\fontetitretrois\the\titreun.\the\titredeux.\incr{\titretrois}.\ \fontetitretrois #2}\HCode{</span></div>}\PAR\else 
+\ifdim\lastskip<\medskipamount\removelastskip\medskip\fi\vskip0pt plus.01\vsize\penalty-100\vskip0pt plus-.01\vsize
+\noindent\writetocentry{subsection}{#2}{\fontetitretrois\the\titreun.\the\titredeux.\incr{\titretrois}.\ \fontetitretrois #2\par}\nobreak\smallskip
+%\writetocentry{subsection}{#2}\definexref{§#1}{\the\titreun.\the\titredeux.\the\titretrois}{}\definexref{ǧ#1}{#2}{}\definexref{ǧ§#1}{\the\pageno}{}%
+\fi
+}
+
+
+
+%% Modification d'Eplain pour afficher 5 colonnes ou plus
+
+\def\LInsert{}%
+\def\RInsert{}%
+\def\CInsert{}%
+\def\BInsert{}%
+\def\TInsert{}%
+\catcode`@=11
+\let\@plainm@g = \m@g
+\def\m@g{\@plainm@g \paperwidth = 8.5 true in \paperheight = 11 true in}%
+\newskip\abovecolumnskip \abovecolumnskip = \bigskipamount
+\newskip\belowcolumnskip \belowcolumnskip = \bigskipamount
+\newdimen\gutter \gutter = 2pc%
+\newbox\@partialpage
+\newbox\@LBox% OL
+\newdimen\@LColumnHeight% OL
+\newdimen\@LColumnWidth%OL
+\newdimen\@normalhsize
+\newdimen\@normalvsize  % The original (before multi-columns) \vsize.
+\newtoks\previousoutput
+\def\tencolumns{\@columns{10}}%
+\def\ninecolumns{\@columns9}%
+\def\eightcolumns{\@columns8}%
+\def\sevencolumns{\@columns7}%
+\def\sixcolumns{\@columns6}%
+\def\fivecolumns{\@columns5}%
+\def\fourcolumns{\@columns4}%
+\def\threecolumns{\@columns3}%
+\def\twocolumns{\@columns2}% OL
+\def\onecolumn{\@columns1}% OL
+\def\begincolumns#1{\ifcase#1\relax \or \columns1 \or \@columns2 \or
+                            \@columns3 \or \@columns4 \or \@columns5 \or \@columns6  \or 
+                            \@columns7 \or \@columns8 \or \@columns9 \or \@columns{10}\else \relax \fi}%
+\def\endcolumns{\singlecolumn}%
+\let\@ndcolumns = \relax
+\chardef\@numcolumns = 1
+\mathchardef\@ejectpartialpenalty = 10141
+\chardef\@col@minlines = 3
+\def\@columns#1{%
+  \@ndcolumns
+  \global\let\@ndcolumns = \@endcolumns
+  \global\chardef\@numcolumns = #1
+  \global\previousoutput = \expandafter{\the\output}%
+  \global\output = {%
+    \ifnum\outputpenalty = -\@ejectpartialpenalty
+      \dimen@ = \vsize
+      \advance\dimen@ by \@col@minlines\baselineskip
+      \global\setbox\@partialpage =
+        \vbox  \ifdim \pagetotal > \vsize  to \dimen@  \fi  {%
+	  \unvbox255 \unskip
+	}%
+    \else
+      \the\previousoutput
+    \fi
+  }%
+  \vskip \abovecolumnskip
+  \vskip \@col@minlines\baselineskip
+  \penalty -\@ejectpartialpenalty
+  \global\output = {\@columnoutput}%
+  \global\@normalhsize = \hsize
+  \global\@normalvsize = \vsize
+  \count@ = \@numcolumns
+  \advance\count@ by -1
+  \global\advance\hsize by -\count@\gutter
+  \global\divide\hsize by \@numcolumns
+  \advance\vsize by -\ht\@partialpage
+  \advance\vsize by -\ht\footins
+  \ifvoid\footins\else \advance\vsize by -\skip\footins \fi
+  \multiply\count\footins by \@numcolumns
+  \advance\vsize by -\ht\topins
+  \ifvoid\topins\else \advance\vsize by -\skip\topins \fi
+  \multiply\count\topins by \@numcolumns
+  \global\vsize = \@numcolumns\vsize
+}%
+\def\gutterbox{\CInsert\vbox to \dimen0{\vfil\hbox{\hfil}\vfil}}%
+\newif\if@forceextraline\@forceextralinefalse
+\def\@columnsplit{%
+  \splittopskip = \topskip
+  \splitmaxdepth = \baselineskip
+  \dimen@ = \ht255
+    \divide\dimen@ by \@numcolumns
+  \if@forceextraline
+    %\advance\dimen@ by \baselineskip   % interet ? fait planter mon manuel de Kanji
+  \fi
+%% adjust the height considering the top and bottom insert
+  \global\@LColumnHeight=\dimen@%
+  \global\setbox\@LBox=\vbox{\TInsert}% OL
+  \advance\@LColumnHeight by-\ht\@LBox
+  \global\setbox\@LBox=\vbox{\BInsert}% OL
+  \advance\@LColumnHeight by-\ht\@LBox
+%% adjust the width for one column considering the left and right insert
+ \global\@LColumnWidth=\hsize%
+   \ifnum\@numcolumns = 1
+   \global\setbox\@LBox=\vbox to\@LColumnHeight{\LInsert\RInsert}% OL
+  \advance\@LColumnWidth by\wd\@LBox
+  \fi
+%%
+  \begingroup
+    \vbadness = 10000
+    \global\setbox1 = \vsplit255 to \@LColumnHeight
+   \global\wd1 = \hsize
+    \ifnum\@numcolumns > 1
+      \global\setbox3 = \vsplit255 to \@LColumnHeight   \global\wd3 = \hsize
+     \fi
+    \ifnum\@numcolumns > 2
+        \global\setbox5 = \vsplit255 to \@LColumnHeight \global\wd5 = \hsize
+    \fi
+    \ifnum\@numcolumns > 3
+        \global\setbox7 = \vsplit255 to \@LColumnHeight \global\wd7 = \hsize
+    \fi
+    \ifnum\@numcolumns > 4
+        \global\setbox9 = \vsplit255 to \@LColumnHeight \global\wd9 = \hsize
+    \fi
+    \ifnum\@numcolumns > 5
+      \global\setbox11 = \vsplit255 to \@LColumnHeight\global\wd11 = \hsize
+    \fi
+    \ifnum\@numcolumns > 6
+      \global\setbox13 = \vsplit255 to \@LColumnHeight\global\wd13 = \hsize
+    \fi
+    \ifnum\@numcolumns > 7
+      \global\setbox15 = \vsplit255 to \@LColumnHeight  \global\wd15 = \hsize
+    \fi
+    \ifnum\@numcolumns > 8
+      \global\setbox17 = \vsplit255 to \@LColumnHeight \global\wd17 = \hsize
+    \fi
+    \ifnum\@numcolumns > 9
+      \global\setbox19 = \vsplit255 to \@LColumnHeight \global\wd19 = \hsize
+    \fi
+  \endgroup
+  \if@forceextraline                         % If this is the first time
+  \else                                      % through, save the single
+    \setbox\@forcelinebox=\copy\@partialpage % column material. 
+  \fi
+  \setbox0 = \box255
+  \global\setbox255 = \vbox{%
+\unvbox\@partialpage
+\TInsert
+\ifcase\@numcolumns \relax\or\hbox to \@normalhsize{\LInsert\box1\RInsert}%
+\or \hbox to \@normalhsize{\LInsert\box1%
+                                      \hfil\gutterbox\hfil\box3\RInsert}%
+      \or \hbox to \@normalhsize{\LInsert\box1%
+                                      \hfil\gutterbox\hfil\box3%
+                                      \hfil\gutterbox\hfil\box5\RInsert}%
+      \or \hbox to \@normalhsize{\LInsert\box1%
+                                      \hfil\gutterbox\hfil\box3%
+                                      \hfil\gutterbox\hfil\box5%
+                                      \hfil\gutterbox\hfil\box7\RInsert}%
+ \or \hbox to \@normalhsize{\LInsert\box1%
+                                      \hfil\gutterbox\hfil\box3%
+                                      \hfil\gutterbox\hfil\box5%
+                                      \hfil\gutterbox\hfil\box7%
+                                      \hfil\gutterbox\hfil\box9\RInsert}%
+ \or \hbox to \@normalhsize{\LInsert\box1%
+                                      \hfil\gutterbox\hfil\box3%
+                                      \hfil\gutterbox\hfil\box5%
+                                      \hfil\gutterbox\hfil\box7%
+                                      \hfil\gutterbox\hfil\box9%
+                                      \hfil\gutterbox\hfil\box11\RInsert}%
+ \or \hbox to \@normalhsize{\LInsert\box1%
+                                      \hfil\gutterbox\hfil\box3%
+                                      \hfil\gutterbox\hfil\box5%
+                                      \hfil\gutterbox\hfil\box7%
+                                      \hfil\gutterbox\hfil\box9%
+                                      \hfil\gutterbox\hfil\box11%
+                                      \hfil\gutterbox\hfil\box13\RInsert}%
+ \or \hbox to \@normalhsize{\LInsert\box1%
+                                      \hfil\gutterbox\hfil\box3%
+                                      \hfil\gutterbox\hfil\box5%
+                                      \hfil\gutterbox\hfil\box7%
+                                      \hfil\gutterbox\hfil\box9%
+                                      \hfil\gutterbox\hfil\box11%
+                                      \hfil\gutterbox\hfil\box13%
+                                      \hfil\gutterbox\hfil\box15\RInsert}%
+ \or \hbox to \@normalhsize{\LInsert\box1%
+                                      \hfil\gutterbox\hfil\box3%
+                                      \hfil\gutterbox\hfil\box5%
+                                      \hfil\gutterbox\hfil\box7%
+                                      \hfil\gutterbox\hfil\box9%
+                                      \hfil\gutterbox\hfil\box11%
+                                      \hfil\gutterbox\hfil\box13%
+                                      \hfil\gutterbox\hfil\box15%
+                                      \hfil\gutterbox\hfil\box17\RInsert}%
+ \or \hbox to \@normalhsize{\LInsert\box1%
+                                      \hfil\gutterbox\hfil\box3%
+                                      \hfil\gutterbox\hfil\box5%
+                                      \hfil\gutterbox\hfil\box7%
+                                      \hfil\gutterbox\hfil\box9%
+                                      \hfil\gutterbox\hfil\box11%
+                                      \hfil\gutterbox\hfil\box13%
+                                      \hfil\gutterbox\hfil\box15%
+                                      \hfil\gutterbox\hfil\box17%
+                                      \hfil\gutterbox\hfil\box19\RInsert}%    
+\fi
+\BInsert
+  }%
+  \setbox\@partialpage = \box0
+}%
+\def\@columnoutput{%
+  \@columnsplit
+  \@recoverclubpenalty 
+  \hsize = \@normalhsize % Local to \output's group.
+  \vsize = \@normalvsize
+  \the\previousoutput
+  \unvbox\@partialpage
+  \penalty\outputpenalty
+  \global\vsize = \@numcolumns\@normalvsize
+}%
+\def\singlecolumn{%
+  \@ndcolumns
+  \chardef\@numcolumns = 1
+  \vskip\belowcolumnskip
+  \nointerlineskip
+}%
+\newbox\@forcelinebox 
+\def\@endcolumns{%
+  \global\let\@ndcolumns = \relax
+  \par % Shouldn't start in horizontal mode.  
+  \global\output = {\global\setbox1 = \box255}%
+  \pagegoal = \pagetotal
+  \break                     % Exercise the page builder, i.e., \output.
+  \setbox2 = \box1           % Save material in box2 in case of overflow.
+  \global\setbox255 = \copy2 % Retrieve what the fake \output set.
+  \@columnsplit
+  \ifvoid\@partialpage
+  \else % There is some left-over. 
+    \setbox0=\box\@partialpage % Merely to void \@partialpage
+    \global\setbox255 = \box2  % Retrieve what the fake \output set.
+%
+\@forceextralinefalse % OL if set to true, it adds unwanted space and warps my layout
+%
+%    \@forceextralinetrue       % Add \forcelinebox to \box255 to save single
+    \@columnsplit              % column material. 
+    \global\setbox255 = \vbox{\box\@forcelinebox\box255}%
+  \fi
+  \global\vsize = \@normalvsize
+  \global\hsize = \@normalhsize
+  \global\output = \expandafter{\the\previousoutput}%
+  \ifvoid\topins\else\topinsert\unvbox\topins\endinsert
+\fi
+  \unvbox255
+}%
+\def\@saveclubpenalty{% save the current value of \clubpenalty
+  \edef\@recoverclubpenalty{%
+     \global\clubpenalty=\the\clubpenalty\relax%
+     \global\let\noexpand\@recoverclubpenalty\relax
+  }% the \noexpand handles infinite self-reference
+}%
+\let\@recoverclubpenalty\relax
+\newdimen\temp@dimen
+\def\columnfill{%
+  \par
+  \dimen@=\pagetotal   % The height of the text set so far. 
+  \temp@dimen = \vsize % = \@numcolumns * columnheight
+  \divide\temp@dimen by \@numcolumns % find out column height
+  \loop
+    \ifdim \dimen@ > \temp@dimen
+      \advance \dimen@ by -\temp@dimen
+      \advance \dimen@ by \topskip % fudge factor
+  \repeat
+  \advance \temp@dimen by -\dimen@
+  \advance \temp@dimen by -\prevdepth
+  \@saveclubpenalty 
+  \clubpenalty=10000\relax
+  \hrule height\temp@dimen width0pt depth0pt\relax
+  \nointerlineskip
+  \par
+  \nointerlineskip
+  \penalty0\vfil % To allow a page break here.
+  \relax
+}%
+
+
+
+\input LD@Typesetting@Maths
+\endinput

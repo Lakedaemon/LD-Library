@@ -1,0 +1,510 @@
+\catcode`@=11\relax
+\LD@Core@IncludeOnce{LD@Typesetting.Maths}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%																%
+%				Définitions, propriétés, théorèmes, lemmes					%
+%																%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Pour inverser l'ordre Hypothèses-propriétés. 
+
+
+\newif\ifInverted\Invertedfalse
+
+
+% La macro qui se charge du formatage en couleur Html/TeX - Normal/Inversé
+\newdimen\OLdimen
+
+
+\def\Definition{\@getoptionalarg\LD@Definition}%
+\def\LD@Definition#1\par{%
+	\def\LD@Option@@{}%
+	\def\LD@Option@@Title{}%
+	\def\LD@Option@@Label{}%	
+	\def\LD@Option@@Index{}%	
+	\def\LD@Option@@Level{}%	
+	\def\LD@Option@@Program{}%	
+	\def\LD@Option@@Type{D}%
+	\def\LD@Option@@Color{Green}%	
+	\LD@Option@Process{;}%
+	\def\LD@Option@@Text{#1}%
+	\ifx\LD@Option@@Index\LD@Empty	
+		\LD@Index@Sidx
+	\else
+		\EA\sidx\EA{\LD@Option@@Index}%
+	\fi
+	\LD@Graphic@Frame
+}%
+
+% Propriété
+
+\def\Propriete{\@getoptionalarg\LD@Propriete}%
+\def\LD@Propriete#1\par{%
+	\def\LD@Option@@{}%
+	\def\LD@Option@@Title{}%
+	\def\LD@Option@@Label{}%	
+	\def\LD@Option@@Index{}%	
+	\def\LD@Option@@Level{}%	
+	\def\LD@Option@@Program{}%	
+	\def\LD@Option@@Type{P}%
+	\def\LD@Option@@Color{Orange}%	
+	\LD@Option@Process{;}%
+	\def\LD@Option@@Text{#1}%
+	\ifx\LD@Option@@Index\LD@Empty	
+		\LD@Index@Sidx
+	\else
+		\EA\sidx\EA{\LD@Option@@Index}%
+	\fi
+	\LD@Graphic@Frame
+}%
+
+
+% Théorème
+\def\Theoreme{\@getoptionalarg\LD@Theoreme}%
+\def\LD@Theoreme#1\par{%
+	\def\LD@Option@@{}%
+	\def\LD@Option@@Title{}%
+	\def\LD@Option@@Label{}%	
+	\def\LD@Option@@Index{}%
+	\def\LD@Option@@Level{}%	
+	\def\LD@Option@@Program{}%	
+	\def\LD@Option@@Type{T}%
+	\def\LD@Option@@Color{Red}%	
+	\LD@Option@Process{;}%
+	\def\LD@Option@@Text{#1}%
+	\ifx\LD@Option@@Index\LD@Empty	
+		\LD@Index@Sidx
+	\else
+		\EA\sidx\EA{\LD@Option@@Index}%
+	\fi
+	\LD@Graphic@Frame
+}%
+
+
+% Assertion
+
+\def\Assertion{\@getoptionalarg\LD@Assertion}%
+\def\LD@Assertion#1\par{%
+	\def\LD@Option@@{}%
+	\def\LD@Option@@Title{}%
+	\def\LD@Option@@Label{}%	
+	\def\LD@Option@@Index{}%	
+	\def\LD@Option@@Level{}%	
+	\def\LD@Option@@Program{}%	
+	\def\LD@Option@@Type{A}%
+	\def\LD@Option@@Color{Black}%	
+	\LD@Option@Process{;}%
+	\def\LD@Option@@Text{#1}%
+	\ifx\LD@Option@@Index\LD@Empty	
+		\LD@Index@Sidx
+	\else
+		\EA\sidx\EA{\LD@Option@@Index}%
+	\fi
+	\LD@Graphic@Frame
+}%
+
+
+
+
+%% Lesmacros qui se chargent de transformer un titre en entree d'index
+\def\LD@Index@List{Th\'eor\`eme,Propri\'et\'e,D\'efinition,Assertion,M\'ethode}
+\def\LD@Index@Explode#1#2{%
+	\EA\def\EA\LD@Index@Explode@Split\EA##\EA1#2##2\LD@End{%
+		\def\LD@Index@Explode@String{##1}%
+		\def\LD@Index@Explode@Test{##2}%
+	}%
+	\EA\EA\EA\LD@Index@Explode@Split \EA#1#2\LD@End
+	\ifx\LD@Index@Explode@String\LD@Empty
+		\EA\LD@Index@Explode@Split\LD@Index@Explode@Test\LD@End
+		\let#1\LD@Index@Explode@String
+	\else
+		\let#2\LD@Empty
+	\fi
+}%
+\def\LD@Index@IfOk#1#2{%
+	\def\LD@Index@IfOk@Split##1#1##2\LD@End{%
+		\def\LD@Temp{##2}%
+		\unless\ifx\LD@Temp\LD@Empty
+			#2%
+		\fi
+	}%
+	\LD@Index@IfOk@Split abcdefghijklmnopqrstuvwxyz 1234567890 ABCDEFGHIJKLMNOPQRSTUVWXYZ#1\LD@End
+}%
+\def\LD@Index@Sanitize#1{%
+	\def\LD@Index@Sanitize@Next##1{%
+		\ifx##1\LD@End
+			\let\LD@Index@Sanitize@Process\relax
+		\else
+			\ifx##1\LD@Index@Ignore
+				\let\LD@Index@Sanitize@Process\LD@Index@Skip
+			\else
+				\let\LD@Index@Sanitize@Process\LD@Index@Sanitize@Next
+				\LD@Index@IfOk##1{\edef#1{#1##1}}
+			\fi
+		\fi
+		\LD@Index@Sanitize@Process
+	}%
+	\EA\let\EA#1\EA\LD@Empty\EA\LD@Index@Sanitize@Next #1\LD@End
+}%
+\def\LD@Index@Ignore{\LD@Empty}%
+\def\LD@Index@Skip#1{%
+	\let\LD@Index@Sanitize@Process\LD@Index@Sanitize@Next
+	\LD@Index@Sanitize@Process
+}%
+\newtoks\LD@Toks@A\newtoks\LD@Toks@B
+\def\LD@Index@Sidx{%
+	\unless\ifx\LD@Option@@Title\LD@Empty
+		\LD@Toks@B={}%
+		\let\LD@Index@String\LD@Option@@Title
+		\LD@Loop@For\LD@Index@Test=\LD@Index@List\WithSeparator ,\Do{%
+			\unless\ifx\LD@Index@String\LD@Empty
+				\LD@Index@Explode\LD@Index@String\LD@Index@Test
+				\def\LD@Index@String@Buffer{}%
+				\unless\ifx\LD@Index@Test\LD@Empty
+					\LD@Toks@A=\EA{\LD@Index@Test}%
+					\let\LD@Test\LD@Index@Test
+					\LD@Index@Sanitize\LD@Index@Test
+					\ifx\LD@Test\LD@Index@Test
+						\edef\LD@Temp{\the\LD@Toks@B\LD@Index@Test}%			
+					\else
+						\edef\LD@Temp{\the\LD@Toks@B\LD@Index@Test @\the\LD@Toks@A}%
+					\fi
+					\ifx\LD@Index@String\LD@Empty
+						\LD@Toks@B=\EA{\LD@Temp}%
+					\else
+					\LD@Toks@B=\EA{\LD@Temp !}%				
+					\fi
+				\fi
+			\fi	
+			\trim\LD@Index@String
+		}%
+		\ifx\LD@Index@String\LD@Empty
+			\edef\LD@Index@String@Buffer{\the\LD@Toks@B}%
+		\else
+			\LD@Toks@A=\EA{\LD@Index@String}%
+			\let\LD@Test\LD@Index@String
+			\LD@Index@Sanitize\LD@Index@String
+			\ifx\LD@Test\LD@Index@String
+				\edef\LD@Index@String@Buffer{\the\LD@Toks@B\LD@Index@String}%			
+			\else
+				\edef\LD@Index@String@Buffer{\the\LD@Toks@B\LD@Index@String @\the\LD@Toks@A}%
+			\fi
+		\fi
+		\EA\sidx\EA{\LD@Index@String@Buffer}%
+	\fi
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%							Methode                                                                                  %
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\LD@Frame@Code@After{}%
+\def\LD@Frame{\@getoptionalarg\LD@@Frame}%
+\def\LD@@Frame#1{%
+	\LD@Option@Process{,}%
+	\LD@Dimen@A=\hsize\relax
+	\advance\LD@Dimen@A by -15.3pt\relax
+	\ifHtml\EndP\fi
+	\tikzpicture
+		\pgfdeclarelayer{background}
+		\pgfsetlayers{background,main}
+		\node[text width=\LD@Dimen@A] (LD@Frame@Node@A) {\noindent\ignorespaces #1} ; 
+		\ifcsname LD@Option@@Title\endcsname
+			\node [yshift=2pt] (LD@Frame@Node@B) at (LD@Frame@Node@A.north) {};
+		\fi
+		\pgfonlayer{background}
+			\draw [body] (current bounding box.south west) rectangle (current bounding box.north east) ;
+		\endpgfonlayer
+		\ifcsname LD@Option@@Title\endcsname
+			\node [head] at (LD@Frame@Node@B.north)  {\noindent\LD@Option@@Title} ;
+		\fi
+		\LD@Frame@Code@After
+	\endtikzpicture
+	\Par
+}%
+\def\Methode{\@getoptionalarg\LD@Maths@Methode}%
+\def\LD@Maths@Methode#1\par{%
+	\LD@Option@Process{,}%
+	\def\LD@Frame@Code@After{}%
+%	\ifcsname LD@Option@@Index\endcsname
+%		\def\LD@Temp{M\'ethode!Methode@}%
+%		\EA\EA\EA\sidx\EA\EA\EA{\EA\LD@Temp\LD@Option@@Index}%
+%	\fi
+	\tikzstyle{body} = [snake=saw,draw=ColorGreen, shading=axis,shading angle=45,top color=ColorVLGreen,bottom color=ColorTGreen,middle color=ColorLGreen,thick,rectangle, inner xsep=5pt, inner ysep=10pt]%
+	\tikzstyle{head}= [draw=ColorRed,fill=ColorVLRed,thick,rectangle,rounded corners,inner xsep=3pt,inner ysep=3pt]%
+	\unless\ifx\LD@Option@@\LD@Empty
+		{\eightpts\rm
+		\def\LD@Temp{[Title=}
+		\EA\EA\EA\def\EA\EA\EA\LD@Temp\EA\EA\EA{\EA\LD@Temp\LD@Option@@]}%
+		\EA\LD@Frame\LD@Temp{#1}%
+		}%
+	\else
+		{\eightpts\rm
+		\LD@Frame{#1}%
+		}%
+	\fi
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                        Index : Concept                                                                                     %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\Concept{\@getoptionalarg\@Concept}%
+\def\@Concept#1\par{%
+	\def\LD@Option@@{}%
+	\def\LD@Option@@Title{}%
+	\def\LD@Option@@Index{}%
+	\LD@Option@Process{;}%
+	\ifHtml
+		\noindent
+		\ifx\@optionalarg\LD@Empty
+			\def\LD@Option@@Index{#1}%
+			\LD@Index@Sidx
+		\else
+			\expandafter\sidx\expandafter{\@optionalarg}%
+		\fi
+		\EndP
+		\HCode{<div class="concept">}\ignorespaces#1\HCode{</div>}\Par
+	\else
+		\ifdim\lastskip<\medskipamount
+			\removelastskip
+			\medskip
+		\fi
+		\ifx\LD@Option@@Index\LD@Empty
+			\ifx\LD@Option@@Title\LD@Empty
+				\ifx\LD@Option@@\LD@Empty
+					\def\LD@Option@@Title{#1}%
+				\else
+					\let\LD@Option@@Title\LD@Option@@
+				\fi
+			\fi
+			\trim\LD@Option@@Title
+			\LD@Index@Sidx
+		\else
+			\EA\sidx\EA{\LD@Option@@Index}%			
+		\fi
+		\vskip0pt plus.01\vsize\penalty-100\vskip0pt plus-.01\vsize
+		\noindent\underbar{\it \ignorespaces#1}%
+		\medskip
+\fi
+}%
+\newcount\LD@Maths@Picture@Counter\LD@Maths@Picture@Counter=0\relax
+\def\LD@Gobble@One#1{#1}
+\def\figure{\let\LD@Figure@CS\LD@Gobble@One\@getoptionalarg\LD@Maths@Figure}%
+\def\Figure{\let\LD@Figure@CS\centerline\@getoptionalarg\LD@Maths@Figure}%
+\def\LD@Maths@Figure#1.{%
+	\def\LD@Option@@Label{}%
+	\def\LD@Option@@Index{}%
+	\LD@Option@Process{,}%
+	\global\advance\LD@Maths@Picture@Counter by1\relax
+	\unless\ifx\LD@Option@@Label\LD@Empty
+		\EA\definexref\EA{\LD@Option@@Label}{\the\LD@Maths@Picture@Counter}{fig}%
+	\fi	
+	\unless\ifx\LD@Option@@Index\LD@Empty
+		\EA\sidx\EA{\LD@Option@@Index}%
+	\fi
+	\LD@Figure@CS{%
+		Figure \the\LD@Maths@Picture@Counter.%
+		\def\LD@Temp{#1}%
+		\trim\LD@Temp
+		\unless\ifx\LD@Temp\LD@Empty
+			\LD@Space\LD@Temp.
+		\fi
+	}%
+	\relax
+}%
+\def\Exemple{\def\LD@Exemple@Text{\it Exemple}\@getoptionalarg\LD@Maths@Exemple}
+\newdimen\LD@Maths@Exemple@Indent
+\newcount\LD@Maths@Exemple@Counter\LD@Maths@Exemple@Counter=0\relax
+\long\def\LD@Maths@Exemple#1\par{%
+	\noindent
+	{%
+		\def\Item##1{%
+			\let\Item\SecondItem
+			\setbox\LD@Box=\hbox{\it ##1}%
+			\advance\LD@Maths@Exemple@Indent by\wd\LD@Box\relax
+			\hangindent\LD@Maths@Exemple@Indent\relax
+			\hangafter=1\relax
+	%\parshape=2 0pt \hsize \LD@Maths@Exemple@Indent \hsize
+			##1\ignorespaces
+		}%
+		\def\SecondItem##1{%
+			\par
+			\hangindent\LD@Maths@Exemple@Indent\relax
+			\hangafter=0\relax
+			\noindent\llap{\it ##1}\ignorespaces
+		}%
+		\eightpts
+		%\par
+		\setbox\LD@Box=\hbox{\LD@Exemple@Text}%
+		\LD@Maths@Exemple@Indent=\wd\LD@Box\relax
+		\hangindent\LD@Maths@Exemple@Indent\relax
+		\hangafter=1\relax
+		\noindent{\LD@Exemple@Text}\ignorespaces #1%
+%		\ifx\@optionalarg\LD@empty
+%			\setbox\LD@Box=\hbox{\LD@Exemple@Text}			
+%			\par\hangindent\wd\LD@Box\hangafter=0\relax
+%			\indent\llap{\LD@Exemple@Text ; }\ignorespaces		
+%		\else
+%			\setbox\LD@Box=\hbox{\LD@Exemple@Text\@optionalarg : }
+%			\par\hangindent\wd\LD@Box\hangafter=0\relax
+%			\indent\llap{\LD@Exemple@Text ; }\ignorespaces	
+%			\global\advance\LD@Maths@Exemple@Counter by1\relax
+%			\definexref{\@optionalarg}{\the\LD@Maths@Exemple@Counter}{ex}%
+%		\fi
+%		#1%
+	\par
+	}%
+	\medskip
+}%
+
+\def\Exemples{\def\LD@Exemple@Text{\it Exemples}\@getoptionalarg\LD@Maths@Exemple}%
+
+
+\def\Eqdef{\@getoptionalarg\LD@Eqdef}
+\def\LD@Eqdef#1{%
+	\EA\eqdefn\EA[\@optionalarg]{#1}\eqref{#1}\qquad
+}%
+
+\long\def\Application : #1\par{\noindent{\eightpts{\it Application : }#1}\medskip}
+%\long\def\Exercice. #1\par{\noindent{\eightpts{\bf Exercice.} #1}\bigskip}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                                      Equations  numérotées                                                           %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\addots{%
+	\mathinner{%
+		\mkern7mu\raise1pt\vbox{\kern7pt\hbox{.}}%
+		\mkern2mu\raise4pt\hbox{.}%
+		\mkern2mu\raise7pt\hbox{.}\mkern1mu
+	}%
+}%
+
+\def\Equation{\@getoptionalarg\@LEquation}
+\def\@LEquation#1$$#2$${\ifx\@optionalarg\empty\def\tempol{\the\eqnumber}\advance\eqnumber by1\else\edef\tempol{\@optionalarg}\fi
+\def\argoL{#1}\trim\argoL\ifx\argoL\empty\else\definexref{\argoL}{\tempol}{eq}\fi
+\ifHtml
+$$\displaystyle\eqalignno{&\displaystyle #2&\mbox{(\bf\tempol)}}$$\else
+$$#2\leqno{\hbox{(\tempol)}}$$\fi}
+
+\def\Norme#1{%
+	\Vert#1\Vert
+}%
+%\def\LD@addots{%
+%	\setbox\LD@Box@One=\hbox{$\cdot$}%
+%	\raise-0.10em\copy\LD@Box@One
+%	\kern0.1em\raise0.20em\copy\LD@Box@One
+%	\kern0.1em\raise0.50em\box\LD@Box@One
+%}
+\def\LD@addots{%
+	\mathinner{%
+		\mkern7mu\raise1pt\vbox{\kern7pt\hbox{.}}%
+		\mkern2mu\raise4pt\hbox{.}%
+		\mkern2mu\raise7pt\hbox{.}\mkern1mu
+	}%
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                        Maths : Symbols                                                                                   %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\Sim{\mathop{\sim}}%
+\def\Ker#1{%
+	\def\LD@Temp{(}%
+	\hbox{Ker}%
+	\unless\ifx#1\LD@Temp
+		\unless\ifx#1\Q
+			\ 
+		\fi
+	\fi
+	#1%
+}%
+\def\Ima#1{%
+	\def\LD@Temp{(}%
+	\hbox{Im}%
+	\unless\ifx#1\LD@Temp
+		\unless\ifx#1\Q
+			\ 
+		\fi
+	\fi
+	#1%
+}%
+\def\Ima{\hbox{Im}}%
+
+\def\Norme#1{%
+	\Vert#1\Vert
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                      Démonstrations, Exemples, Applications, Exercices, Remarques                                       %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\long\def\Demonstration. #1\CQFD{\noindent{\eightpts D\'emonstration. #1}\bigskip}
+\long\def\Rappels. #1\par{\noindent{\eightpts{\it Rappels. }#1}\medskip}
+
+\def\Remarque{\noindent{\it Remarque}}
+\def\Remarques{\noindent{\it Remarques}}
+\def\Notation{\noindent{\it Notation}}
+
+
+
+
+\def\CenterLine{%
+	\Par
+	\centerline
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%															%
+%							Conseil							%
+%															%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\Conseil : #1\par{{%
+	\eightpts
+	\noindent
+	\llap{%
+		$\underline{\mbox{Conseil}}$ : 
+	}%
+	#1\medskip
+}}%
+\def\Rappel : #1\par{{%
+	\eightpts
+	\noindent
+	\llap{%
+		$\underline{\mbox{Rappel}}$ : 
+	}%
+	#1\medskip
+}}%
+\newdimen\LD@Dimen@A
+\newbox\LD@Box@A
+\def\LD@Margin@H{5pt}%
+\def\Incrust\par#1\par#2\par{%
+	\setbox\LD@Box@A=\hbox{#2}%
+	{%
+		\LD@Dimen@A=\hsize\relax
+		\advance\LD@Dimen@A by-\wd\LD@Box@A\relax
+		\moveright\LD@Dimen@A\hbox{\smash{\copy\LD@Box@A}}%
+		\advance\LD@Dimen@A by-\LD@Margin@H
+		\parshape 1 0pt \LD@Dimen@A
+		#1\par
+	}%
+}%
+\def\Illustrate #1\tikzpicture#2\endtikzpicture{%
+	\setbox\LD@Box@A=\hbox{\tikzpicture#2\endtikzpicture}%
+	{%
+		\LD@Dimen@A=\hsize\relax
+		\advance\LD@Dimen@A by-\wd\LD@Box@A\relax
+%		\kern\LD@Dimen@A\hbox
+{{\copy\LD@Box@A}}%
+		\advance\LD@Dimen@A by-\LD@Margin@H
+		\parshape 1 0pt \LD@Dimen@A
+		#1\par
+	}%
+}%
+
+\endinput

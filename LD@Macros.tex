@@ -1,0 +1,884 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                         Titres, fontes et macros                                             %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\tit{%
+\textfont0=\seventeenrm\scriptfont0=\tenrm\def\rm{\fam0\seventeenrm}%
+\textfont1=\seventeenib\scriptfont1=\twelveib%
+\textfont2=\seventeensy\scriptfont2=\twelvesy\scriptscriptfont2=\ninesy
+\textfont3=\seventeenex
+\textfont\itfam=\seventeenti
+\def\it{\fam\itfam\seventeenti}%
+\textfont\bbfam=\seventeenbb \scriptfont\bbfam=\twelvebb
+\def\bb{\fam\bbfam\seventeenbb}%
+\textfont\msafam=\seventeenmsa\scriptfont\msafam=\twelvemsa
+\textfont\scalnfam=\seventeenscaln
+\def\pcap{\fam\pcapfam\seventeenpcap}
+\normalbaselineskip=25pt\normalbaselines\rm}
+
+
+%% Pour couper automatiquement un titre trop long
+
+\def\raggedcenter{\leftskip=20pt plus 10em  % reglages initial 4em
+     \rightskip=\leftskip
+      \parfillskip=0pt
+       \spaceskip=.3333em \xspaceskip=.5em
+        \pretolerance=9999 \tolerance=9999
+         \hyphenpenalty=9999 \exhyphenpenalty=9999 }
+
+\def\titrecentre#1{{\parindent0mm\raggedcenter\tit#1\par}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                  Paramètres d'une page                                                    %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% différents formats de pages
+\def\formatpage{
+\hsize150truemm
+\vsize 240truemm
+\hoffset=5truemm
+\voffset=-3truemm
+\pretolerance=500
+\tolerance=1000
+\brokenpenalty=5000
+\parindent3mm
+}
+%\formatpage
+
+\def\olspept{
+%\magnification 1200
+\hsize180truemm\vsize 270truemm\hoffset=-10truemm\voffset=-13truemm
+\pretolerance=500\tolerance=1000\brokenpenalty=5000
+\parindent3mm
+}
+
+
+\def\dimstand{\hsize 150truemm\vsize 240truemm\hoffset=5truemm\voffset=0truemm}
+
+\def\dimart{\hsize126truemm\vsize186truemm\hoffset16truemm\voffset=24truemm}
+
+%%
+
+
+
+\interfootnoteskip=0pt
+\let\note=\numberedfootnote
+\everyfootnote={\eightpoint\leftskip=5truemm\rightskip5truemm}
+
+
+%%
+
+
+\newcount\chstart
+\chstart=\pageno
+\headline={\ifnum\pageno=\chstart {\hfill} \else {\hss \tenrm --\ \folio\ --\hss}\fi}
+\footline={\hfill}
+\normalbaselines
+\frenchspacing
+
+%%
+\newif\ifMidFolio
+\MidFoliotrue            % numéro de page au mileu du haut de page par d\'efaut
+
+\newif\ifpagetitre \pagetitretrue
+\newtoks\hautpagetitre \hautpagetitre={\hfill}
+\newtoks\baspagetitre \baspagetitre={\hfill}
+\newtoks\auteurcourant \auteurcourant={\hfill}
+\newtoks\titrecourant \titrecourant={\hfill}
+\newtoks\hautpagegauche
+\newtoks\hautpagedroite
+\newtoks\hautpagemilieu
+\hautpagemilieu={\tenrm\hfil -- \folio\ -- \hfil}
+\hautpagegauche={\ifMidFolio\the\hautpagemilieu\else\tenrm\folio\hfil\the\auteurcourant\hfil\fi}
+\hautpagedroite={\ifMidFolio\the\hautpagemilieu\else\hfil\the\titrecourant\hfil\tenrm\folio\fi}
+\newtoks\baspagegauche \baspagegauche={\hfil}
+\newtoks\baspagedroite \baspagedroite={\hfil}
+\headline={\ifpagetitre\the\hautpagetitre
+\else\ifodd\pageno\the\hautpagedroite\else\the\hautpagegauche\fi\fi }
+\footline={\ifpagetitre\the\baspagetitre
+\else\ifodd\pageno\the\baspagedroite
+\else\the\baspagegauche\fi\fi \global\pagetitrefalse}
+
+\def\nopagenumber{\headline={\hfill}\footline={\hfill}}
+%\def\numpgsuiv{ \chstart=\pageno\pageno=\chstart}
+
+\def\pageblanche{\vfill\eject\pagetitretrue
+\null\vfill\eject
+\pagetitretrue
+}
+
+
+\def\hautspages#1#2{\auteurcourant={\ninepcap#1}\titrecourant={\nineit#2}\MidFoliofalse}
+
+\ifnum\chstart=\pageno \pagetitretrue\fi
+%\ifnum\pageno=\chstart \pagetitretrue \fi
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                  Date et heure (française)                                                  %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\countdef\temps=170
+\temps=\time
+\countdef\nminutes=171{\nminutes = \time}%
+\countdef\nheure=172
+\def\heure{\begingroup
+   \temps = \time \divide\temps by 60
+   \nheure = \temps
+   \nminutes = \time
+   \multiply\temps by 60
+   \advance\nminutes by -\temps
+   \ifnum\nminutes<10 \toks1 = {0}%
+   \else\toks1 = {}%
+   \fi
+   \number\nheure h\the\toks1 \number\nminutes
+\endgroup}%
+
+\def\dateheure{\vglue-10mm\rightline{(\the\day/\the\month/\the\year,\ \heure)}}
+\def\date{\the\day/\the\month/\the\year}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                       Caractères spéciaux                                                                    %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\e{{\rm e}}                                                % constante e
+\def\qed{\Math{\rlap{$\sqcap$}\sqcup}}        % rectangle en fin de démonstration
+\def\1{1\!\!1}                                                   % fonction caractéristique
+\def\ssm{\smallsetminus}                             % opérateur ensembliste "privé de"
+
+\def\swap#1#2{\let\temp#1\let#1#2\let#2\temp}
+\swap\epsilon\varepsilon
+\swap\theta\vartheta
+\swap\rho\varrho
+%\swap\sigma\varsigma
+%\swap\phi\varphi
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                 Bibliographie                                                                     %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%
+%%   Paramètres
+%
+
+\newif\ifNumRef              % Determine si les references bibliographiques sont numérotées automatiquement    
+\NumReftrue                   %                               (option par défaut) 
+
+%
+%%   Variables
+%
+
+\newcount\NumRef\NumRef=0
+
+%
+%%
+%%% Nouvelles instructions
+%
+%
+
+\def\CitRef#1{[\refn{Ref§#1}]}              % \citeref{label}   ->  renvoie  "[numero associe au label]"
+
+\def\DefRef#1 ; #2 ; #3 ; #4 ; #5\par{\ifNumRef\global\advance\NumRef by 1\definexref{Ref§#1}{{\the
+                       \NumRef}}{}\else\definexref{Ref§#1}{#1}{}\fi%          \DefRef{label}   ->  definit un [numero] associé au label #1 
+                        \item{\CitRef{#1}} #2, {\it #3 \bf #4} #5}%                                         et affiche "[numero] #2, {\it #3 \bf #4} #5"
+                
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%        Numérotation automatique des paragraphes, des équations et Sommaire              %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%
+%%   Paramètres
+%
+
+\newif\ifSecLabelEq        % Determine si le numero de section prefixe le label des equations    
+\SecLabelEqtrue             %                               (option par défaut) 
+
+%
+%% Variables
+%
+
+\newcount\titreun\titreun=0
+\newcount\titredeux\titredeux=0
+\newcount\titretrois\titretrois=0
+
+%
+%% Tests
+%
+
+%\newif\ifHealthy
+
+%
+%% Fontes
+%
+
+\def\fontetitreun{\twelvepts\gpdouze\twelvebf}
+\def\fontetitredeux{\elevenpts\textfont1=\eleveni\scriptfont1=\ninei\elevenit}
+\def\fontetitredeuxb{\elevenpts\eleventi\gponze\textfont1=\elevenib\scriptfont1=\nineib}
+\def\fontetitretrois{\textfont0=\elevenrm\scriptfont0=\eightrm\textfont1=\eleveni\scriptfont1=\eighti\scriptscriptfont1=\sixi\elevenit}
+
+%
+%% Fonctions internes
+%
+
+\def\eqconstruct#1{\ifSecLabelEq\the\titreun.#1\else#1\fi}%Definit la numerotation des equations
+
+\def\init#1{\global#1=0}
+
+\def\incr#1{\global\advance#1 by 1 {\the #1}}
+
+\long\def\Indentation#1#2{\setbox10=\hbox{\fontetitreun#1}
+                          \ifdim\wd10 < 4mm
+                       \setbox10=\hbox to 4mm{\box10\hfill}
+                     \else\ifdim\wd10 < 6mm
+                       \setbox10=\hbox to 6mm{\box10\hfill}
+                          \else\ifdim\wd10 < 8mm
+                       \setbox10=\hbox to 8mm{\box10\hfill}
+                     \else\ifdim\wd10 < 12mm
+                       \setbox10=\hbox to 12mm{\box10\hfill}
+                     \fi\fi\fi\fi
+                     \dimen10=\hsize
+                     \advance \dimen10 by -\wd10
+                     \noindent \box10 %\ignorespaces
+                     \hbox{\vtop{\hsize=\dimen10\raggedright\noindent\fontetitreun#2}}}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                 Notes en marge gauche                                                     %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\def\leftnote#1{\vadjust{\setbox1=\vtop{\hsize 20mm\parindent=0pt\eightpoint
+\baselineskip=9pt\rightskip=4mm plus 4mm\vskip-4.7mm#1}\hbox{\kern-2cm\smash{\box1}}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                 Opérateurs                                                                         %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\log{\mathop{\rm log}\nolimits}
+
+\def\ch{\mathop{\rm ch}\nolimits}
+\def\sh{\mathop{\rm sh}\nolimits}
+\def\th{\mathop{\rm th}\nolimits}
+\def\tg{\mathop{\rm tg}\nolimits}
+\def\cotan{\mathop{\rm cotan}\nolimits}
+\def\arccos{\mathop{\rm Arccos}\nolimits}
+\def\arcsin{\mathop{\rm Arcsin}\nolimits}
+\def\arctan{\mathop{\rm Arctan}\nolimits}
+\def\argth{\mathop{\rm Argth}\nolimits}
+\def\argsh{\mathop{\rm Argsh}\nolimits}
+\def\argch{\mathop{\rm Argch}\nolimits}
+
+
+\def\Sim{\mathop{\sim}}
+\def\card{\mathop{\rm card}\nolimits}
+\def\dim{\mathop{\rm dim}\nolimits}
+\def\det{\mathop{\hbox{\rm d\'et}}\nolimits}
+\def\mod{\mathop{\rm mod}\nolimits}
+\def\sgn{\mathop{\rm sgn}\nolimits}
+
+
+
+\def\quote{\leavevmode\raise.24ex\hbox{$\scriptscriptstyle\langle\!\langle\>$}}    % guillemets ouvrants
+\def\etouq{\leavevmode\raise.24ex\hbox{$\scriptscriptstyle\>\rangle\!\rangle$}}    % guillemets fermants
+
+
+
+%% pour aller a la ligne dans un \proclaim:
+\def\PAR{\par}
+
+
+%pour eviter les rectangles noirs:
+%\overfullrule=0pt
+% pour que les @ soient des lettres
+\def\signeat{\catcode`@=11}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                 Notes en bas de page                                                       %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Pour que les accents se placent correctement en mode math en corps 8 et 6
+\skewchar\eighti='177 \skewchar\sixi='177
+\skewchar\eightsy='60 \skewchar\sixsy='60
+
+%
+% [Format : \note{texte de la note} avec numerotation automatique]
+%
+%
+\let\footnotea=\footnote
+%\catcode`@=11
+\message{output routines,}
+\newinsert\footins
+\def\footnote#1{\let\@sf\empty % parameter #2 (the text) is read later
+  \ifhmode\edef\@sf{\spacefactor\the\spacefactor}\/\fi
+\hbox{$^{(#1)}$}\@sf\vfootnote{#1.}}
+\def\vfootnote#1{\insert\footins\bgroup
+  \interlinepenalty\interfootnotelinepenalty
+  \splittopskip\ht\strutbox % top baseline for broken footnotes
+  \splitmaxdepth\dp\strutbox \floatingpenalty\@MM
+  \leftskip\z@skip \rightskip\z@skip \spaceskip\z@skip \xspaceskip\z@skip
+  \textindent{#1}\footstrut\futurelet\next\fo@t}
+\def\fo@t{\ifcat\bgroup\noexpand\next \let\next\f@@t
+  \else\let\next\f@t\fi \next}
+\def\f@@t{\bgroup\aftergroup\@foot\let\next}
+\def\f@t#1{#1\@foot}
+\def\@foot{\strut\egroup}
+\def\footstrut{\vbox to\splittopskip{}}
+\skip\footins=\bigskipamount % space added when footnote is present
+\count\footins=800 % footnote magnification factor (1 to 1)
+\dimen\footins=8in % maximum footnotes per page
+
+%
+%\anote=\footnote de plain (2 arguments)
+%
+\def\anote#1#2{\footnotea{\hbox{$^{#1}$}}{\eightpts#2}}
+%\catcode`@=12 % the "@" signs are no longer letters
+
+%reference de note
+ \def\defrefnote#1{\definexref{#1}{{\the\footnotenumber}}{refnotes}}
+ \def\refnote#1{\ref{#1}}
+
+
+
+%\def\note#1#2{\footnote{#1}{\noindent\eightpts #2\vskip-10pt\par}}
+%\def\note#1#2{\hbox{$^{(#1)}$}\footnote{}{\eightpts$#1.$#2\vskip-10pt\par}}
+\def\pclm#1#2{\noi\bf#1\sl\ #2}
+
+\def\footnoterule{\kern -2pt\hrule width 7truecm\kern 2.4pt}
+
+%reference croisee a des numeros de notes
+\def\xnotedef#1{\definexref{#1}{\noexpand\number\footnotenumber}{Note}}%
+\def\noteref{\ref}
+
+
+%
+% Fin notes
+%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                  Numérotation des équation (à gauche par défaut)                           %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ % choix numerotation gauche ou droite: defaut=gauche, \numadroite{oui} -> a droite
+ 
+  
+\newif\ifNumGauche
+\NumGauchetrue
+
+\ifNumGauche\let\eqno=\leqno\let\eqalignno=\leqalignno
+\else\let\leqno=\eqno\let\leqalignno=\eqalignno
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                  Insertion de dessins et d'illustrations                                             %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\picture #1 by #2 (#3){\leavevmode\vbox to #2{
+   \hrule width #1 height 0pt depth 0pt
+    \vfill
+     \special{picture #3}}}
+
+
+
+%fleches
+
+\def\grad{\mathop{\rm grad}\nolimits}
+
+\def\gradv{\mathop{\overrightarrow{\rm grad}}\nolimits}
+%\def\vec{\overrightarrow}
+
+
+\def\re{{\Re e\ }}
+\def\im{{\Im m\ }}
+
+
+\def\emptyset{{\varnothing}}
+
+
+\def\|{\Vert}
+\let\vieuxle=\le
+\let\vieuxge=\ge
+\def\le{\ifHtml\vieuxle\else\leqslant\fi}\def\leq{\leqslant}
+\def\ge{\geqslant}\def\geq{\geqslant}
+\def\wh{\widehat}
+\def\§{\S\thinspace}
+
+%% Variables
+
+\newdimen\oldim
+\newbox\olbox
+\newcount\olcnt
+
+
+
+%%
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OL
+%%%%
+%%
+
+
+
+%%% binome de Newton
+\def\bn#1#2{\setbox\olbox\vbox{\hbox{\Math{\scriptstyle #1}}%
+\hbox{\Math{\scriptstyle #2}}}
+\Math{\left(\vcenter{\hbox to\wd\olbox{\hfill\Math{\scriptstyle
+#1}\hfill}\hbox to\wd\olbox{\hfill\Math{\scriptstyle #2}\hfill}}
+\right)}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\ps#1\ps{\left\langle #1\right\rangle }
+\def\pss#1\pss{\left[#1\right]}
+
+\def\ul{\underline}
+\def\ol{\overline}
+
+
+
+\def\N#1{\Q|\!\Q|#1\W|\!\W|}
+
+
+%Insertion de figures et illustrations
+\def\picture #1 by #2 (#3){\leavevmode\vbox to #2{
+   \hrule width #1 height 0pt depth 0pt
+    \vfill
+     \special{picture #3}}}
+
+
+%% pour aller a la ligne dans un \proclaim:
+ \def\PAR{\par}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                            Books vs  Slides                                                                                              %
+%                                                                                                                                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\long\def\book#1\book{\ifbook #1\fi}
+\def\Book#1{\ifbook #1\fi}
+\long\def\slide#1\slide{\ifbook\relax\else #1\fi}
+\def\Slide#1{\ifbook\relax\else #1\fi}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                         Racourcis                                                                                            %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\def\Prerequis{\noindent{\bf Pr\'e-requis}}
+%\def\Corollaire{\noindent{\bf Corollaire}}
+%\def\Attention{\noindent$\underline{\it Attention}$}
+\def\Rappel{\noindent{\it Rappel}}
+\def\Bullet{\noindent\item{$\bullet$}}
+\def\Det{\sbox{D\'et}}
+\def\Id{\sbox{Id}}
+%\def\Ker{\sbox{Ker}\ }
+\def\IM{\sbox{Im}}
+\def\Vect{\sbox{Vect}}
+\def\Dim{\sbox{Dim}}
+\def\rang{\sbox{Rang}\ }
+\def\dim{\sbox{dim}\ }
+\def\ieme{{\mbox{\sevenrm i\`eme}}}
+\def\er{{\mbox{\sevenrm er}}}
+\def\nd{{\mbox{\sevenrm nd}}}
+\def\Card{\sbox{Card}\ }
+
+
+\def\Tr{\sbox{Tr}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                         Racourcis                                                                                            %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\newcount\olnumF   
+%\global\olnumF=1
+%\def\Figure #1, #2.{\centerline{{\bf Figure  \definexref{#1}{\the\olnumF}{Figure}
+%\eqrefn{#1}\global\advance\olnumF by 1.\enspace--- }#2}}
+
+
+\def\Per{{\hbox{\tensy\char63}}}
+\def\per{{\hbox{\sevensy\char63}}}
+\def\LuciferCross{\ \rput{0}(0,.1){\scalebox{1 -1}{\dag}}\ }
+\def\LuciferStar{\ \rput{0}(0,.1){\scalebox{1 -1}{\star}}\ }
+\def\App#1\to#2,#3\mapsto#4\ppA{\vtop{\hbox{$#1$}\hbox{$#3$}}\vtop{\hbox{$\to$}\hbox{$\mapsto$}}\vtop{\hbox{$#2$}\hbox{$#4$}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                         Exos                                                                                                    %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\def\pn{\par\noindent}
+\def\Ind{{\it Indication : }}
+
+%%%  Numérotation automatique des exercices
+
+\newcount\numeroexo\numeroexo=0
+\newcount\numerosectionexo\numerosectionexo=0    
+\newif\ifexolabel\exolabeltrue
+\newif\ifexosection\exosectionfalse
+\def\filiere{PTSI}
+
+\def\exo#1. #2\par{\expandafter\def\csname exo#1\endcsname{
+\global\advance\numeroexo by 1%
+\ifexosection\definexref{labelexo\filiere#1}{\the\numerosectionexo.\the\numeroexo}{exo}\else\definexref{labelexo\filiere#1}{\the\numeroexo}{exo}\fi\noindent\ifexolabel\eqrefn{labelexo\filiere#1}\else#1\fi) #2\medskip}}
+
+\newcount\numeroprobleme\numeroprobleme=0
+\newif\ifproblemelabel\problemelabeltrue
+\def\Probleme#1. #2\par{\expandafter\def\csname Probleme#1\endcsname{\global\advance\numeroprobleme by 1%
+\definexref{labelprobleme\filiere#1}{\the\numeroprobleme}{probleme}\centerline{\bf Probl\`eme \ifproblemelabel\eqrefn{labelprobleme\filiere#1}\else#1\fi}\medskip\noindent #2\medskip}}
+
+
+\def\sol#1. #2\par{\expandafter\def\csname sol#1\endcsname{#2\medskip}}
+
+
+\catcode`@=11
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                        Pour se débarasser des espaces de début et de fin                                            %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% The Solution
+\def\trim #1{\expandafter\trim@\expandafter{#1 }#1}
+\def\trim@ #1{\trim@@ @#1 @ #1 @ @@}
+\def\trim@@ #1@ #2@ #3@@{\trim@@@\empty #2 @}
+\def\unbrace#1{#1}
+\unbrace{\def\trim@@@ #1 } #2@#3{\expandafter\def
+  \expandafter #3\expandafter {#1}}
+
+
+%
+%  synthaxe : \def\ol{ gah } \trim\ol le resultat est dans \ol
+
+%% Test Code
+%\def\Test{\afterassignment\Test@ \def\test}
+%\def\Test@{\trim\test \afterassignment\Test@@ \def\test@}
+%\def\Test@@{\message{\ifx\test\test@ Y\else FAIL:|\meaning\test|\fi}}
+
+
+%% Testing The Solution
+%\Test{}{}
+%\Test{ }{}
+%\Test{ a }{a}
+%\Test{ {}{} }{{}{}}
+%\Test{{braces}}{{braces}}
+%\Test{ {braces} }{{braces}}
+%\Test{ { braces } }{{ braces }}
+%\Test{no space and no space}{no space and no space}
+%\Test{no space and a space: }{no space and a space:}
+%\Test{ :a space and no space}{:a space and no space}
+%\Test{ :a space and a space: }{:a space and a space:}
+%\Test{ \ifx }{\ifx}
+%\Test{ \ifx/ }{\ifx/}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                                      Equations  numérotées                                                           %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\def\Equation{\@getoptionalarg\@LEquation}
+\def\@LEquation#1$$#2$${\ifx\@optionalarg\empty\def\tempol{\the\eqnumber}\advance\eqnumber by1\else\edef\tempol{\@optionalarg}\fi
+\def\argoL{#1}\trim\argoL\ifx\argoL\empty\else\definexref{\argoL}{\tempol}{eq}\fi
+\ifHtml
+$$\displaystyle\eqalignno{&\displaystyle #2&\mbox{(\bf\tempol)}}$$\else
+$$#2\leqno{\hbox{(\tempol)}}$$\fi}
+
+
+%
+%\def\Equation{\@getoptionalarg\@LEquation}
+%\def\@LEquation#1$$#2$${\ifx\@optionalarg\empty\def\tempol{\the\eqnumber}\advance\eqnumber by1\else\edef\tempol{\@optionalarg}\fi
+%\def\argoL{#1}\trim\argoL\ifx\argoL\empty\else\definexref{\argoL}{\tempol}{eq}\fi
+%\ifHtml
+%$$\HCode{<mtable><mlabeledtr side="left"><mtd>}\mbox{(\tempol)}\HCode{</mtd><mtd><mrow>}#2\HCode
+%{</mrow></mtd></mlabeledtr></mtable>}$$\else
+%$$#2\leqno{\hbox{(\tempol)}}$$\fi}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                        Définitions, propriétés, théorèmes, lemmes                                                        %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Pour inverser l'ordre Hypothèses-propriétés. 
+
+
+\newif\ifInverted\Invertedfalse
+
+
+% La macro qui se charge du formatage en couleur Html/TeX - Normal/Inversé
+\newdimen\OLdimen
+
+
+%\DefineRGBcolor F0F9E3=VLGreen.
+%\DefineRGBcolor E5F9D1=LGreen.
+%\DefineRGBcolor 5DA93B=Green.
+
+\def\ColorFrame{\@getoptionalarg\@LColorFrame}%
+\def\@LColorFrame#1#2{%
+\noindent
+\ifHtml % Html
+\ifInverted % Inverted
+\EndP
+\HCode{<div class="ICF#1">}\vbox{\ignorespaces#2\EndP}\HCode{</div>}
+\ifx\@optionalarg\empty\else\HCode{<div class="centerline"><span class="ICFHyp#1">}\@optionalarg\HCode{</span></div>}\fi
+\Invertedfalse
+\else % Inverted false
+\EndP
+\ifx\@optionalarg\empty\else
+\HCode{<div class="centerline"><span class="CFHyp#1">}\@optionalarg\HCode{</span></div>}\fi
+\HCode{<div class="CF#1">}\vbox{\noindent\ignorespaces#2\EndP}
+\HCode{</div>}
+\fi
+\else  % Html false
+\tikzstyle{body} = [draw=Color#1, fill=ColorL#1, thick,
+    rectangle, rounded corners, inner xsep=5pt, inner ysep=10pt]
+\tikzstyle{head}= [draw=Color#1, fill=ColorVL#1, thick,
+    rectangle, rounded corners, inner xsep=3pt, inner ysep=3pt]
+\ifInverted
+\ifx\@optionalarg\empty
+\OLdimen=\hsize\advance\OLdimen by -15.3pt
+\tikzpicture
+\node[text width=\OLdimen,body] {\noindent#2} ;
+\endtikzpicture
+\PAR
+\else
+\OLdimen=\hsize\advance\OLdimen by -15.3pt
+\tikzpicture
+\node[text width=\OLdimen,body] (a) {\noindent#2} ;
+\node [head] at (a.south) {\noindent\@optionalarg} ;
+\endtikzpicture
+\PAR
+\fi
+\vskip15pt
+\Invertedfalse
+\else % Inverted false
+\ifx\@optionalarg\empty
+\bigskip\noindent
+\OLdimen=\hsize\advance\OLdimen by -15.3pt
+\tikzpicture
+\node[text width=\OLdimen,body] {\noindent#2} ; 
+\endtikzpicture
+\PAR
+\else
+%¨
+\OLdimen=\hsize\advance\OLdimen by -15.3pt
+\tikzpicture
+\node[text width=\OLdimen,body] (a) {\noindent#2} ;
+\node [head] at (a.north)  {\noindent\@optionalarg} ;
+\endtikzpicture
+\PAR
+\vskip9pt\fi
+\fi\fi}
+
+
+%Définition
+
+\def\Definition{\@getoptionalarg\@LDefinition}
+\def\@LDefinition#1\par{\ifx\@optionalarg\empty\@LColorFrame{Green}{#1}\else
+\edef\temp{[\@optionalarg]}\expandafter\ColorFrame\temp{Green}{#1}\fi
+}
+
+%Propriété
+
+\def\Propriete{\@getoptionalarg\@LPropriete}
+\def\@LPropriete#1\par{\ifx\@optionalarg\empty\@LColorFrame{Orange}{#1}\else
+\edef\temp{[\@optionalarg]}\expandafter\ColorFrame\temp{Orange}{#1}\fi
+}
+
+%Théorème
+
+\def\Theoreme{\@getoptionalarg\@LTheoreme}
+\def\@LTheoreme#1\par{\ifx\@optionalarg\empty\@LColorFrame{Red}{#1}\else
+\edef\temp{[\@optionalarg]}\expandafter\ColorFrame\temp{Red}{#1}\fi
+}
+
+
+% Nocolor
+
+\def\Assertion{\@getoptionalarg\@LAssertion}
+\def\@LAssertion#1\par{\ifx\@optionalarg\empty\@LColorFrame{Black}{#1}\else
+\edef\temp{[\@optionalarg]}\expandafter\ColorFrame\temp{Black}{#1}\fi
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                      Démonstrations, Exemples, Applications, Exercices, Remarques                                       %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\long\def\Demonstration. #1\CQFD{\noindent{\eightpts D\'emonstration. #1}\bigskip}
+\long\def\Exemple : #1\par{\noindent{\eightpts{\it Exemple : }#1}\medskip}
+\long\def\Exemples : #1\par{\noindent{\eightpts{\it Exemples : }#1}\medskip}
+\long\def\Application : #1\par{\noindent{\eightpts{\it Application : }#1}\medskip}
+\long\def\Exercice. #1\par{\noindent{\eightpts{\bf Exercice.} #1}\bigskip}
+\def\Remarque{\noindent{\it Remarque}}
+\def\Remarques{\noindent{\it Remarques}}
+\def\Notation{\noindent{\it Notation}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                Text inside maths / ensuremaths                                                                 %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\def\mbox#1{{\ifHtml\PauseMathClass\mtexttrue\HCode{<mtext>}\hbox{#1}\HCode{</mtext>}\EndPauseMathClass\else \hbox{#1}\fi}} 
+\def\sbox#1{{\ifHtml\PauseMathClass\mtexttrue\HCode{<mtext>&nbsp;}\hbox{#1}\HCode{&nbsp;</mtext>}\EndPauseMathClass\else \hbox{#1}\fi}} 
+
+\def\cced{\ifHtml \HCode{&ccedil;}\else\c c\fi}
+\def\Math#1{\ifmmode #1\else $#1$\fi}
+
+
+% \newtoks\tks 
+%       \def\mbox{\ifHtml \afterassignment\mya \else \myb\fi \tks} 
+%       \def\mya{\HCode{<mtext>}\hbox{\PauseMathClass\mtexttrue  
+%                           \the\tks\EndPauseMathClass}\HCode{</mtext>}} 
+%       \def\myb{\hbox{\the\tks}} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                                  Colors                                                                                         %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcount\olcounta%
+\newcount\olcountb%
+\newcount\olloopcount%
+\def\DefineRGBcolor #1#2#3#4#5#6=#7.{%
+\def\olRGB{}%
+%
+\def\space{ }
+\def\ConvertHD##1{%%%%% convertion nombre hexadecimal de deux chiffres vers fraction decimale à 6 chiffres après la virgule
+\def\olnumber{##1}
+\unless\ifnum\olnumber=255\relax
+	\def\oldd{}\olloopcount=0\loop
+	\olcounta=\olnumber\multiply\olcounta by 10\divide\olcounta by "FF\edef\oltemp{\oldd\the\olcounta}\edef\oldd{\oltemp}\olcountb=\olnumber
+	\multiply\olcountb by 10\multiply\olcounta by"FF\advance\olcountb by-\olcounta
+	\edef\olnumber{\the\olcountb}\advance\olloopcount by 1\ifnum\olloopcount<5\repeat
+	\edef\oltemp{\olRGB}\edef\olRGB{\oltemp.\oldd}
+\else
+	\edef\oldd{999999}%
+	\edef\olRGB{\olRGB.\oldd}
+\fi
+}%%-->>resultat dans oldd et \olRGB
+\ConvertHD{"#5#6}\edef\tempa{,.\oldd}\ConvertHD{"#3#4}\edef\tempa{,.\oldd\tempa}\ConvertHD{"#1#2}\edef\tempa{.\oldd\tempa}%
+\edef\temp{{Color#7}{rgb}{\tempa}}
+\expandafter\definecolor\temp
+%\newrgbcolor{Color#7}{\olRGB}
+}
+
+
+\def\MakeRGBcolor #1=#2.{%
+\DefineRGBcolor #1=#2.
+\expandafter\def\csname#2\endcsname##1{
+{\csname Color#2\endcsname##1}
+#1}}
+
+
+
+
+\def\pagehsize{\hsize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                                                                      %
+%                                                                             Racourcis                                                                                        %
+%                                                                                                                                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\ssi{\quad\Longleftrightarrow\quad}       % Equivalent
+\def\diff{\mbox{\rm d}}                                             % différentielle 
+\def\NULL{\ifHtml{\HCode{}}\else{}\fi}
+\def\pn{\ifHtml\noindent\HCode{<br />}\else\par\noindent\fi}
+
+
+
+
+
+\let\ds=\displaystyle
+\let\ss=\scriptstyle
+\let\sss=\scriptscriptstyle
+\let\|=\parallel
+
+\def\[{[}
+\def\]{]}
+
+
+
+\def\Center#1{\ifHtml\EndP\HCode{<div align="center">}#1\HCode{</div>}\Par\else\centerline{#1}\fi}
+\def\OLSpace{ }
+\def\§{\ifHtml\HCode{&\#160;}\else\OLSpace\fi}
+%
+%%% Code Roadmap
+%
+%-> Index, Toc, Concept, Definition, Inversed, Colors, Propriete
+%

@@ -1,0 +1,137 @@
+\magnification 1200\relax
+\input color.txs
+\input epsf
+\input eplain
+
+
+
+
+
+\catcode`@=11\relax
+
+\input LD@Fonts
+\catcode`@=11\relax
+\input LD@Macros
+\catcode`@=11\relax
+%\input LD@Variables.tex
+\newif\ifHtml\Htmlfalse
+\ifcsname Api\endcsname
+	\input \Api
+\fi
+
+
+% Engine detection 
+\catcode`@=11\relax
+\ifcsname luatexversion\endcsname
+	\def\LD@Engine{luatex}%
+\else
+	\def\LD@Engine{xetex}%
+\fi
+
+% Driver detection -> Tikz 
+\catcode`@=11\relax
+\ifcsname pgfsysdriver\endcsname
+	\def\LD@Html@Test{pgfsys-tex4ht.def}%
+		\def\LD@Output{Xhtml}%
+	\ifx\LD@Html@Test\pgfsysdriver
+		\Htmltrue
+	\fi
+\else
+%	\def\pgfsysdriver{pgfsys-dvipdfmx.def}% for XeTeX
+	\def\pgfsysdriver{pgfsys-xetex.def}% for XeTeX
+	\def\LD@Output{Pdf}%
+\fi
+
+
+
+\input LD@Tikz@Init
+
+
+
+
+
+
+\csname tex4ht\endcsname
+
+
+% Driver Selective loading 
+\catcode`@=11\relax
+\def\LD@Output@Test{Xhtml}%
+\ifx\LD@Output@Test\LD@Output
+	\input LD@Html
+	\input LD@Output@Xhtml
+\else
+	\input LD@Output@Pdf
+\fi
+
+\ifHtml
+\else \let\ancientjobname\jobname
+\edef\jobname{\ancientjobname-print}
+\definecontentsfile{toc}
+\edef\indexfilebasename{\ancientjobname-print}
+\fi
+\def\Tilde{\char`\~}
+
+
+%%%% après tex4ht sinon problèmes
+\let\Q=\left
+\let\W=\right
+\let\F=\over
+\let\b=\big
+\let\B=\Big
+\def\d{\,\mbox{\rm d}}                                              % d droit d'intégration
+%%%
+
+
+\SecLabelEqtrue             % le numero de section prefixe le label des equations
+\NumReftrue                    % les references bibliographiques sont numerotees automatiquement
+
+\catcode `@=11\relax
+\input LD@Layout
+\input LD@Tikz@Cliparts
+
+
+\DefineRGBcolor F0F9E3=VLGreen.
+\DefineRGBcolor E5F9D1=LGreen.
+\DefineRGBcolor DAF9BE=TGreen.
+\DefineRGBcolor 5DA93B=Green.
+\DefineRGBcolor F6DCCA=VLRed.
+\DefineRGBcolor F6D4BD=LRed.
+\DefineRGBcolor DAF9BE=TRed.
+\DefineRGBcolor B5F9A1=TTRed.
+\DefineRGBcolor F6B080=Red.
+\DefineRGBcolor F9F5E3=VLOrange.
+\DefineRGBcolor F9F5D0=LOrange.
+\DefineRGBcolor DAF9BE=TOrange.
+\DefineRGBcolor B5F9A1=TTOrange.
+\DefineRGBcolor D7A93B=Orange.
+\DefineRGBcolor EEEEEE=VLBlack.
+\DefineRGBcolor DDDDDD=LBlack.
+\DefineRGBcolor CCCCCC=TBlack.
+\DefineRGBcolor B5F9A1=TTBlack.
+\DefineRGBcolor 000000=Black.
+
+\def\LD@Colors@Hide{%
+	\DefineRGBcolor FFFFFF=VLGreen.
+	\DefineRGBcolor FFFFFF=LGreen.
+	\DefineRGBcolor FFFFFF=TGreen.
+	\DefineRGBcolor 000000=Green.
+	\DefineRGBcolor FFFFFF=VLRed.
+	\DefineRGBcolor FFFFFF=LRed.
+	\DefineRGBcolor FFFFFF=TRed.
+	\DefineRGBcolor FFFFFF=TTRed.
+	\DefineRGBcolor 000000=Red.
+	\DefineRGBcolor FFFFFF=VLOrange.
+	\DefineRGBcolor FFFFFF=LOrange.
+	\DefineRGBcolor FFFFFF=TOrange.
+	\DefineRGBcolor FFFFFF=TTOrange.
+	\DefineRGBcolor 000000=Orange.
+	\DefineRGBcolor FFFFFFF=VLBlack.
+	\DefineRGBcolor FFFFFF=LBlack.
+	\DefineRGBcolor FFFFFF=TBlack.
+	\DefineRGBcolor FFFFFF=TTBlack.
+	\DefineRGBcolor 000000=Black.
+}%
+
+
+\endinput

@@ -1,0 +1,370 @@
+\catcode`@=11\relax
+\input LD@Header.tex
+\input LD@Library.tex
+\font\TangoBig="HGSeikaishotaiPRO" at 12pt\TangoBig
+\font\TangoBigRed="HGSeikaishotaiPRO:color=FF0F0F" at 12pt
+\newwrite\FilteredFile
+\catcode`@=11\relax
+\immediate\openout\FilteredFile=JMdictwithJLPT.xml\relax%
+
+\def\empty{}%
+\newcount\OLCount
+\newtoks\OLTok
+\newif\ifloop
+\def\space{ }%
+\xdef\paren{（}%
+
+\newcount\HiraganaOnly\global\HiraganaOnly=0\relax
+\newcount\HiraganaAndKanji\global\HiraganaAndKanji=0\relax
+\for\JLPT:=1,2,3,4\do{%
+	\immediate\write16{\JLPT}
+\edef\tempd{jlpt\JLPT.utf}%
+	\LD@ParseFile\tempd{#1}{{%
+		\xdef\Saved{#1}%
+		\let\ArgOne\relax
+		\let\ArgTwo\relax
+		\xdef\Tail{#1\space}%
+		\ifx\Tail\empty
+		\else
+			\looptrue
+			\loop
+				\LD@String@Split\Tail{ }\Head\Tail
+					\LD@String@Split\Head{}\TestOL\Trash
+					\ifx\paren\TestOL
+						\loopfalse
+					\else
+						\ifx\ArgOne\relax
+							\xdef\ArgOne{\Head}%
+							\let\ArgTwo\relax
+						\else
+							\xdef\ArgTwo{\Head}%
+						\fi
+					\fi
+				\ifx\Tail\empty
+					\loopfalse
+				\fi
+			\ifloop
+			\repeat
+			\ifx\ArgTwo\relax
+				\EA\xdef\CS\ArgOne\EC{\JLPT}%
+				\global\advance\HiraganaOnly by1\relax
+			\else
+				\EA\xdef\CS\ArgOne\EC{\ArgTwo}%
+				\EA\xdef\CS J\ArgOne\EC{\JLPT}%		
+				\global\advance\HiraganaAndKanji by1\relax
+			\fi
+		\fi
+	}}{}%
+}%
+
+\noindent
+Hiragana Only : \the\HiraganaOnly
+\par\noindent
+Hiragana And Kanji : \the\HiraganaAndKanji
+\medskip
+
+
+%%% Abandon all hope ye who enter here
+%\begingroup
+%%% Abandon all hope ye who enter here
+
+\newlinechar=`\^^M
+\catcode`\^^M=13¤relax
+\catcode`¤=0\relax%
+¤catcode`¤\=11¤relax
+¤catcode`$=11¤relax% no maths
+¤catcode`^=11¤relax%no superscript
+¤catcode`_=11¤relax% no subscript
+¤catcode`&=11¤relax% no alignement
+
+%% Letters
+
+¤catcode`<=11
+¤catcode`?=11
+¤catcode`!=11
+¤catcode`[=11
+¤catcode`]=11
+¤catcode`~=11
+¤catcode`/=11
+
+%% Switch
+
+¤def¤Parse{¤catcode60=0¤relax}%   < escape char
+¤def¤Copy{¤catcode60=11¤relax}%   < letter
+
+¤catcode`<=11¤relax
+%% Macros in Copy context
+
+¤xdef¤Entry{}%
+¤def¤?XML #1?>{
+	¤immediate¤write¤FilteredFile{<?xml #1 ?>}%
+	¤xdef¤Entry{}%
+	¤Parse
+}%
+¤def¤DOCTYPE#1]>{%
+	¤EA¤LD@Concat¤EA{¤Entry}{<!DOCTYPE #1]>
+}¤Entry
+	¤Parse
+}%
+¤def¤JMDICT{%
+	¤EA¤LD@Concat¤EA{¤Entry}{<JMdict>
+}¤Entry
+	¤Parse
+}%
+
+¤newcount¤ReadingsNumber
+¤newcount¤WritingsNumber
+
+
+
+¤def¤ENTRY{%
+	¤EA¤LD@Concat¤EA{¤Entry}{<entry>
+}¤Entry
+	¤global¤ReadingsNumber=0¤relax
+	¤global¤WritingsNumber=0¤relax
+	¤Parse
+}%
+
+
+¤def¤COMMENT#1-->{%
+	¤EA¤LD@Concat¤EA{¤Entry}{<!-- #1-->
+}¤Entry
+	¤Parse
+}%
+¤def¤ENT_SEQ#1</ent_seq>{%
+	¤EA¤LD@Concat¤EA{¤Entry}{<ent_seq>#1</ent_seq>
+}¤Entry
+	¤Parse
+}
+
+%%%% Hiragana readings
+¤newcount¤HiraganaCount¤global¤HiraganaCount=0¤relax
+¤newcount¤HiraganaFromKanjiCount¤global¤HiraganaFromKanjiCount=0¤relax
+
+¤def¤R_ELE{% reading element
+	¤EA¤LD@Concat¤EA{¤Entry}{<r_ele>
+}¤Entry
+	¤Parse
+}%
+¤def¤RE_NOKANJI{% 
+	¤EA¤LD@Concat¤EA{¤Entry}{<re_nokanji/>
+}¤Entry
+	¤Parse
+}%
+¤def¤RE_RESTR #1</re_restr>{% Restrictions on the reading
+	¤EA¤LD@Concat¤EA{¤Entry}{<re_restr>#1</re_restr>
+}¤Entry
+	¤Parse
+}%
+¤def¤RE_INF #1</re_inf>{% Info on the reading
+	¤EA¤LD@Concat¤EA{¤Entry}{<re_inf>#1</re_inf>
+}¤Entry
+	¤Parse
+}%
+¤def¤RE_PRI #1</re_pri>{% Priority of the reading
+	¤EA¤LD@Concat¤EA{¤Entry}{<re_pri>#1</re_pri>
+}¤Entry
+	¤Parse
+}%
+¤def¤REB #1</reb>{% Reading
+	¤EA¤LD@Concat¤EA{¤Entry}{<reb>#1</reb>
+}¤Entry
+	¤ifcsname #1¤endcsname
+		¤EA¤LD@Concat¤EA{¤Entry}{<re_pri>JLPT¤CS #1¤EC </re_pri>
+}¤Entry
+		¤global¤advance¤HiraganaCount by1¤relax
+	¤fi
+	¤global¤advance¤ReadingsNumber by1¤relax
+	¤EA¤xdef¤CS¤the¤ReadingsNumber R¤EC{}%
+	¤EA¤xdef¤CS¤the¤ReadingsNumber RH¤EC{#1}%
+	¤EA¤EA¤EA¤LD@Concat¤EA¤EA¤EA{¤EA¤Entry¤EA}¤EA{¤EA¤CS¤the¤ReadingsNumber R¤EC}¤Entry
+	¤Parse
+}%
+¤def¤/R_ELE{%
+	¤EA¤LD@Concat¤EA{¤Entry}{</r_ele>
+}¤Entry
+	¤Parse
+}%
+
+%%%% Kanji writing
+
+¤newcount¤KanjiCount¤global¤KanjiCount=0¤relax
+¤def¤K_ELE{%
+	¤EA¤LD@Concat¤EA{¤Entry}{<k_ele>
+}¤Entry
+	¤Parse
+}%
+¤def¤KE_INF #1</ke_inf>{% Writing Info
+	¤EA¤LD@Concat¤EA{¤Entry}{<ke_inf>#1</ke_inf>
+}¤Entry
+	¤Parse
+}%
+¤def¤KE_PRI #1</ke_pri>{% Writing priority
+	¤EA¤LD@Concat¤EA{¤Entry}{<ke_pri>#1</ke_pri>
+}¤Entry
+	¤Parse
+}%
+¤def¤KEB #1</keb>{% Writing
+	¤EA¤LD@Concat¤EA{¤Entry}{<keb>#1</keb>
+}¤Entry
+	¤ifcsname #1¤endcsname
+		¤EA¤LD@Concat¤EA{¤Entry}{<ke_pri>JLPT¤CS J#1¤EC </ke_pri>
+}¤Entry
+		¤global¤advance¤KanjiCount by1¤relax
+	¤fi
+	¤global¤advance¤WritingsNumber by1¤relax
+	¤EA¤xdef¤CS¤the¤WritingsNumber WK¤EC{#1}%
+	¤Parse
+}%
+¤def¤/K_ELE{%
+	¤EA¤LD@Concat¤EA{¤Entry}{</k_ele>
+}¤Entry
+	¤Parse
+}%
+
+
+
+
+
+¤def¤SENSE #1</sense>{%
+	¤EA¤LD@Concat¤EA{¤Entry}{<sense>#1</sense>
+}¤Entry
+	¤Parse
+}%
+
+
+
+
+¤def¤INFO #1</info>{%
+	¤EA¤LD@Concat¤EA{¤Entry}{<info>#1</info>
+}¤Entry
+	¤Parse
+}%
+
+¤newcount¤Glop
+¤def¤/ENTRY{%
+	¤loop%
+	¤ifnum¤WritingsNumber>0¤relax%
+		¤ifcsname¤CS¤the¤WritingsNumber WK¤EC¤endcsname%
+			¤global¤Glop=¤ReadingsNumber¤relax%
+			¤xdef¤GlopHiragana{¤CS¤CS¤the¤WritingsNumber WK¤EC¤EC}%
+			{¤loop%
+				¤ifnum¤Glop>0¤relax%
+				¤xdef¤temparasol{¤CS¤the¤Glop RH¤EC}%
+				¤ifx¤temparasol¤GlopHiragana¤relax%
+					¤global¤advance¤HiraganaFromKanjiCount by1¤relax%
+					¤EA¤xdef¤CS¤the¤Glop R¤EC{<re_pri>JLPT¤CS J¤CS¤the¤WritingsNumber WK¤EC¤EC </re_pri>
+}%
+				¤fi%
+				¤global¤advance¤Glop by-1¤relax%
+			¤repeat}%
+		¤fi%
+		¤global¤advance¤WritingsNumber by-1¤relax%
+	¤repeat%
+	¤EA¤LD@Concat¤EA{¤Entry}{</entry>}¤Entry%
+	¤immediate¤write¤FilteredFile{¤Entry}%
+	¤xdef¤Entry{}%
+	¤Parse%
+}%
+
+
+
+¤def¤/JMDICT{%
+	¤immediate¤write¤FilteredFile{</JMdict>}%
+	¤Parse
+}%
+
+
+
+%% Macros in Parse Context
+¤Parse
+
+¤newcount¤EntryCount¤global¤EntryCount=0¤relax
+
+¤def<?xml{¤Copy¤?XML }%
+¤def<!DOCTYPE{¤Copy¤DOCTYPE }%
+¤def<!--{¤Copy¤COMMENT }%
+¤def<JMdict>{¤Copy¤JMDICT }%
+
+
+¤def<entry>{¤Copy¤ENTRY }%
+¤def<ent_seq>{¤Copy¤ENT_SEQ }%
+
+
+¤def<r_ele>{¤Copy¤R_ELE }%
+¤def<re_nokanji/>{¤Copy¤RE_NOKANJI }%
+¤def<re_restr>{¤Copy¤RE_RESTR }%
+¤def<re_inf>{¤Copy¤RE_INF }%
+¤def<re_pri>{¤Copy¤RE_PRI }%
+¤def<reb>{¤Copy¤REB }%
+¤def</r_ele>{¤Copy¤/R_ELE }%
+
+¤def<k_ele>{¤Copy¤K_ELE }%
+¤def<ke_inf>{¤Copy¤KE_INF }%
+¤def<ke_pri>{¤Copy¤KE_PRI }%
+¤def<keb>{¤Copy¤KEB }%
+¤def</k_ele>{¤Copy¤/K_ELE }%
+
+¤def<sense>{¤Copy¤SENSE }%
+
+
+
+¤def<info>{¤Copy¤INFO }%
+¤def</entry>{¤Copy¤/ENTRY }%
+
+
+¤def</JMdict>{¤Copy¤/JMDICT }%
+
+¤tracingstats=2¤relax
+
+
+¤catcode`$=11¤relax% no maths
+¤catcode`^=11¤relax%no superscript
+¤catcode`_=11¤relax% no subscript
+¤catcode`&=11¤relax% no alignement
+
+%% Letters
+
+
+
+¤catcode`@=11¤relax
+¤catcode`(=11¤relax
+¤catcode`)=11¤relax
+¤catcode`'=11¤relax
+¤catcode`"=11¤relax
+¤catcode`+=11¤relax
+¤catcode`°=11¤relax
+%¤catcode`-=11¤relax
+%¤catcode`>=11¤relax
+¤catcode`,=11¤relax
+¤catcode`;=11¤relax
+¤catcode`.=11¤relax
+¤catcode`:=11¤relax
+¤catcode`§=11¤relax
+¤catcode`*=11¤relax
+¤catcode`µ=11¤relax
+¤catcode`£=11¤relax
+¤catcode`¨=11¤relax
+¤catcode`¤#=11¤relax
+¤catcode`¤%=11¤relax
+¤catcode`¤{=11¤relax
+¤catcode`¤}=11¤relax
+¤catcode`¤ =13¤let =¤space
+¤input JMdict.xml
+¤closeout¤FilteredFile
+
+¤catcode`¤%=14¤relax
+¤catcode`¤\=0\relax
+%¤endgroup
+%%% Abandon all hope ye who enter here
+\catcode`@=11\relax
+
+%\LD@Time@Benchmark{done...}%
+
+\noindent
+Hiragana : \the\HiraganaCount
+\par\noindent
+Hiragana from Kanji : \the\HiraganaFromKanjiCount 
+\par\noindent
+Kanji : \the\KanjiCount
+\bye

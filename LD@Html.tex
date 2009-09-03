@@ -1,0 +1,237 @@
+%\LD@Core@IncludeOnce{LD@Html}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                                    Css                                                                  %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Css{
+.chapter{ 
+font-size:180\%;
+}
+.section{ 
+font-size:160\%;
+}
+.subsection{ 
+font-size:140\%;
+}
+div.concept{ 
+text-decoration:underline;
+font-size:120\%;
+}
+.CFGreen{
+padding:0px 10px 0px 10px;
+border: 1px solid \#5da93b;
+background-color:\#e5f9d1;
+}
+.CFHypGreen{
+border: 1px solid \#5da93b;
+background-color:\#f0f9e3;
+position:relative;
+top:11px;
+padding : 3px;
+}
+.ICFGreen{
+padding:0px 10px 0px 10px;
+border: 1px solid \#5da93b;
+background-color:\#e5f9d1;
+position:relative; 
+bottom:1px;
+}
+.ICFHypGreen{
+border: 1px solid \#5da93b;
+background-color:\#f0f9e3;
+position:relative;
+bottom:12px;
+padding : 3px;
+}
+.CFHypOrange{
+border: 1px solid \#d7a93b;
+background-color:\#f9f5e3;
+position:relative;
+top:11px;
+padding : 3px;
+}
+.CFOrange{
+padding:0px 10px 0px 10px;
+border: 1px solid \#d7a93b;
+background-color:\#f9f5d0;
+}
+.ICFOrange{
+padding:0px 10px 0px 10px;
+border: 1px solid \#d7a93b;
+background-color:\#f9f5d0;
+position:relative; 
+bottom:1px;
+}
+.ICFHypOrange{
+border: 1px solid \#d7a93b;
+background-color:\#f9f5e3;
+position:relative;
+bottom:12px;
+padding : 3px;
+}
+.CFHypRed{
+border: 1px solid \#F6B080;
+background-color:\#F6DCCA;
+position:relative;
+top:11px;
+padding : 3px;
+}
+.CFRed{
+padding:0px 10px 0px 10px;
+border: 1px solid \#F6B080;
+background-color:\#F6D4BD;
+}
+.ICFRed{
+padding:0px 10px 0px 10px;
+border: 1px solid \#F6B080;
+background-color:\#F6D4BD;
+position:relative; 
+bottom:1px;
+}
+.ICFHypRed{
+border: 1px solid \#F6B080;
+background-color:\#F6DCCA;
+position:relative;
+bottom:12px;
+padding : 3px;
+}
+.CFHypBlack{
+border: 1px solid \#000000;
+background-color:\#FFFFFF;
+position:relative;
+top:11px;
+padding : 3px;
+}
+.CFBlack{
+padding:0px 10px 0px 10px;
+border: 1px solid \#000000;
+background-color:\#FFFFFF;
+}
+.ICFBlack{
+padding:0px 10px 0px 10px;
+border: 1px solid \#000000;
+background-color:\#FFFFFF;
+position:relative; 
+bottom:1px;
+}
+.ICFHypRed{
+border: 1px solid \#000000;
+background-color:\#FFFFFF;
+position:relative;
+bottom:12px;
+padding : 3px;
+}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                                 Configure                                                           %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\Configure{chapter}
+%{\HCode{<div class="chapter">}}
+%{\HCode{</div>}}
+%{\HCode{<h2 class="chapterHead">}}
+%{\HCode{</h2>}} 
+
+
+
+% debug tex4ht not needed anymore
+%\Configure{eqalign}   {\HCode{<mtable columnalign="right left" class="eqalign">}}   {\HCode{</mtable>}}   {\HCode{<mtr \Hnewline class="eqalign">}}   {\IgnorePar\HCode{</mtr>}}   
+%{\HCode{\ifnum \HCol=3 <mtd\Hnewline       class="eqalign3"></mtd>\fi       <mtd \Hnewline class="eqalign\HCol">}}   {\HCode{</mtd>}} 
+
+
+%\Configure{halign}   {\HCode{<mtable>}}  {\HCode{</mtable>}}   {\HCode{<mtr \Hnewline class="eqalign">}}   {\IgnorePar\HCode{</mtr>}}  {\HCode{ <mtd>}}   {\HCode{</mtd>}}
+
+%\catcode`\:=11
+%\Configure{halign}{\EndP\halignTB{halign}} {\HCode{</mtable>}} \R:HA\r:HA\D:HA\d:HA
+%\catcode`\:=12
+
+%\Configure{writetoc}{}
+\Configure{crosslinks} {[} {]~} {Suivant} {Pr\'ec\'edent} {Fin pr\'ec\'edente} {D\'ebut} {Fin} {Sommaire}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                                 TOC                                                                    %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%% overriding Eplain macros
+
+
+\def\@indexitem{\begingroup
+ \@indexitemsetup
+  \leftskip = 0pt
+  \aboveindexitemskip
+  \penalty-100 % Encourage page breaks before items.
+  \def\par{\endgraf\endgroup\nobreak}%
+}%
+\def\@indexsubitem{%
+  \@indexitemsetup
+  \HCode{&nbsp;&nbsp;&nbsp;&nbsp;}%% OL %%\leftskip = 2em
+}%
+\def\@indexsubsubitem{%
+  \@indexitemsetup
+\HCode{&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}%% OL %%\leftskip = 2em
+}%
+\def\@indexitemsetup{%
+ \HCode{<br />}%% OL %% \par
+  \hangindent = 1em
+  \raggedright
+  \hyphenpenalty = 10000
+  \hookrun{indexitem}%
+}%
+
+
+\NewSection\CutSection{}
+\long\def\Section #1, #2.{\CutSection{}\init{\titretrois}\ifSecLabelEq\init{\eqnumber}\fi
+\ifHtml\noindent\writetocentry{section}{#2}\EndP\HCode{<div class="noindent"><span class="section">}{\fontetitredeuxb\the\titreun.\incr{\titredeux}.\ \fontetitredeuxb#2}\HCode{</span></div>}\Par\else 
+\ifdim\lastskip<\bigskipamount\removelastskip\bigskip\fi
+                                    \vskip0pt plus.001\vsize\penalty-150\vskip0pt plus-.01\vsize
+                                     \init{\titretrois}\writetocentry{section}{#2}{\noindent\fontetitredeuxb
+                                      \the\titreun.\incr{\titredeux}.\ \fontetitredeuxb#2}\nobreak\smallskip\par
+%                                       \writetocentry{section}{#2}\definexref{§#1}{\the\titreun.\the\titredeux}{}\definexref{ǧ#1}{#2}{}\definexref{ǧ§#1}{\the\pageno}{}%
+\fi}
+
+
+
+%\Configure{@HEAD}{\HCode{%
+%<link rel="stylesheet" type="text/css" href="Mathematicon.css" />\Hnewline
+%%<link rel="stylesheet" type="text/css" href="tex-live.css" />\Hnewline
+%}}
+
+\NewSection\CutChapter{}
+\long\def\Chapter #1, #2.{\CutChapter{}\init{\titredeux}\ifSecLabelEq\init{\eqnumber}\fi\ifHtml\noindent\writetocentry{chapter}{#2}\EndP\ifCenteredchapter\HCode{<div class="centerline">}\else\HCode{<div class="flushleft">}\fi
+\HCode{<span class="chapter">}{\fontetitreun\incr{\titreun}.\ \fontetitreun #2}\HCode{</span></div>}\Par\else 
+\removelastskip\par\bigskip\bigskip\goodbreak\vskip0pt plus.01\vsize\penalty-200\vskip0pt plus-.01\vsize        
+                                      \goodbreak\noindent\writetocentry{chapter}{#2}{\ifCenteredchapter\parindent0mm\raggedcenter\fi\fontetitreun\incr{\titreun}.\ \fontetitreun #2\par}\nobreak
+%                                       \medskip\definexref{§#1}{\the\titreun}{}\definexref{ǧ#1}{#2}{}\definexref{ǧ§#1}{\the\pageno}{}%
+\fi}
+
+
+
+%
+% \Configure{Section} {}{}
+%    {\advance\c by1\HCode{<h2>}[\the\c]}
+%    {\HCode{</h2>}}
+\CutAt{CutChapter,CutChapter}  
+%\TocAt{Chapter,Section}
+\ConfigureToc{Section} {} {$\bullet$~}  {}  {~~ }
+
+
+%\def\c#1{\HCode{&ccedil;}}%
+
+\def\MakeRGBcolor #1=#2.{\expandafter\def\csname#2\endcsname##1{\ifmathml
+\HCode{<mstyle mathcolor="\##1">}##1\HCode{</mstyle>}\else
+\HCode{<span style="color:\##1;">}##1\HCode{</span>}\fi}}
+
+
+\def\tocchapterentry#1#2{\line{\bf #1}}
+\def\tocsectionentry#1#2{\line{\quad\HCode{&nbsp;&nbsp;}\sl #1}}
+\def\tocsubsectionentry#1#2{\line{\qquad\HCode{&nbsp;&nbsp;&nbsp;&nbsp;}\rm #1}}
+\def\PDF#1{}%

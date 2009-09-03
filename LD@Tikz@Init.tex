@@ -1,0 +1,24 @@
+
+% Debug tikz
+\font\ninerm=cmr9% prerequisite Here
+\font\texttt=cmr10
+\font\scriptsize=cmr7
+\font\textsf=cmr10
+\def\itshape{} % need this in the er package
+\def\RequirePackage#1{}
+\let\ConfigureEnv\Configure
+%
+
+
+\input tikz.tex
+\usetikzlibrary{petri,er,mindmap,arrows,trees,shapes,snakes,matrix,patterns,topaths,automata,backgrounds,plothandlers,plotmarks,fit,positioning,decorations.text}
+\input pgffor.tex
+\input pgfbaseimage.tex
+\input pgfbasepatterns.tex
+
+%% Debug Tikz
+\catcode`@=11\relax
+\def\f@size{10pt}% size of tikz fonts
+\def\small{\tenrm}
+\def\@flushglue{10pt}
+\endinput

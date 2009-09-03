@@ -1,0 +1,436 @@
+\catcode`@=11
+%Sort tex macros%sort.tex                        Jan 93
+%Shorthands
+\let\ag=\aftergroup
+\let\ea=\expandafter\let\nx=\noexpand
+%Counters
+\newcount\n\newcount\k\newcount\kk\n=0
+\newcount\kzero\kzero0 %Bias value
+\newcount\pk\newcount\pkone%Used in sortcs
+\newcount\frst%First value of range
+\newcount\lst %Last value of range
+\newcount\slst%Successor \lst
+\newcount\dif %Difference \lst-\frst
+\newcount\nw  %Number of words
+\newcount\nc  %Number of characters/comp
+\newcount\numex %Number of exchanges
+\newcount\rndval%Random number
+\newcount\rndnum%Seed random generator
+\newcount\rndtmp%Temporary value
+\newcount\status%Status comparison
+%Newif-s
+\newif\ifcontinue%controls loops
+\newif\iffound%locating accent cs
+\newif\ifproof\prooftrue
+%
+%Storing: from copy
+\def\seq#1\qes{\k0 \fifow#1 \wofif{} }
+%Auxiliaries: FIFO
+\def\fifow#1 {\ifx\wofif#1\n\k\wofif\fi
+ \processw{#1}\fifow}
+\def\wofif#1\fifow{\fi}
+\def\processw#1{\advance\k1 \ea
+ \gdef\csname\the\k\endcsname{#1}}
+%
+%Storing: from file
+\newread\rec
+\def\storefrom#1{%#1 is file name
+ \openin\rec=#1 \k\kzero \continuetrue
+ \loop\ifeof\rec\continuefalse\fi
+ \ifcontinue\advance\k1{}\read\rec to\xyz
+  \ea\let\csname\the\k\endcsname=\xyz
+ \repeat\advance\k-1\n\k\closein\rec}
+%
+%Storing: random numbers
+\def\storerandomn#1{%#1 number of numbers
+ \n#1\k0
+ \loop\ifnum\k<\n\advance\k1 \rnd\ea
+  \xdef\csname\the\k\endcsname{\the\rndval}
+ \repeat}
+%
+%With, due to Reid, 1987
+\def\rnd{\global\multiply\rndnum371{}%
+ \global\advance\rndnum1{}%
+ \ifnum\rndnum>99999
+  \rndtmp\rndnum \divide\rndtmp100000
+  \multiply\rndtmp100000
+  \global\advance\rndnum-\rndtmp
+ \fi\global\rndval\rndnum
+ \global\divide\rndval1000 }
+%
+%Storing: random words
+\def\storerandomw#1{%#1 number of words
+ \n#1\nw\n\def\defarr{\ea\gdef
+  \csname\the\nw\endcsname}
+ {\loop\ifnum0<\nw{\ag\defarr\ag{%
+   \randomword}}\advance\nw-1
+ \repeat}}%end s-r-w.
+%
+\def\randomword{\rnd \nc\rndval
+ \divide\nc15 \advance\nc2
+ \loop\ifnum0<\nc\randomchar
+   \advance\nc-1
+ \repeat}%end r-word
+%
+%Random character is modified
+\def\randomchar{\rnd
+ \multiply\rndval29 \divide\rndval100
+ \ifnum26=\rndval\rndval0 \fi
+ \ifnum26<\rndval\rndval4 \fi
+%Mod cgl: I \ag-ed the letter
+\ea\ag\ifcase\rndval
+ a\or b\or c\or d\or e\or f\or g\or h\or
+ i\or j\or k\or l\or m\or n\or o\or p\or
+ q\or r\or s\or t\or u\or v\or w\or x\or
+ y\or z\fi}%end r-char
+%
+%Typeset
+%Parameters: Separators
+\def\sepn{, }%Number separator
+\def\sepw{ } %Word separator
+\let\sep\sepw
+%
+\def\prc#1{\init{#1}\def\prc##1{%
+ \ifnum\lst=##1{}\else\ifnum\slst=##1{}%
+  \lst\slst\advance\slst1{}\else
+  \prtfl\sepn\init{##1}\fi\fi}}
+%
+\def\init#1{\frst=#1\lst=#1\slst=#1{}%
+   \advance\slst1{}}
+%
+%Print range: \frst-\lst (or \lst).
+\def\prtfl{\the\frst\ifnum\frst<\lst
+ \advance\frst1{}\ifnum\frst=\lst\sepn
+ \else\nobreak--\nobreak\fi\the\lst\fi}
+%
+%Printing sequences
+\def\prts{{\k\kzero%print \1,...\n
+ \def\sep{\let\sep=\sepw}%
+ \loop\ifnum\k<\n\advance\k1
+  \sep\csname\the\k\endcsname
+ \repeat}}%end \prts
+%
+\let\prtw=\prts
+%
+\def\prtn{{\k\kzero%Print number sequence
+ \loop\ifnum\k<\n\advance\k1
+  \ea\prc\csname\the\k\endcsname
+ \repeat\prtfl}}%end \prtn
+%
+\def\typind#1{%#1 a def
+ \ea\splittot#1.%
+ \ifcase\digit\word\or
+         {\tt\word}\or
+  {\tt\char92\word}\or
+  $\langle\hbox{\word}\rangle$\fi{}
+  \pagenrs}
+%
+\def\splittot#1 !#2 #3.{\def\word{#1}%
+  \chardef\digit=#2{}\def\pagenrs{#3}}
+%
+\def\prtind{{\def\\{\hfil\break}\k\kzero
+ \def\sep{\let\sep\sepw}%
+ \loop\ifnum\k<\n\advance\k1
+  \sep\ea\typind\csname\the\k\endcsname
+ \repeat}}
+%
+%Sorting in O(nlog n)
+%Numbers
+\def\sortn{\let\cmp\cmpn\sort\prtn}
+%
+%ASCII words
+\def\sortaw{\let\cmp\cmpaw\sort\prtw}
+%
+%Words (with accents)
+\def\sortw{\let\cmp\cmpw{\accdef\sort}\prtw}
+%
+\def\sort{\heapsort}
+%
+%Paramaters: ij and accent string
+\def\accstr{\`\'\"\^\c}
+%
+\def\accdef{\def\i{i}\def\j{j}%
+ \def\'##1{##1a}\def\`##1{##1g}%
+ \def\"##1{##1t}\def\^##1{##1h}%
+ \def\c##1{##1c}}
+%
+\def\ij{ij}
+%
+%Sorting parameters: exchange macro
+\def\xch#1#2{%#1, #2 counter variables
+ \ea\let\ea\auxone\csname\the#1\endcsname
+ \ea\let\ea\auxtwo\csname\the#2\endcsname
+ \ea\global\ea\let\csname\the#2\endcsname
+ \auxone
+ \ea\global\ea\let\csname\the#1\endcsname
+ \auxtwo}
+%
+%Sorting parameters: number comparison
+\def\cmpn#1#2{%#1, #2 are def-s
+%Result: \status= 0, 1, 2, if
+%        \val{#1} =, >, < \val{#2}
+ \ifnum#1=#2\global\status0 \else
+   \ifnum#1>#2\global\status1 \else
+                \global\status2 \fi\fi}
+%
+%Parameters: comparison of words
+\def\cmpw#1#2{%#1, #2 are def-s
+%Result: \status= 0, 1, 2, if
+%        \val{#1} =, >, < \val{#2}
+ \let\nxt\nxtw\cmpc#1#2}
+%
+\def\cmpaw#1#2{%#1, #2 are defs with as
+%replacement text the words.
+%Result: \status= 0, 1, 2, if
+%        \val{#1} =, >, < \val{#2}
+ \let\nxt\nxtaw\cmpc#1#2}
+%
+\def\cmpc#1#2{%#1, #2 are def-s
+%Result: \status= 0, 1, 2, if
+%        \val{#1} =, >, < \val{#2}
+\ifproof\global\advance\nc1
+        \let\aa#1\let\bb#2\fi
+ \global\status0 \continuetrue
+ {\loop\ifx\empty#1\continuefalse\fi
+       \ifx\empty#2\continuefalse\fi
+  \ifcontinue\nxt#1\nxtt\nxt#2\nxtu
+             \@lge\nxtt\nxtu
+  \repeat}\ifnum0=\status
+ \ifx\empty#1\ifx\empty#2\else
+                  \global\status2 \fi
+ \else\ifx\empty#2\global\status1 \fi
+ \fi\fi
+ \ifproof\immediate\write16{\aa
+  \ifnum0=\status=\else
+   \ifnum1=\status>\else
+                  <\fi\fi\bb.}
+ \fi%end ifproof
+}
+%
+\def\@lge#1#2{%#1 and #2 letter values
+%Result: \status= 0, 1, 2, if
+%              #1 =, >, <  #2.
+%and \continuefalse if #1=/#2.
+ \ifnum#1=#2{}\else\continuefalse
+  \ifnum#1<#2\global\status2 \else
+             \global\status1 \fi
+ \fi}
+%
+\def\nxtw#1#2{\def\pop##1##2\pop{%
+ \gdef#1{##2}\def\head{##1}}%head and tail
+ \ea\pop#1\pop%split in head and tail
+ \ea\loc\head\accstr%\head is an accent cs?
+ \iffound\let\acs\head
+  \ea\pop#1\pop%next head and tail
+  \ea\let\ea#2\csname ot\acs\head\endcsname
+ \else\ea\let\ea#2\csname ot\head\endcsname
+ \fi}
+%
+\def\loc#1#2{\def\locate##1#1##2\end
+ {\ifx\empty##2\empty\foundfalse
+ \else\foundtrue\fi}\ea\locate#2.#1\end}
+%
+%Parameters:  for ASCII words
+\def\nxtaw#1#2{%Result: value of first
+%letter of string supplied in #1 is delivered
+%in #2. (To be used as a number (\chardef)).
+%#1, #2 are control sequences.
+ \def\pop##1##2\pop{\gdef#1{##2}%
+  \chardef#2=`##1{}}\ea\pop#1\pop}
+%
+\def\cmpir#1#2{%#1, #2 defs
+%Result: \status= 0, 1, 2 if
+%        \val{#1} =, >, < \val{#2}
+ \ea\ea\ea\decom\ea#1\ea;#2.}
+%
+\def\decom#1 !#2 #3;#4 !#5 #6.{%
+ \def\one{#1}\def\four{#4}\cmpaw\one\four
+ \ifnum0=\status%Compare secondary keys
+   \ifnum#2<#5{}\global\status2{}\else
+     \ifnum#2>#5{}\global\status1{}\else
+                %Compare tertiary keys
+       \ifnum#3<#6{}\global\status2{}\else
+         \ifnum#3>#6{}\global\status1{}\fi
+       \fi
+     \fi
+   \fi
+ \fi}
+%
+\def\red{%Reduction of \1,...,\n
+ \k0\kk0\let\refer\empty
+ \loop\ifnum\k<\n\advance\k1
+  \ea\let\ea\record\csname\the\k\endcsname
+  \ea\splitwn\record.%
+  \ifx\refer\word%extend with number
+    \ea\xdef\csname\the\kk\endcsname{%
+       \csname\the\kk\endcsname, \num}%
+  \else%write record to \kk
+   \advance\kk1\let\refer\word\ea\global
+   \ea\let\csname\the\kk\endcsname\record
+  \fi
+ \repeat\n=\kk}
+%
+\def\redrng{%Reduction of \1,...,\n, with
+%range representation of page numbers
+ {\k1\kk0
+ \ea\let\ea\record\csname\the\k\endcsname
+ \ea\splitwn\record.\let\refer\word
+ \let\nrs\empty\prcrng\num
+ \loop\ifnum\k<\n\advance\k1
+  \ea\let\ea\record\csname\the\k\endcsname
+  \ea\splitwn\record.%
+  \ifx\refer\word%extend \nrs with number
+    \prcrng\num
+  \else%write record to \kk
+    \advance\kk1 \strnrs
+    \ea\xdef\csname\the\kk\endcsname{\refer{}
+      \nrs}\let\nrs\empty\init\num\prcrng\num
+    \let\refer\word
+  \fi
+ \repeat\ifnum1<\n
+  \advance\kk1 \strnrs
+  \ea\xdef\csname\the\kk\endcsname{\word{}
+    \nrs}
+ \global\n\kk\fi}}
+%
+\def\prcrng#1{\init{#1}\def\prcrng##1{%
+ \ifnum##1=\lst\else\ifnum##1=\slst
+  \lst\slst\advance\slst1 \else
+  \strnrs\init{##1}\fi\fi}}
+%
+\def\strnrs{\dif\lst\advance\dif-\frst
+ \edef\nrs{\ifx\nrs\empty\else\nrs\sepn\fi
+  \the\frst\ifnum0<\dif
+   \ifnum1=\dif\sepn\the\lst
+   \else\nobreak--\nobreak\the\lst
+   \fi
+  \fi}}
+%
+\def\splitwn#1 !#2 #3.{\def\word{#1 !#2}%
+ \def\num{#3}}
+%
+\def\getdig#1 !#2 #3.{\def\dig{#2}}
+%
+\def\sortcs{\global\k0\global\pk\n
+\global\pkone\pk\global\advance\pkone1
+%Invariant: 1:k non-cs; pk+1:n control seq-s
+\loop\global\advance\k1
+\ifnum\k<\pkone
+ \ea\ea\ea\getdig\csname\the\k\endcsname.%
+ \if2\dig{\continuetrue
+  \loop
+   \ifnum\k=\pk\continuefalse
+   \else\ea\ea\ea\getdig\csname\the\pk
+                          \endcsname.%
+    \if2\dig
+    \else\xch\k\pk\continuefalse
+    \fi
+   \fi\global\pkone\pk\global\advance\pk-1
+  \ifcontinue
+  \repeat}%
+ \fi
+\repeat}%Result\1:\pk non-cs, \pkone:\n cs
+%
+%Parameters: Ordering table
+\chardef\ota=32 \chardef\otA=32
+ \chardef\otaa=33 \chardef\otag=33
+ \chardef\otat=34 \chardef\otah=35
+\chardef\otb=39 \chardef\otB=39
+\chardef\otc=46 \chardef\otC=46
+ \chardef\otcc=47 \chardef\otcc=47
+\chardef\otd=53 \chardef\otD=53
+\chardef\ote=60 \chardef\otE=60
+ \chardef\otea=61 \chardef\oteg=62
+ \chardef\otet=63 \chardef\oteh=64
+\chardef\otf=67 \chardef\otF=67
+\chardef\otg=74 \chardef\otG=74
+\chardef\oth=81 \chardef\otH=81
+\chardef\oti=88 \chardef\otI=88
+ \chardef\otit=91 \chardef\otih=92
+\chardef\otj=95 \chardef\otJ=95
+ \chardef\otjt=98
+\chardef\otk=102 \chardef\otK=102
+\chardef\otl=109 \chardef\otL=109
+\chardef\otm=116 \chardef\otM=116
+\chardef\otn=123 \chardef\otN=123
+\chardef\oto=130 \chardef\otO=130
+ \chardef\otoa=131 \chardef\otog=132
+ \chardef\otot=133 \chardef\otoh=134
+\chardef\otp=137 \chardef\otP=137
+\chardef\otq=143 \chardef\otQ=143
+\chardef\otr=150 \chardef\otR=150
+\chardef\ots=157 \chardef\otS=157
+\chardef\ott=164 \chardef\otT=164
+\chardef\otu=171 \chardef\otU=171
+ \chardef\otut=174 \chardef\otuh=175
+\chardef\otv=178 \chardef\otV=178
+\chardef\otw=185 \chardef\otW=185
+\chardef\otx=192 \chardef\otX=192
+\chardef\otij=199 \chardef\otIJ=199
+\chardef\oty=200 \chardef\otY=200
+\chardef\otz=206 \chardef\otZ=206
+%\endinput                   %cgl@rug.nl
+%
+%%%%%%%%%% heap sort macro      %%%%%%%%%%
+%heapsort.tex                    Jan, 93
+\newcount\n\newcount\lc\newcount\r
+\newcount\ic\newcount\uone
+\newcount\jc\newcount\jj\newcount\jjone
+\newif\ifgoon
+%Non-descending sorting
+\def\heapsort{%data in \1 to \n
+\r=\n\heap\ic=1{}%
+{\loop\ifnum\r>1{}\xch\ic\r
+   \advance\r-1{}\sift\ic\r
+\repeat}}
+%
+\def\heap{%Transform \1..\n into heap
+ \lc=\n\divide\lc2{}\advance\lc1{}%
+ {\loop\ifnum\lc>1{}\advance\lc-1{}%
+  \sift\lc\n\repeat}}
+%
+\def\sift#1#2{%#1, #2 counter variables
+ \jj=#1\uone=#2\advance\uone1{}\goontrue
+ {\loop\jc=\jj \advance\jj by\jj
+  \ifnum\jj<\uone
+   \jjone=\jj \advance\jjone1{}%
+   \ifnum\jj<#2{}\cmpval\jj\jjone
+         \ifnum2=\status\jj=\jjone\fi\fi
+   \cmpval\jc\jj\ifnum2>\status\goonfalse\fi
+ \else\goonfalse\fi
+\ifgoon\xch\jc\jj\repeat}}
+%
+\def\cmpval#1#2{%#1, #2 counter variables
+%Result: \status= 0, 1, 2 if
+%        \val{#1} =, >, < \val{#2}
+ \ea\let\ea\aone\csname\the#1\endcsname
+ \ea\let\ea\atwo\csname\the#2\endcsname
+ \cmp\aone\atwo}
+%\endinput                    %cgl@rug.nl
+%
+%%%%%%%%%% quick sort macro      %%%%%%%%%%
+\newcount\low\newcount\up\newcount\m
+\def\quicksort{%Values given in
+%\low,...,\up are sorted, non-descending.
+%Parameters: \cmp, comparison.
+ \ifnum\low<\up\else\brk\fi
+%\refval, a reference value selected at random.
+ \m=\up\advance\m-\low%Size-1 of array part
+ \ifnum10<\m\rnd\multiply\m\rndval
+   \divide\m99{}\advance\m\low \xch\low\m
+ \fi
+ \ea\let\ea\refval\csname\the\low\endcsname
+ \m=\low\k=\low\let\refvalcop=\refval
+ {\loop\ifnum\k<\up\advance\k1{}%
+   \ea\let\ea\oneqs\csname\the\k\endcsname
+   \cmp\refval\oneqs\ifnum1=\status
+      \global\advance\m1{}\xch\m\k\fi
+   \let\refval=\refvalcop
+  \repeat}\xch\low\m
+ {\up=\m\advance\up-1{}\quicksort}%
+ {\low=\m\advance\low1{}\quicksort}\krb}
+%
+\def\brk#1\krb{\fi}\def\krb{\relax}
+%\endinput                      %cgl@rug.nl
+%
+\catcode`@=12

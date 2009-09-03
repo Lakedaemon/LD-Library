@@ -1,0 +1,691 @@
+\catcode`@=11\relax
+\input LD@Header.tex
+\input LD@Library.tex
+\input LD@Typesetting.tex
+\ifHtml
+\Css{
+.tikz{ 
+	float: left;
+	clear: both;
+	padding:20px;
+}}
+\Css{
+.LD{
+	float: left;
+	padding: 20px;
+}}
+\fi
+%\Students
+\ifHtml
+\font\LD@Font@Arial=cmr10
+\else
+\font\LD@Font@Arial="Arial" at 10pt
+\fi
+
+
+\newcount\LD@Svg@Count\global\LD@Svg@Count=1\relax
+\long\def\LD@Svg@Test#1\LD@End@Svg@Test{{%
+	\ifHtml
+		\noindent\EndP
+		\HCode{<div class="tikz" align="center"><h2>ForeignElement\the\LD@Svg@Count</h2>}%
+		{%
+			\tikzstyle{every picture}=[font=\SvgText,tex4ht node/escape=true]%
+			 #1%
+		}%
+		\HCode{</div>}%	
+		\HCode{<div class="LD" align="center"><h2>SvgText \the\LD@Svg@Count</h2>}%
+		{%
+			%\tikzstyle{every picture}=[font=\SvgText,text only=true]%
+			#1%
+		}%
+		\HCode{</div>}%
+		\Par
+	\else
+		\centerline{#1}
+	\fi
+	\global\advance\LD@Svg@Count by1\relax
+}}%
+
+
+
+\font\SvgText=cmr10\relax
+%\everypar={}
+
+\LD@Svg@Test
+\tikzpicture
+\node [rectangle,fill=red!20] at (0,0) {A};
+\node [rectangle,fill=red!20] at (2,0) {a};
+\endtikzpicture
+\LD@End@Svg@Test
+
+\LD@Svg@Test
+\tikzpicture
+\draw (0,0) node[inner sep=0pt,draw] {tight}
+(0cm,2em) node[inner sep=5pt,draw] {loose}
+(0cm,4em) node[fill=red!20] {default};
+\draw (3,0) node[inner sep=0pt,draw] {TIGHT}
+(3cm,2em) node[inner sep=5pt,draw] {LOOSE}
+(3cm,4em) node[fill=red!20] {DEFAULT};
+\draw (6,0) node[inner sep=0pt,draw] {$tight$}
+(6cm,2em) node[inner sep=5pt,draw] {$loose$}
+(6cm,4em) node[fill=red!20] {$default$};
+\draw (9,0) node[inner sep=0pt,draw] {$TIGHT$}
+(9cm,2em) node[inner sep=5pt,draw] {$LOOSE$}
+(9cm,4em) node[fill=red!20] {$Default$};
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+%%%%%%%%%%%% Test SVG 001%%%%%%%%%%%%%%
+
+\LD@Svg@Test
+\tikzpicture
+\node [rectangle,fill=red!20] at (2,0) {a};
+\node [ellipse,fill=blue!20] at (0,0) {$a$};
+\endtikzpicture
+\LD@End@Svg@Test
+%%%%%%%%%%%% Test SVG 001%%%%%%%%%%%%%%
+\LD@Svg@Test
+\tikzpicture
+   \draw (0,0) circle (1mm);  % b.north will lie on the center of this circle
+ \pgfmatrix{rectangle}{text}{mymatrix}{\pgfusepath{}}{\pgfpointanchor{b}{north}}{\let\&=\pgfmatrixnextcell}
+   {
+     \draw (0,0) circle (1cm); \& \node (a) [draw] {Hallo}; \\
+     \node (b) [draw] {Welt};  \& \draw (0,0) circle (5mm); \\
+   }
+   \draw [->] (a) -- (b);
+ \endtikzpicture
+\LD@End@Svg@Test
+
+\LD@Svg@Test
+\tikzpicture
+\matrix [matrix of math nodes,ampersand replacement=\&,nodes={circle,draw},nodes in empty cells]
+{
+a_8 \& \& a_6 \\
+a_3 \& \& a_7 \\
+a_4 \& a_9 \& \\
+};
+\endtikzpicture
+\LD@End@Svg@Test
+
+\LD@Svg@Test
+\tikzpicture
+\node [ellipse,fill=red!20] at (2,0) {a};
+\node [rectangle,fill=blue!20] at (0,0) {a $a^b$};
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+
+%%%%%%%%%%%% Test SVG %%%%%%%%%%%%%%
+
+\LD@Svg@Test
+\EA\def\CS Pos0\EC{0}
+\EA\def\CS Pos1\EC{0.15}
+\EA\def\CS Pos2\EC{0.37}
+\EA\def\CS Pos3\EC{0.63}
+\EA\def\CS Pos4\EC{0.85}
+\EA\def\CS Pos5\EC{1}
+\EA\def\CS Posout0\EC{0}
+\EA\def\CS Posout1\EC{0.5}
+\EA\def\CS Posout2\EC{1}
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+%
+\tikzpicture
+\tikzstyle{Classe}=[rectangle,rounded corners,minimum width=3.5cm,draw]
+\tikzstyle{Option}=[ellipse,draw,inner sep=2pt]
+\tikzstyle{Diplome}=[starburst,inner sep=1pt,draw]
+\tikzstyle{Travail}=[ellipse,inner sep=2pt,draw]
+\tikzstyle{Cursus}=[-triangle 60,very thick,draw]
+\path (3,2) .. controls (4,-2) and  (10,-2) .. (11,2) \foreach \p in {0,1,...,5} {node[pos={\CS Pos\p\EC}] (Node\p) {}};
+\node [Diplome,fill=green!40] (BacS) at (Node0)  {Bac S};
+\node [Diplome,fill=green!40] (BacSTL) at  (Node1) {Bac STL};
+\node [Diplome,fill=green!40] (BacSTI) at (Node2) {Bac STI};
+\node [Diplome,fill=green!40] (BacES) at (Node3) {Bac ES};
+\node [Diplome,fill=green!40] (BacSMS) at (Node4) {Bac SMS};
+\node [Diplome,fill=green!40] (BacPRO) at (Node5) {Bac Pro};
+\node (Cross) at (7,2.5) {};
+\node[Classe,fill=blue!30,minimum width=4cm] (HPE1) at (7,2.5) {S.T.S. HPE 1\`ere ann\'ee};
+\node[Classe,fill=blue!20,minimum width=4cm] (HPE2) at (7,3.8) {S.T.S. HPE 2\`eme ann\'ee};
+\node [Diplome,fill=green!20,inner sep=4pt] (BTSHPE) at (7,5.5) {B.T.S. HPE};
+\path (4,7) .. controls (5,8) and  (9,8) .. (10,7) \foreach \p in {0,1,2} {node[pos={\CS Posout\p\EC}] (Nod\p) {}};
+\node [Travail,fill=red!60] (VieActive) at (Nod0) {Vie Active};
+\node [rectangle,draw,fill=red!20] (LicensePro) at (Nod1) {Licence pro};
+\node [rectangle,draw,fill=red!20, text width=2.55cm, text badly centered]  (TitreCertifie) at (Nod2) {Titre~certifi\'e de~niveau~$2$};
+\pgfonlayer{background}%
+\draw[Cursus,shorten >=1mm] (HPE1) -- (HPE2)-- (BTSHPE);
+\draw[very thick] (Node0) .. controls +(1,-0.5) and (7,0) .. (HPE1);
+\draw[very thick] (Node1) .. controls +(1.5,-0.5) and (7,-0.2) .. (HPE1);
+\draw[very thick] (Node2) .. controls +(0.4,0.25) and (7,-0.5) .. (HPE1);
+\draw[very thick] (Node3) .. controls +(-0.4,0.25) and (7,-0.5) .. (HPE1);
+\draw[very thick] (Node4) .. controls +(-1.5,-0.5) and (7,0) .. (HPE1);
+\draw[very thick] (Node5) .. controls +(-1,-0.5) and (7,0) .. (HPE1);
+\draw[very thick,Cursus,shorten >=1mm] (BTSHPE.150) -- (VieActive. -8);
+\draw[very thick,Cursus,shorten >=1mm] (BTSHPE) -- (LicensePro);
+\draw[very thick,Cursus,shorten >=1mm] (BTSHPE.30) -- (TitreCertifie.south west);
+\endpgfonlayer
+\endtikzpicture
+\LD@End@Svg@Test
+
+%%%%%%%%%%%% Test SVG 002%%%%%%%%%%%%%%
+
+\LD@Svg@Test
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+%
+\tikzpicture[]
+\tikzstyle{Classe}=[rectangle,rounded corners,minimum width=3.5cm,draw]
+\tikzstyle{Option}=[ellipse,draw,inner sep=2pt]
+\tikzstyle{Diplome}=[starburst,inner sep=4pt,draw]
+\tikzstyle{Cursus}=[-triangle 60,very thick,draw]
+\node[Classe,fill=blue!40,minimum width=4cm] (2nde) at (2,-2.4) {Seconde G\'en\'erale};
+\node[Option,fill=red!20] (SI) at (1,-1.7) {\sevenpts SI};
+\node[Option,fill=red!20] (SVT) at (2,-1.7) {\sevenpts SVT} ;
+\node[Option,fill=red!20] (PC) at (3,-1.7) {\sevenpts PC} ;
+\node [Diplome,fill=green!20] (BacS) at (2,1.4) {Bac S};
+\draw[Cursus,shorten >=1mm] (2nde.163) .. controls ++(0,0) .. (SI)  .. controls (0.5,0) .. (BacS.210);
+\draw[Cursus,shorten >=1mm] (2nde.17) .. controls ++(0,0) .. (PC)  .. controls (3.5,0) .. (BacS.330);
+\draw[Cursus,shorten >=0.3cm] (2nde) -- (SVT) -- (BacS);
+\node[Classe,fill=blue!30] (1ereS) at (2,-1) {Premi\`ere S};
+\node[Classe,fill=blue!20] (TS) at (2,0) {Terminale S};\pgfonlayer{background}
+\node[rectangle, rounded corners,fill=red!40,color=green!60,pattern color=green!40,draw,pattern=north west lines, fit=(SI) (SVT) (PC),inner sep=3pt] (options) {};
+\endpgfonlayer
+\endtikzpicture
+\LD@End@Svg@Test
+
+%%%%%%%%%%%% Test SVG 003%%%%%%%%%%%%%%
+
+\LD@Svg@Test
+	\tikzstyle{every node}=[rounded corners=0pt,anchor=center,text centered]%
+	\tikzpicture[rounded corners=0pt,anchor=center,text centered]
+		\scope
+			\node [text width=2cm, text height=10pt,rectangle, draw,node distance=18pt,inner xsep=0pt,inner ysep=4pt] (aa) {$\sc P$} ;
+			\node [text width=2cm, text height=10pt,rectangle, draw,right of=aa,node distance=2cm,inner xsep=0pt,inner ysep=4pt] (bb) {Vrai} ;
+			\node [text width=2cm, text height=10pt,rectangle, draw,right of=bb, node distance=2cm,inner xsep=0pt,inner ysep=4pt] (cc) {Faux} ;
+			\node [text width=2cm, text height=10pt,rectangle, draw,below of=aa, node distance=18pt,inner xsep=0pt,inner ysep=4pt] (aaa) {$\overline{\sc P}$} ;
+			\node [text width=2cm, text height=10pt,rectangle, draw,right of=aaa,node distance=2cm,inner xsep=0pt,inner ysep=4pt] (bbb) {Faux} ;
+			\node [text width=2cm, text height=10pt,rectangle, draw,right of=bbb, node distance=2cm,inner xsep=0pt,inner ysep=4pt] (ccc) {Vrai} ;
+		\endscope
+	\endtikzpicture
+\LD@End@Svg@Test
+%%%%%%%%%%%% Test SVG 004%%%%%%%%%%%%%%
+
+\LD@Svg@Test
+\tikzpicture
+\clip (-1,-1) rectangle (8,4.5);
+\draw[-] (-0.2,0) -- (6.5,0) coordinate (x axis);
+\draw[-] (0,-0.2) -- (0,4.5) coordinate (y axis);
+\draw[-,thick,dotted] (2,2.5) -- (6,4) ;
+\draw[-,thick,dotted] (4,1.5) -- (6,4);
+\draw[-open triangle 60,thick] (0,0) -- node [pos=0.4,anchor=east] {$\vec j$} (0,1);
+\draw[-open triangle 60,thick] (0,0) -- node [pos=0.4,anchor=north] {$\vec i$} (1,0);
+\draw[-triangle 60,thick] (0,0) --  (2,2.5) node [anchor=south east] {$M (s)$};
+\draw[dashed] (2,2.5) -- (0,2.5) node [color=red,anchor=east] {$b$};
+\draw[dashed] (2,2.5) -- (2,0) node [color=red,anchor=north] {$a$};
+\draw[-triangle 60,thick] (0,0) --  (4,1.5) node [anchor=north west] {$P (z)$};
+\draw[dashed] (4,1.5) -- (0,1.5) node [color=red,anchor=east] {$d$};
+\draw[dashed] (4,1.5) -- (4,0) node [color=red,anchor=north] {$c$};
+\draw[-triangle 60,thick] (0,0) --  (6,4) node [anchor=south] {$Q (s+z)$};
+\draw[dashed] (6,4) -- (0,4) node [color=red,anchor=east] {$b+d$};
+\draw[dashed] (6,4) -- (6,0) node [color=red,anchor=north] {$a+c$};
+\node [anchor=north east] (O) at (0,0) {$O$};
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+%%%%%%%%%%%% Test SVG 005%%%%%%%%%%%%%%
+
+\LD@Svg@Test
+\tikzpicture
+\clip (-1,-1.9) rectangle (5.5,1.9);
+\draw[-] (-0.5,0) -- (5,0) coordinate (x axis);
+\draw[-] (0,-1.7) -- (0,1.7) coordinate (y axis);
+\node [anchor=north east] (O) at (0,0) {$O$};
+\draw[-triangle 45,thick] (0,0) -- node [anchor=south,sloped,pos=0.4] {\vbox to 14pt{}$x\vec i+y\vec j$} %node [anchor=north,sloped,color=red,pos=0.6] {$z=x+iy$}
+ (4.3,1.4) node [anchor=south west] {$M (z)$};
+\draw[dashed] (4.3,1.4) -- (0,1.4) node [anchor=east] {$iy$};
+\draw[-triangle 45,thick] (0,0) -- node [anchor=north,sloped,pos=0.4] {\vbox to 14pt{}$x\vec i-y\vec j$} % node [anchor=north,sloped,color=red,pos=0.4] {$\overline z=x-yi$} 
+ (4.3,-1.4) node [anchor=north west] {$P (\overline z)$};
+\draw[dashed,color=red] (4.3,-1.4) -- (0,-1.4) node [anchor=east] {$-iy$};
+\draw[-triangle 45,thick] (0,0) -- node [anchor=south,pos=0.6] {$x\vec i$} node [color=red,anchor=north,pos=0.6] {$x$} (4.3,0) ;
+\draw[-triangle 45,thick] (4.3,0) -- node [anchor=west] {$y\vec j$} (4.3,1.4);
+\draw[|-triangle 45,thick] (4.3,0) -- node [anchor=west] {$-y\vec j$} (4.3,-1.4);
+\draw[-open triangle 60,thick] (0,0) -- node [pos=0.4,anchor=east] {$\vec j$} (0,1);
+\draw[-open triangle 60,thick] (0,0) -- node [anchor=north,pos=0.2] {$\vec i$} (1,0);
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+%%%%%%%%%%%% Test SVG 006 %%%%%%%%%%%%%%
+
+\LD@Svg@Test
+\tikzpicture
+\clip (-1,-0.7) rectangle (6.5,2.7);
+\draw[-] (-0.5,0) -- (6,0) coordinate (x axis);
+\draw[-] (0,-0.5) -- (0,2.7) coordinate (y axis);
+\node [anchor=north east] (O) at (0,0) {$O$};
+\draw[-triangle 45,thick] (0,0) -- node [anchor=south,sloped,pos=0.4] {$OM=|z|=\sqrt{x^2+y^2}$} 
+ (5.3,2.4) node [anchor=west] {$M (z)$};
+\draw[-triangle 45,thick] (0,0) -- node [anchor=south] {$x\vec i$} (5.3,0) ;
+\draw[-triangle 45,thick] (5.3,0) -- node [anchor=east] {$y\vec j$} (5.3,2.4);
+\draw[-open triangle 60,thick] (0,0) -- node [pos=0.4,anchor=east] {$\vec j$} (0,1);
+\draw[-open triangle 60,thick] (0,0) -- node [anchor=north] {$\vec i$} (1,0);
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+%%%%%%%%%%%% Test SVG 007 %%%%%%%%%%%%%% 
+
+\LD@Svg@Test
+	\tikzstyle{object}=[ellipse,fill=red!20, draw,inner sep=0.5em]
+\tikzstyle{operator}=[rectangle,rounded corners,fill=blue!20, draw,inner sep=0.4em]
+\tikzstyle{fork}=[diamond,fill=green!20, draw]
+\tikzstyle{line}=[draw,line width=0.5ex]
+\tikzstyle{thinline}=[draw,line width=0.2ex]
+\font\SvgText=cmr8\relax
+\tikzstyle{every node}=[inner sep=2pt]
+\tikzpicture
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+\node [object] (a) {Matrice $A$} ;
+\node [operator,right of=a, node distance=2.7cm] (b) {$\det(A-\lambda I_n)$} ;
+\draw [line] (a)--(b) ; 
+\node[object, right of=b,node distance=3cm] (c) {Polynome $P_A$} ;
+\draw[line,->] (b) -- (c) ;
+\node[fork,node distance=2cm,below of=c] (m) {$\forall i:m_i=n_i$} ;
+\node[below of=m,node distance=2.2cm] (prep) {};
+\path (m)-- node[midway] (mo) {oui} (prep) ;
+\draw [line] (m)--(mo) ; \draw [line,->] (mo)--(prep);
+\node[below of=prep,node distance=0.2cm] (p) {$=$} ;
+\node[right of=p] (q) {$P$} ;
+\node[above of=q,node distance=0.3cm] (abq) {};
+\node[right of=q] (r) {$D$} ;
+\node[above of=r,node distance=0.3cm] (abr) {};
+\node[operator,node distance=1cm,font=\texttt,below of=r] (t) {Inversion} ;
+\node[right of=r] (s) {$P^{-1}$} ;
+\node[left of=p,label=180:{\qquad}] (pp) {$A$} ;
+\node[node distance=0.3cm,left of=pp] (ppp) {} ;
+\draw[->,thinline,draw=red] (a) .. controls +(down:4cm) and +(left:2cm) .. (ppp.west) ;
+\node[node distance=0.03cm,above of=q] (qq) {} ;
+\node[node distance=0.02cm,above of=s] (ss) {} ;
+\draw[<-,thinline,red] (ss.south east) .. controls +(315:1cm) and +(right:1cm) .. (t);
+\draw[->,thinline,red] (qq.south west) .. controls +(225:1cm) and +(left:1cm) .. (t);
+\node[node distance=4cm,snake=saw,thinline,left of=m, text width=2cm] (n) {Trigonaliser $A$} ;
+\path (m)-- node[midway] (mn) {non} (n) ;
+\draw [line] (m)--(mn) ; \draw [line,->] (mn)--(n);
+\node[operator,node distance=2.8cm,right of=c] (d) {Factorisation} ;
+\draw [line](c)--(d) ;
+\node[object,node distance=3cm,right of=d] (f) {multiplicit\'e $m_i$ } ;
+\draw[->,line] (d) -- (f) ;
+\draw[->,thinline,draw=red] (f.south) -- (abr.north east) ;
+\node[object,node distance=1cm,below of=f] (g) {Valeur propre $\lambda_i$} ;
+\draw[->,line] (d) -- (g) ;
+\draw[->,thinline, draw=red] (g.south) -- (abr.north east) ;
+\node[object,node distance=2.8cm,right of=m] (k) {Dimension $n_i$} ;
+\node[operator,node distance=3cm,right of=k,text width=2.4cm,text height=1.8em] (h) {R\'esolution de\pn$(A-\lambda_iI_n)X=0$} ;
+\node[object,node distance=1.2cm,below of=h] (j) {Espace propre $E_i$} ;
+\draw[->,line] (h) -- (j) ;
+\draw [line] (g) -- (h) ;
+\draw[->,thinline] (h) -- (k) ;
+\draw [line] (k) -- (m) ;
+\node[object,node distance=3.5cm,left of=j] (l) {Base $B_i$} ;
+\draw[->,thinline] (h) -- (l) ;
+\draw[->,line] (j) -- (l) ;
+\draw[->,line] (l) -- (k) ;
+\draw[->,thinline,draw=red] (l.south west) -- (abq.north east) ;
+\pgfonlayer{background}
+	\draw [snake=saw,line] (pp.south west) rectangle (s.north east);
+	\node [forbidden sign,line width=0.5ex, draw=red,fill=white] at (mn) {\qquad\quad} ;
+\endpgfonlayer
+\endtikzpicture
+\LD@End@Svg@Test
+
+%%%%%%%%%%%% Test SVG 008 %%%%%%%%%%%%%%
+
+\LD@Svg@Test
+\tikzpicture
+\node [circle,fill=gray,pattern=north west lines,pattern color=gray,draw=red,thick] at (1,4.5) {$\sc D(a,r)$};
+\node [circle,fill=gray,pattern=north west lines,pattern color=gray,draw=gray,thick] at (0,3) {$\overline{\sc D}(a,r)$};
+\node [circle,draw=gray,thick] at (1,1.5) {$\sc C(a,r)$};
+\draw (4,3) circle (2cm);
+\node [label={[label distance=-0.3cm]-45:$a$}] at (4,3) {$\times$};
+\draw [->] (4,3) -- node [anchor=south,sloped] {rayon $r$}++(200:2cm);
+\draw [->] (4,3) -- node [anchor=south,sloped,pos=0.4] {$|z-a|$}++(50:2.5cm) node [label={[label distance=-0.3cm]-45:$z$}] {$\times$};
+\endtikzpicture
+\LD@End@Svg@Test
+
+%%%%%%%%%%%% Test SVG 009 %%%%%%%%%%%%%%
+
+\LD@Svg@Test
+\tikzpicture[]
+\tikzstyle{Classe}=[rectangle,rounded corners,draw]
+\tikzstyle{Option}=[ellipse,draw,inner sep=2pt]
+\tikzstyle{Diplome}=[starburst,inner sep=4pt,draw]
+\tikzstyle{Cursus}=[-triangle 60,very thick,draw]
+\node[Classe,fill=red!50] (2nde) at (0,0) {
+Calculer la suite $(u_n)_{n\in\ob N}$ 
+d\'efinie par $u_0=0$, $u_1=1$ et $
+u_{n+2}=u_{n+1}+u_n+1\qquad(n\in\ob N).
+$};
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+%%%%%%%%%%%% Test SVG 010 %%%%%%%%%%%%%%
+\LD@Svg@Test
+\tikzpicture[]
+\tikzstyle{Classe}=[rectangle,rounded corners,draw]
+\tikzstyle{Option}=[ellipse,draw,inner sep=2pt]
+\tikzstyle{Diplome}=[starburst,inner sep=4pt,draw]
+\tikzstyle{Cursus}=[-triangle 60,very thick,draw]
+\node[rectangle,fill=blue!40,text width=9cm] (de) at (0,0) {%
+Soit $\{I_n\}_{n\in\ob N}$ la suite d\'efinie par 
+$$
+I_n:=\int_0^1\ln(1+t^n)\d t
+$$
+pour $n\in\ob N$. \pn
+a) D\'emontrer que $\lim_{n\to\infty}I_n=0$.  \pn
+b) Lorsque $n\to+\infty$, d\'emontrer que $I_n\sim K/n$ 
+pour une certaine constante $K>0$. 
+};
+\node[ellipse,fill=blue!40] (de) at (-1,0) { $K>0$. 
+};
+\endtikzpicture
+\LD@End@Svg@Test
+
+%%%%%%%%%%%% Test SVG 011 %%%%%%%%%%%%%%
+\LD@Svg@Test
+\tikzpicture[domain=0:360,smooth,variable=\x,scale=1,baseline=(current bounding box.north)]
+	\draw[very thin,color=black!20,step=0.5] (-1.1,-1.1) grid (1.1,1.1);
+	\draw[->] (-1.1,0) -- (1.1,0) node[below] {\eightpts$x$};
+	\draw[->] (0,-1.1) -- (0,1.1) node[left] {\eightpts$y$};
+	\draw[color=blue] plot ({cos(\x)^3},{sin(\x)^3}) ;
+	\node [anchor=north] at (current bounding box.south) {\eightpts\Figure Astroide.};
+\endtikzpicture
+\LD@End@Svg@Test
+
+%%%%%%%%%%%% Test SVG 012 %%%%%%%%%%%%%%
+
+\LD@Svg@Test
+\tikzpicture[domain=0:360,smooth,variable=\x,scale=1]%,baseline=(0,0)] %(current bounding box.north)]
+	\scope
+	\clip (-1.2,-1.2) rectangle (1.5,1.5);
+	\draw[very thin,color=black!20,step=0.5] (-1.1,-1.1) grid (1.5,1.5);
+	\draw[->] (-1.1,0) -- (1.1,0) node[above] {\eightpts$x$};
+	\draw[->] (0,-1.1) -- (0,1.1) node[right] {\eightpts$y$};
+	\draw[color=blue] plot ({cos(\x)^3},{sin(\x)^3}) ;
+	\draw[color=red] (1.41421,1.41421) circle (1.5 cm);
+	\fill [color=red] (1.41421,1.41421) circle (1pt);
+	\node [anchor=north,color=red] at (1.41421,1.41421) {\eightpts$C$};
+	\draw [color=green](0.3535,0.3535) -- (1.41421,1.41421) node[midway,anchor=south,color=green]{\eightpts$R$};
+	\draw [color=black,->](0.3535,0.3535)-- (-0.3535,1.0605)node[pos=1,anchor=north,color=black]{\eightpts$\vec T$};
+	\draw [color=black,->](0.3535,0.3535)-- (-0.3535,-0.3535)node[pos=1,anchor=north,color=black]{\eightpts$\vec N$};
+	\fill [black] (0.3535,0.3535) circle (1pt);
+	\node [anchor=south,color=blue] at (0.3535,0.3535) {\eightpts$M$};
+	\endscope
+	%\node [anchor=north] at (current bounding box.south) {\eightpts \Figure [{Rayon, centre et cercle de courbure},Index=Courbes!Astroide@]{Courbure}} ;
+\endtikzpicture
+\LD@End@Svg@Test
+
+%%%%%%%%%%%% Test SVG 012 %%%%%%%%%%%%%%
+\LD@Svg@Test
+\tikzpicture
+\draw (0,0) node[inner sep=0pt,draw] {tight}
+(0cm,2em) node[inner sep=5pt,draw] {loose}
+(0cm,4em) node[fill=red!20] {default};
+\endtikzpicture
+\LD@End@Svg@Test
+
+\LD@Svg@Test
+\tikzpicture
+\draw (0,0) node[inner sep=0pt,draw] {tight}
+(0cm,2em) node[inner sep=5pt,draw] {loose}
+(0cm,4em) node[fill=red!20] {default};
+\draw (3,0) node[inner sep=0pt,draw] {TIGHT}
+(3cm,2em) node[inner sep=5pt,draw] {LOOSE}
+(3cm,4em) node[fill=red!20] {DEFAULT};
+\draw (6,0) node[inner sep=0pt,draw] {$tight$}
+(6cm,2em) node[inner sep=5pt,draw] {$loose$}
+(6cm,4em) node[fill=red!20] {$default$};
+\draw (9,0) node[inner sep=0pt,draw] {$TIGHT$}
+(9cm,2em) node[inner sep=5pt,draw] {$LOOSE$}
+(9cm,4em) node[fill=red!20] {$Default$};
+\endtikzpicture
+\LD@End@Svg@Test
+
+\LD@Svg@Test
+\tikzstyle{every node}=[dart, shape border uses incircle,inner sep=1pt, draw]
+\tikzpicture
+\foreach \a/\b/\c in {A/0/0, B/45/0, C/0/45, D/45/45}
+\node [shape border rotate=\b, rotate=\c] at (\b/36,-\c/36) {\a};
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+\LD@Svg@Test
+\tikzpicture[every node/.style={draw,circle}]
+\draw[help lines] (0,0) grid (2,5);
+\scope[node distance=5mm]
+\node (a) at (1,1) {a};
+\node [left=of a] {1}; \node [right=of a] {2};
+\node [above=of a] {3}; \node [below=of a] {4};
+\node [above left=of a] {5}; \node [above right=of a] {6};
+\node [below left=of a] {7}; \node [below right=of a] {8};
+\endscope
+\scope[node distance=5mm and 5mm]
+\node (b) at (1,4) {b};
+\node [left=of b] {1}; \node [right=of b] {2};
+\node [above=of b] {3}; \node [below=of b] {4};
+\node [above left=of b] {5}; \node [above right=of b] {6};
+\node [below left=of b] {7}; \node [below right=of b] {8};
+\endscope
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+\LD@Svg@Test
+\tikz \draw (0,0) .. controls +(right:3.5cm) and +(right:3.5cm) .. (0,3)
+\foreach \p in {0,0.125,...,1} {node[pos=\p]{\p}};
+\LD@End@Svg@Test
+
+\LD@Svg@Test
+\tikzpicture[shorten >=1pt,node distance=2cm,auto]
+\draw[help lines] (0,0) grid (3,2);
+\node[state] (q_0) {$q_0$};
+\node[state] (q_1) [above right of=q_0] {$q_1$};
+\node[state] (q_2) [below right of=q_0] {$q_2$};
+\node[state] (q_3) [below right of=q_1] {$q_3$};
+\path[->] (q_0) edge node {0} (q_1)
+edge node [swap] {1} (q_2)
+(q_1) edge node {1} (q_3)
+edge [loop above] node {0} ()
+(q_2) edge node [swap] {0} (q_3)
+edge [loop below] node {1} ();
+\endtikzpicture
+\LD@End@Svg@Test
+
+\LD@Svg@Test
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+\tikzpicture[node distance = 2cm, auto]
+    % Place nodes
+    \node [block] (init) {initialize model};
+    \node [cloud, left of=init] (expert) {expert};
+    \node [cloud, right of=init] (system) {system};
+    \node [block, below of=init] (identify) {identify candidate models};
+    \node [block, below of=identify] (evaluate) {evaluate candidate models};
+    \node [block, left of=evaluate, node distance=3cm] (update) {update model};
+    \node [decision, below of=evaluate] (decide) {is best candidate better?};
+    \node [block, below of=decide, node distance=3cm] (stop) {stop};
+    % Draw edges
+    \path [line] (init) -- (identify);
+    \path [line] (identify) -- (evaluate);
+    \path [line] (evaluate) -- (decide);
+    \path [line] (decide) -| node [near start] {yes} (update);
+    \path [line] (update) |- (identify);
+    \path [line] (decide) -- node {no}(stop);
+    \path [line,dashed] (expert) -- (init);
+    \path [line,dashed] (system) -- (init);
+    \path [line,dashed] (system) |- (evaluate);
+\endtikzpicture
+\LD@End@Svg@Test
+
+\LD@Svg@Test
+\tikzpicture[scale=3,cap=round]
+  % Local definitions
+  \def\costhirty{0.8660256}
+
+  % Colors
+  \colorlet{anglecolor}{green!50!black}
+  \colorlet{sincolor}{red}
+  \colorlet{tancolor}{orange!80!black}
+  \colorlet{coscolor}{blue}
+
+  % Styles
+  \tikzstyle{axes}=[]
+  \tikzstyle{important line}=[very thick]
+  \tikzstyle{information text}=[rounded corners,fill=red!10,inner sep=1ex]
+
+  % The graphic
+  \draw[style=help lines,step=0.5cm] (-1.4,-1.4) grid (1.4,1.4);
+
+  \draw (0,0) circle (1cm);
+
+  \scope[style=axes]
+    \draw[->] (-1.5,0) -- (1.5,0) node[right] {$x$};
+    \draw[->] (0,-1.5) -- (0,1.5) node[above] {$y$};
+
+    \foreach \x/\xtext in {-1, -.5/-0.5, 1}
+      \draw[xshift=\x cm] (0pt,1pt) -- (0pt,-1pt) node[below,fill=white]
+            {$\xtext$};
+
+    \foreach \y/\ytext in {-1, -.5/-0.5, .5/0.5, 1}
+      \draw[yshift=\y cm] (1pt,0pt) -- (-1pt,0pt) node[left,fill=white]
+            {$\ytext$};
+  \endscope
+
+  \filldraw[fill=green!20,draw=anglecolor] (0,0) -- (3mm,0pt) arc(0:30:3mm);
+  \draw (15:2mm) node[anglecolor] {$\alpha$};
+
+  \draw[style=important line,sincolor]
+    (30:1cm) -- node[left=1pt,fill=white] {$\sin \alpha$} +(0,-.5);
+
+  \draw[style=important line,coscolor]
+    (0,0) -- node[below=2pt,fill=white] {$\cos \alpha$} (\costhirty,0);
+
+  \draw[style=important line,tancolor] (1,0) --
+    node [right=1pt,fill=white]
+    {
+      $\displaystyle \tan \alpha \color{black}=
+      {{\color{sincolor}\sin \alpha}\over\color{coscolor}\cos \alpha}$
+    } (intersection of 0,0--30:1cm and 1,0--1,1) coordinate (t);
+
+  \draw (0,0) -- (t);
+
+  \draw[xshift=1.85cm] node [right,text width=6cm,style=information text]
+    {
+      The {\color{anglecolor} angle $\alpha$} is $30^\circ$ in the
+      example ($\pi/6$ in radians). The {\color{sincolor}sine of
+        $\alpha$}, which is the height of the red line, is
+      $$
+  \sin \alpha = 1/2.
+      $$
+      By the Theorem of Pythagoras we have ${\color{coscolor}\cos^2 \alpha} +
+      {\color{sincolor}\sin^2\alpha} =1$. Thus the length of the blue
+      line, which is the {\color{coscolor}cosine of $\alpha$}, must be
+      $$
+      {\color{coscolor}\cos\alpha} = \sqrt{1 - 1/4} = \textstyle
+      0.5 \sqrt 3.
+      $$%
+      This shows that {\color{tancolor}$\tan \alpha$}, which is the
+      height of the orange line, is
+      $$
+      {\color{tancolor}\tan\alpha} = {\color{sincolor}\sin
+          \alpha\over\color{coscolor}\cos \alpha} = 1/\sqrt 3.
+      $$
+    };
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+
+
+\def\A{\sc A }
+\def\B{\sc B }
+\def\pa#1{\left(#1\right)}
+
+\LD@Svg@Test
+\tikzpicture[
+    grow=right,
+    level 1/.style={sibling distance=3.5cm,level distance=5.2cm},
+    level 2/.style={sibling distance=3.5cm, level distance=6.7cm},
+    edge from parent/.style={very thick,draw=blue!40!black!60,
+        shorten >=5pt, shorten <=5pt},
+    edge from parent path={(\tikzparentnode.east) -- (\tikzchildnode.west)},
+    kant/.style={text width=2cm, text centered, sloped},
+ every node/.style={text ragged, inner sep=2mm},
+    punkt/.style={rectangle, rounded corners, shade, top color=white,
+    bottom color=blue!50!black!20, draw=blue!40!black!60, very
+    thick }
+    ]
+
+\node[punkt, text width=5.5em] {Country~\B}
+    %Lower part lv1
+    child {
+        node[punkt] [rectangle split, rectangle split, rectangle split parts=3,
+         text ragged] {
+            \bf{Scenario  1}
+                  \nodepart{second}
+            $\mbox{Country \B}\colon    s\bar{Q}$
+                  \nodepart{third}
+            $\mbox{Country \A}\colon\pa{1-s}\bar{Q}$
+        }
+        edge from parent
+            node[kant, below, pos=.6] {Unchanged parity}
+    }
+    %Upper part, lv1
+    child {
+        node[punkt, text width=6em] {Country~\A}
+        %child 1
+        child {
+            node [punkt,rectangle split, rectangle split,
+            rectangle split parts=3] {
+                \bf{Scenario  2}
+                \nodepart{second}
+                $\mbox{Country \B}\colon s\bar{Q}+2\alpha\Delta E -sc$
+                \nodepart{third}
+                $\mbox{Country \A}\colon\pa{1-s}\bar{Q}-\alpha\Delta E -
+                \pa{1-s}c$
+            }
+            edge from parent
+                node[below, kant,  pos=.6] {Unchanged parity}
+        }
+        %child 2
+        child {
+            node [punkt, rectangle split, rectangle split parts=3]{
+                \bf{Scenario 3}
+                \nodepart{second}
+                $\mbox{Country \B}\colon s\bar{Q}-2sc$
+                \nodepart{third}
+                $\mbox{Country \A}\colon\pa{1-s}\bar{Q}-2\pa{1-s}c$
+            }
+            edge from parent
+                node[kant, above] {Devalues}}
+            edge from parent{
+                node[kant, above] {Devalues}}
+    };
+\endtikzpicture
+\LD@End@Svg@Test
+
+
+\bye
+
+
+
