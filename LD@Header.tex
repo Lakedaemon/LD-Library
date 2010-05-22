@@ -1,4 +1,8 @@
-\magnification 1200\relax
+\ifcsname setmagnification\endcsname
+	\magnification\setmagnification\relax
+\else
+	\magnification 1200\relax
+\fi
 \input color.txs
 \input epsf
 \input eplain
@@ -9,7 +13,23 @@
 
 \catcode`@=11\relax
 
-\input LD@Fonts
+
+
+\iftrue
+\input LD@Fonts@LM@XeTeX
+% \let\AMSfont\relax
+ %\let\DStroke\relax 
+ %\let\LMTone\relax
+ %\let\LMTSone\relax
+ %\input fontch.tex
+ %\input bsymbols.tex
+
+
+ 
+ 
+\fi
+
+
 \catcode`@=11\relax
 \input LD@Macros
 \catcode`@=11\relax
