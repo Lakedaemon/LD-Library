@@ -19,6 +19,7 @@
 % dingbats : fantastic, creature
 %
 
+
 %  : fonte romaine en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
 % 
 
@@ -26,7 +27,7 @@
 \font\fourteenrm="Latin Modern Roman" at 14pt%cmr12 scaled 1200
 \font\twelverm="Latin Modern Roman" at 12pt%cmr12
 \font\elevenrm="Latin Modern Roman" at 11pt%cmr10 scaled 1100
-\font\tenrm="Latin Modern Roman" at 10pt%cmr10
+\font\tenrm="Latin Modern Roman" at 10pt%cmr10%ec-lmr10
 \font\ninerm="Latin Modern Roman" at 9pt%cmr9
 \font\eightrm="Latin Modern Roman" at 8pt%cmr8
 \font\sevenrm="Latin Modern Roman" at 7pt%cmr7
@@ -79,7 +80,7 @@
 \font\eleventi="Latin Modern Roman/BI" at 11pt%cmbxti10 at 11pt
 \font\tenti="Latin Modern Roman/BI" at 10pt%cmbxti10
 \font\nineti="Latin Modern Roman/BI" at 9pt%cmbxti10 at 9pt
-\newfam\bolditfam
+\csname newfam\endcsname\bolditfam
 \textfont\bolditfam=\tenti
 \def\boldit{\fam\bolditfam\tenti}
 
@@ -87,6 +88,7 @@
 %  : fonte italique math\'ematique en 6, 7, 8, 9, 10, 11 et 12  points
 % 
 
+%Bad,change this
 \font\twelvei=cmmi10 scaled 1200
 \font\eleveni=cmmi10 scaled 1100
 \font\teni=cmmi10
@@ -94,7 +96,8 @@
 \font\eighti=cmmi8
 \font\seveni=cmmi7
 \font\sixi=cmmi6
-\font\fivei=cmmi6
+\font\fivei=cmmi5
+
 
 % \msafam : famille de symboles amstex en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
 %
@@ -136,12 +139,12 @@
 
 % : famille de fontes slanted en 5, 6, 7, 8, 9 et 10  points
 % 
-\font\tensl=cmsl10
-\font\ninesl=cmsl9                 
-\font\eightsl=cmsl8
-\font\sevensl=cmsl10 at 7pt
-\font\sixsl=cmsl10 at 6pt
-\font\fivesl=cmsl10 at 5pt
+\font\tensl="Latin Modern Roman Slanted:color=FF0000" at 10pt%cmsl10
+\font\ninesl="Latin Modern Roman Slanted:color=FF0000" at 9pt%cmsl9                 
+\font\eightsl="Latin Modern Roman Slanted:color=FF0000" at 8pt%cmsl8
+\font\sevensl="Latin Modern Roman Slanted:color=FF0000" at 7pt%cmsl10 at 7pt
+\font\sixsl="Latin Modern Roman Slanted:color=FF0000" at 6pt%cmsl10 at 6pt
+\font\fivesl="Latin Modern Roman Slanted:color=FF0000" at 5pt%cmsl10 at 5pt
 
 
 % \gotfam : famille de lettres gothiques en 5, 6, 7, 8, 9 et 10  points
@@ -190,6 +193,8 @@
 \font\elevenib=cmmib10 scaled 1100
 \font\tenib=cmmib10
 \font\nineib=cmmib10 scaled 900
+
+
 
 % \scalbfam : famille de lettres de ronde grasses en 5, 6, 7, 8, 9, 10, 12, 14 et 17 points
 % \scalb=\scalbfam en 10 points
@@ -290,6 +295,63 @@
 \font\twelveygoth=ygoth scaled 1200
 \font\twentyygoth=ygoth scaled 2000
 \font\thirtyygoth=ygoth scaled 4000
+
+
+
+
+
+%% fontch
+%% extension font
+\font\sevenex=cmex7
+\font\eightex=cmex8
+\font\nineex=cmex9
+\font\fiveex=cmex7 scaled 714
+\font\sixex=cmex7 scaled 857
+%% math-italic boldface font
+\font\fivemib=cmmib5
+\font\sixmib=cmmib6
+\font\sevenmib=cmmib7
+\font\eightmib=cmmib8
+\font\ninemib=cmmib9
+%% boldface symbols fonts
+\font\fivebsy=cmbsy5
+\font\sixbsy=cmbsy6
+\font\sevenbsy=cmbsy7
+\font\eightbsy=cmbsy8
+\font\ninebsy=cmbsy9
+
+\skewchar\fivemib='177
+\skewchar\sixmib='177
+\skewchar\sevenmib='177
+\skewchar\eightmib='177
+\skewchar\ninemib='177
+\skewchar\fivebsy='60
+\skewchar\sixbsy='60
+\skewchar\sevenbsy='60
+\skewchar\eightbsy='60
+\skewchar\ninebsy='60
+%% Families defined in plain.tex %%
+%% fam0 rm roman
+%% fam1 i  math-italic
+%% fam2 sy symbols
+%% fam3 ex extension fonts
+%% fam4 itfam text-italic
+%% fam5 slfam slanted
+%% fam6 bffam roman boldface
+%% fam7 ttfam teletype
+%%
+%% New family math-italic bold. Must be fam8 %%
+%\newfam\mibfam
+%%
+%% New family symbols boldface. Must be fam9 %%
+%\newfam\bsyfam
+%%
+%% New family sans serif  %%
+%\newfam\ssfam
+%%
+%% New family small caps %%
+%\newfam\cscfam
+%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                                                                                            %
@@ -461,15 +523,16 @@
 \def\tt{\fam\ttfam\tentt}%
 \textfont\bffam=\tenbf\scriptfont\bffam=\sevenbf\scriptscriptfont\bffam=\fivebf
 \def\bf{\fam\bffam\tenbf}%
-%\abovedisplayskip=3pt plus2pt minus 2pt
-%\belowdisplayskip=3pt plus1pt minus 2pt
-%\abovedisplayshortskip= 2pt plus 2pt minus 1pt
-%\belowdisplayshortskip= 2pt plus 2pt minus 1pt
-%\smallskipamount=2pt plus 1pt minus 2pt
-%\medskipamount=3pt plus 2pt minus 2pt
-%\bigskipamount=7pt plus 3pt minus 3pt
-%\setbox\strutbox=\hbox{\vrule height 5pt depth 2pt width 0pt}%
-%\normalbaselineskip=10.5pt plus.3pt minus.3pt\normalbaselines
+\abovedisplayskip=3pt plus2pt minus 2pt
+\belowdisplayskip=3pt plus1pt minus 2pt
+\abovedisplayshortskip= 2pt plus 2pt minus 1pt
+\belowdisplayshortskip= 2pt plus 2pt minus 1pt
+\smallskipamount=2pt plus 1pt minus 2pt
+\medskipamount=3pt plus 2pt minus 2pt
+\bigskipamount=7pt plus 3pt minus 3pt
+\setbox\strutbox=\hbox{\vrule height 5pt depth 2pt width 0pt}%
+\normalbaselineskip=10.5pt plus.3pt minus.3pt\normalbaselines
+
 \rm}
 
 % Paragraphes en 11 points
@@ -610,3 +673,47 @@
 \newsymbol\nexists 2040
 \newsymbol\smallsetminus 2272
 \newsymbol\varnothing 203F
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                                                            %
+%                                                   Imported froml fontch                                                    %
+%                                                                                                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Redefinition of character commands %%
+\chardef\i="19 \chardef\j="1A
+\chardef\ae="E6 \chardef\AE="C6
+\chardef\oe="F7 \chardef\OE="D7
+\chardef\o="F8 \chardef\O="D8
+\chardef\ss="FF \chardef\SS="DF
+\chardef\aa="E5 \chardef\AA="C5
+\chardef\l="AA \chardef\L="8A
+\mathchardef\Gamma="0100
+\mathchardef\Delta="0101
+\mathchardef\Theta="0102
+\mathchardef\Lambda="0103
+\mathchardef\Xi="0104
+\mathchardef\Pi="0105
+\mathchardef\Sigma="0106
+\mathchardef\Upsilon="0107
+\mathchardef\Phi="0108
+\mathchardef\Psi="0109
+\mathchardef\Omega="010A
+\def\hbar{{\mathchar"7009\mkern-9muh}}
+
+
+
+%\def\tilde{\mathaccent"7004} % doesn't work
+\def\tilde{\mathaccent"365 }
+
+\def\grave{\mathaccent"712 }
+\def\acute{\mathaccent"713 }
+\def\check{\mathaccent"714 }
+\def\breve{\mathaccent"715 }
+\def\bar{\mathaccent"716 }
+\def\ddot{\mathaccent"717 }
+
+%\def\ring{\mathaccent"7006 }
+%%
+

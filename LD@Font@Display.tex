@@ -1,0 +1,5 @@
+\newcount\ol\relax\ol=000\relax
+\loop 
+\ifnum\ol<3000\global\advance\ol by 1\relax\EA\def\EA\tilde\EA{\EA\mathaccent\EA"\the\ol}
+$\tilde{A}${\fiverm\the\ol}\repeat
+\endinput
