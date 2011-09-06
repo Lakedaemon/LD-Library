@@ -1,0 +1,37 @@
+\newcount\LD@Exo@Total\LD@Exo@Total=0\relax
+
+\def\LD@Exo@Theme@Display#1#2#3{%
+	{\LD@Loop@For\LD@Theme=#2\WithSeparator\Do{%
+%             Tests if there are exercices in the LD@Theme
+		\gdef\LD@List@Empty{Y}%	
+		{\LD@Loop@For\LD@Exo@Type=#3\WithSeparator ,\Do{\if Y\LD@List@Empty	
+			{\LD@Loop@For\LD@Level=#1\WithSeparator ,\Do{\if Y\LD@List@Empty
+				\ifcsname LD@Exo@Theme@@\LD@Level @@\LD@Theme @@\LD@Exo@Type\endcsname
+					\EA\let\EA\LD@Exo@List\CS LD@Exo@Theme@@\LD@Level @@\LD@Theme @@\LD@Exo@Type\EC
+					\unless\ifx\LD@Exo@List\LD@Empty
+						\gdef\LD@List@Empty{N}%
+					\fi
+				\fi
+			\fi}}%
+		\fi}}%
+%		If there are exercices in the LD@Theme, display them
+		\if N\LD@List@Empty
+			\edef\LD@Temp{null, \LD@Font@Arial\LD@Theme.}%
+			\EA\Chapter\LD@Temp\PAR\medskip
+			{\LD@Loop@For\LD@Exo@Type=#3\WithSeparator ,\Do{%
+				{\LD@Loop@For\LD@Level=#1\WithSeparator ,\Do{%
+					\ifcsname LD@Exo@Theme@@\LD@Level @@\LD@Theme @@\LD@Exo@Type\endcsname
+%					\edef\LD@Temp{null, \LD@Font@Arial\LD@Exo@Type.}%
+%					\EA\Section\LD@Temp\PAR
+%					\medskip\noindent$\underline{\hbox{\LD@Font@Arial\LD@Exo@Type}}$\medskip\noindent
+						\EA\let\EA\LD@Exo@List\CS LD@Exo@Theme@@\LD@Level @@\LD@Theme @@\LD@Exo@Type\EC
+						{\LD@Loop@For\LD@Exo@Label=\LD@Exo@List\WithSeparator ,\Do{%
+							\EA\Exercice\EA{\LD@Exo@Label}%
+							\global\advance\LD@Exo@Total by1\relax
+						}}%
+					\fi
+				}}%
+			}}%
+		\fi
+	}}%
+}%

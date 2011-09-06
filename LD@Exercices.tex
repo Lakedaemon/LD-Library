@@ -55,6 +55,7 @@
 %						Notion : classement par notion, concept				%
 %															%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\catcode`@=11\relax
 \newtoks\LD@String@Toks@A
 \newtoks\LD@String@Toks@B
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  should not be here
@@ -347,7 +348,7 @@
 		\global\advance\LD@Exo@Count by1\relax % \global
 		\definexref{labelexo#1}{\the\LD@Exo@Count}{exolabel}%
 		\LD@Maths@Exercice@Display
-	\fi
+\fi
 }%
 \def\LD@Maths@Exercice@Text{\underline{\mbox{\bf Exercice}}}%
 \def\LD@Exercice@Display@Code{}%
