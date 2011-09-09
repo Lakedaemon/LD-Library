@@ -1,3 +1,115 @@
+\newcount\LD@Count@Temp
+
+
+\newif\ifLD@Inferno@Master@\LD@Inferno@Master@false
+\LD@Exo@Label@Hide
+
+
+
+\def\LD@Exercice@Display@Code{}%%\LD@Option@@Label\qquad\eightpts}%
+\gdef\LD@Exercice@Solution@List{}%
+\gdef\LD@Exercice@Indication@List{}%
+\gdef\LD@Exercice@Notion@List{}%
+\def\LD@Exercice@Display@Code@Post{%
+	\ifcsname LD@Exo@@Solution\endcsname
+		\unless\ifx\LD@Exo@@Solution\LD@Empty
+			\ifLD@Inferno@Master@
+				\pn{\eightpts Solution : \eightpts \LD@Exo@@Solution}%
+			\else
+				\ifx\LD@Exercice@Solution@List\LD@Empty
+					\EA\gdef\EA\LD@Exercice@Solution@List\EA{\LD@Option@@Label}%
+				\else
+					\EA\EA\EA\gdef\EA\EA\EA\LD@Exercice@Solution@List\EA\EA\EA{\EA\LD@Exercice@Solution@List\EA ,\LD@Option@@Label}%
+				\fi
+			\fi
+		\fi
+	\fi
+	\ifcsname LD@Exo@@Notion\endcsname
+		\unless\ifx\LD@Exo@@Notion\LD@Empty
+			\ifLD@Inferno@Master@
+				\pn{\eightpts Notions intervenant dans la solution : \eightpts \LD@Exo@@Notion}%
+			\else
+				\ifx\LD@Exercice@Notion@List\LD@Empty
+					\EA\gdef\EA\LD@Exercice@Notion@List\EA{\LD@Option@@Label}%
+				\else
+					\EA\EA\EA\gdef\EA\EA\EA\LD@Exercice@Notion@List\EA\EA\EA{\EA\LD@Exercice@Notion@List\EA ,\LD@Option@@Label}%
+				\fi
+			\fi	
+		\fi
+	\fi
+	\ifcsname LD@Exo@@Indication\endcsname
+		\unless\ifx\LD@Exo@@Indication\LD@Empty
+			\ifLD@Inferno@Master@
+				\pn{\eightpts Indication : \eightpts \LD@Exo@@Indication}%	
+			\else
+				\ifx\LD@Exercice@Indication@List\LD@Empty
+					\EA\gdef\EA\LD@Exercice@Indication@List\EA{\LD@Option@@Label}%
+					\else
+					\EA\EA\EA\gdef\EA\EA\EA\LD@Exercice@Indication@List\EA\EA\EA{\EA\LD@Exercice@Indication@List\EA ,\LD@Option@@Label}%
+				\fi
+			\fi
+		\fi
+	\fi
+	\medskip\penalty-100
+}%
+\def\LD@Display#1{%
+	\LD@Count@Temp=#1\relax
+	\ifcase\LD@Count@Temp
+	\or
+	Math. Sup.
+	\or
+	Math. Spé
+	\else
+	\fi
+}%
+
+
+
+\def\LD@Maths@Exercice@Text{%
+	\underline{%
+		\mbox{%
+			\ifx\LD@Exo@@Solution\LD@Empty 
+				\unless\ifx\LD@Exo@@Indication\LD@Empty 
+					\it
+				\fi 
+			\else
+				\ifx\LD@Exo@@Indication\LD@Empty 
+					\bf
+				\else
+					\boldit
+				\fi 
+			\fi 
+			Exercice%
+		}%
+	}%
+}%
+
+\def\LD@Exo@Sol@Display{%
+	{\EA\LD@Loop@For\EA\LD@Exo@Label\EA=\csname LD@Exercice@Solution@List\endcsname\WithSeparator ,\Do{%
+		\LD@Data@Def{Sol}\LD@Exo@Label\LD@Temp
+		\noindent{\eightpts \ref{labelexo\LD@Exo@Label}. \LD@Temp}
+		\medskip
+	}}%
+
+}%
+\def\LD@Exo@Notion@Display{%
+	{\EA\LD@Loop@For\EA\LD@Exo@Label\EA=\csname LD@Exercice@Notion@List\endcsname\WithSeparator ,\Do{%
+		\LD@Data@Def{Notion}\LD@Exo@Label\LD@Temp
+		\noindent\pn{\eightpts \ref{labelexo\LD@Exo@Label} : \LD@Temp}%
+		\medskip
+	}}%
+}%
+
+
+\def\LD@Exo@Indication@Display{%
+	{\EA\LD@Loop@For\EA\LD@Exo@Label\EA=\csname LD@Exercice@Indication@List\endcsname\WithSeparator ,\Do{%
+		\LD@Data@Def{Ind}\LD@Exo@Label\LD@Temp
+		\noindent\pn{\eightpts \ref{labelexo\LD@Exo@Label}. \LD@Temp}%
+		\medskip
+	}}%
+
+}%
+
 \newcount\LD@Exo@Total\LD@Exo@Total=0\relax
 
 \def\LD@Exo@Theme@Display#1#2#3{%
